@@ -20,6 +20,12 @@
 		4F4D6EC41AD76C5B00D1ABD8 /* CategoryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC31AD76C5B00D1ABD8 /* CategoryCollectionViewController.m */; };
 		4F4D6EC71AD76C7900D1ABD8 /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC61AD76C7900D1ABD8 /* ImageViewController.m */; };
 		4F4D6ECA1AD76FD000D1ABD8 /* BottomNavImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC91AD76FD000D1ABD8 /* BottomNavImageViewController.m */; };
+		4FE3E2901ADA0E3C00B174F4 /* ASModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E28F1ADA0E3C00B174F4 /* ASModel.m */; };
+		4FE3E2B11ADA107700B174F4 /* ASRemoteStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B01ADA107700B174F4 /* ASRemoteStore.m */; };
+		4FE3E2B41ADA107800B174F4 /* Store.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B31ADA107800B174F4 /* Store.m */; };
+		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
+		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
+		4FE3E2BD1ADA107800B174F4 /* ASLocalStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2BC1ADA107800B174F4 /* ASLocalStore.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +52,18 @@
 		4F4D6EC61AD76C7900D1ABD8 /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewController.m; sourceTree = "<group>"; };
 		4F4D6EC81AD76FD000D1ABD8 /* BottomNavImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BottomNavImageViewController.h; sourceTree = "<group>"; };
 		4F4D6EC91AD76FD000D1ABD8 /* BottomNavImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BottomNavImageViewController.m; sourceTree = "<group>"; };
+		4FE3E28E1ADA0E3C00B174F4 /* ASModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASModel.h; sourceTree = "<group>"; };
+		4FE3E28F1ADA0E3C00B174F4 /* ASModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASModel.m; sourceTree = "<group>"; };
+		4FE3E2AF1ADA107700B174F4 /* ASRemoteStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASRemoteStore.h; path = Model/ASRemoteStore.h; sourceTree = "<group>"; };
+		4FE3E2B01ADA107700B174F4 /* ASRemoteStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASRemoteStore.m; path = Model/ASRemoteStore.m; sourceTree = "<group>"; };
+		4FE3E2B21ADA107800B174F4 /* Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Store.h; path = Model/Store.h; sourceTree = "<group>"; };
+		4FE3E2B31ADA107800B174F4 /* Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Store.m; path = Model/Store.m; sourceTree = "<group>"; };
+		4FE3E2B51ADA107800B174F4 /* ASCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASCategory.h; path = Model/ASCategory.h; sourceTree = "<group>"; };
+		4FE3E2B61ADA107800B174F4 /* ASCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASCategory.m; path = Model/ASCategory.m; sourceTree = "<group>"; };
+		4FE3E2B81ADA107800B174F4 /* ASImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASImage.h; path = Model/ASImage.h; sourceTree = "<group>"; };
+		4FE3E2B91ADA107800B174F4 /* ASImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASImage.m; path = Model/ASImage.m; sourceTree = "<group>"; };
+		4FE3E2BB1ADA107800B174F4 /* ASLocalStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASLocalStore.h; path = Model/ASLocalStore.h; sourceTree = "<group>"; };
+		4FE3E2BC1ADA107800B174F4 /* ASLocalStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASLocalStore.m; path = Model/ASLocalStore.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +136,8 @@
 			isa = PBXGroup;
 			children = (
 				4F4D6E971AD75EB800D1ABD8 /* FiveHundredPixelsDaily.xcdatamodeld */,
+				4FE3E28E1ADA0E3C00B174F4 /* ASModel.h */,
+				4FE3E28F1ADA0E3C00B174F4 /* ASModel.m */,
 				4FE3E2891ADA0A8000B174F4 /* Classes */,
 			);
 			name = Model;
@@ -126,6 +146,16 @@
 		4FE3E2891ADA0A8000B174F4 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4FE3E2B81ADA107800B174F4 /* ASImage.h */,
+				4FE3E2B91ADA107800B174F4 /* ASImage.m */,
+				4FE3E2B51ADA107800B174F4 /* ASCategory.h */,
+				4FE3E2B61ADA107800B174F4 /* ASCategory.m */,
+				4FE3E2B21ADA107800B174F4 /* Store.h */,
+				4FE3E2B31ADA107800B174F4 /* Store.m */,
+				4FE3E2BB1ADA107800B174F4 /* ASLocalStore.h */,
+				4FE3E2BC1ADA107800B174F4 /* ASLocalStore.m */,
+				4FE3E2AF1ADA107700B174F4 /* ASRemoteStore.h */,
+				4FE3E2B01ADA107700B174F4 /* ASRemoteStore.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -238,8 +268,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */,
+				4FE3E2901ADA0E3C00B174F4 /* ASModel.m in Sources */,
 				4F4D6E9F1AD75EB800D1ABD8 /* DetailViewController.m in Sources */,
+				4FE3E2B41ADA107800B174F4 /* Store.m in Sources */,
 				4F4D6E9C1AD75EB800D1ABD8 /* MasterViewController.m in Sources */,
+				4FE3E2BD1ADA107800B174F4 /* ASLocalStore.m in Sources */,
 				4F4D6E991AD75EB800D1ABD8 /* FiveHundredPixelsDaily.xcdatamodeld in Sources */,
 				4F4D6EC11AD76BCA00D1ABD8 /* CategoryTableViewCell.m in Sources */,
 				4F4D6E961AD75EB800D1ABD8 /* AppDelegate.m in Sources */,
@@ -248,6 +282,8 @@
 				4F4D6EC41AD76C5B00D1ABD8 /* CategoryCollectionViewController.m in Sources */,
 				4F4D6EBE1AD76BAE00D1ABD8 /* CategoriesTableViewController.m in Sources */,
 				4F4D6ECA1AD76FD000D1ABD8 /* BottomNavImageViewController.m in Sources */,
+				4FE3E2B11ADA107700B174F4 /* ASRemoteStore.m in Sources */,
+				4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

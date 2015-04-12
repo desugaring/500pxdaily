@@ -36,8 +36,6 @@
 		4F4D6EA11AD75EB800D1ABD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4F4D6EA31AD75EB800D1ABD8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4F4D6EA61AD75EB800D1ABD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		4F4D6EB11AD75EB800D1ABD8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4F4D6EB21AD75EB800D1ABD8 /* FiveHundredPixelsDailyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FiveHundredPixelsDailyTests.m; sourceTree = "<group>"; };
 		4F4D6EBC1AD76BAE00D1ABD8 /* CategoriesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoriesTableViewController.h; sourceTree = "<group>"; };
 		4F4D6EBD1AD76BAE00D1ABD8 /* CategoriesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoriesTableViewController.m; sourceTree = "<group>"; };
 		4F4D6EBF1AD76BCA00D1ABD8 /* CategoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryTableViewCell.h; sourceTree = "<group>"; };
@@ -65,7 +63,6 @@
 			isa = PBXGroup;
 			children = (
 				4F4D6E8F1AD75EB800D1ABD8 /* FiveHundredPixelsDaily */,
-				4F4D6EAF1AD75EB800D1ABD8 /* FiveHundredPixelsDailyTests */,
 				4F4D6E8E1AD75EB800D1ABD8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -81,26 +78,14 @@
 		4F4D6E8F1AD75EB800D1ABD8 /* FiveHundredPixelsDaily */ = {
 			isa = PBXGroup;
 			children = (
-				4F4D6E941AD75EB800D1ABD8 /* AppDelegate.h */,
-				4F4D6E951AD75EB800D1ABD8 /* AppDelegate.m */,
+				4FE3E2881ADA0A7600B174F4 /* Model */,
+				4FE3E2871ADA07E600B174F4 /* Views */,
 				4F4D6E9A1AD75EB800D1ABD8 /* MasterViewController.h */,
 				4F4D6E9B1AD75EB800D1ABD8 /* MasterViewController.m */,
 				4F4D6E9D1AD75EB800D1ABD8 /* DetailViewController.h */,
 				4F4D6E9E1AD75EB800D1ABD8 /* DetailViewController.m */,
-				4F4D6EA01AD75EB800D1ABD8 /* Main.storyboard */,
-				4F4D6EC81AD76FD000D1ABD8 /* BottomNavImageViewController.h */,
-				4F4D6EC91AD76FD000D1ABD8 /* BottomNavImageViewController.m */,
-				4F4D6EC51AD76C7900D1ABD8 /* ImageViewController.h */,
-				4F4D6EC61AD76C7900D1ABD8 /* ImageViewController.m */,
-				4F4D6EC21AD76C5B00D1ABD8 /* CategoryCollectionViewController.h */,
-				4F4D6EC31AD76C5B00D1ABD8 /* CategoryCollectionViewController.m */,
-				4F4D6EBF1AD76BCA00D1ABD8 /* CategoryTableViewCell.h */,
-				4F4D6EC01AD76BCA00D1ABD8 /* CategoryTableViewCell.m */,
-				4F4D6EBC1AD76BAE00D1ABD8 /* CategoriesTableViewController.h */,
-				4F4D6EBD1AD76BAE00D1ABD8 /* CategoriesTableViewController.m */,
 				4F4D6EA31AD75EB800D1ABD8 /* Images.xcassets */,
 				4F4D6EA51AD75EB800D1ABD8 /* LaunchScreen.xib */,
-				4F4D6E971AD75EB800D1ABD8 /* FiveHundredPixelsDaily.xcdatamodeld */,
 				4F4D6E901AD75EB800D1ABD8 /* Supporting Files */,
 			);
 			path = FiveHundredPixelsDaily;
@@ -109,27 +94,78 @@
 		4F4D6E901AD75EB800D1ABD8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4F4D6E941AD75EB800D1ABD8 /* AppDelegate.h */,
+				4F4D6E951AD75EB800D1ABD8 /* AppDelegate.m */,
+				4F4D6EA01AD75EB800D1ABD8 /* Main.storyboard */,
 				4F4D6E911AD75EB800D1ABD8 /* Info.plist */,
 				4F4D6E921AD75EB800D1ABD8 /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4F4D6EAF1AD75EB800D1ABD8 /* FiveHundredPixelsDailyTests */ = {
+		4FE3E2871ADA07E600B174F4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4F4D6EB21AD75EB800D1ABD8 /* FiveHundredPixelsDailyTests.m */,
-				4F4D6EB01AD75EB800D1ABD8 /* Supporting Files */,
+				4FE3E28C1ADA0ABB00B174F4 /* ImageDetail */,
+				4F4D6EC21AD76C5B00D1ABD8 /* CategoryCollectionViewController.h */,
+				4F4D6EC31AD76C5B00D1ABD8 /* CategoryCollectionViewController.m */,
+				4FE3E28A1ADA0A9800B174F4 /* Categories */,
 			);
-			path = FiveHundredPixelsDailyTests;
+			name = Views;
 			sourceTree = "<group>";
 		};
-		4F4D6EB01AD75EB800D1ABD8 /* Supporting Files */ = {
+		4FE3E2881ADA0A7600B174F4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4F4D6EB11AD75EB800D1ABD8 /* Info.plist */,
+				4F4D6E971AD75EB800D1ABD8 /* FiveHundredPixelsDaily.xcdatamodeld */,
+				4FE3E2891ADA0A8000B174F4 /* Classes */,
 			);
-			name = "Supporting Files";
+			name = Model;
+			sourceTree = "<group>";
+		};
+		4FE3E2891ADA0A8000B174F4 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		4FE3E28A1ADA0A9800B174F4 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				4F4D6EBC1AD76BAE00D1ABD8 /* CategoriesTableViewController.h */,
+				4F4D6EBD1AD76BAE00D1ABD8 /* CategoriesTableViewController.m */,
+				4FE3E28B1ADA0AA600B174F4 /* Cells */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		4FE3E28B1ADA0AA600B174F4 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4F4D6EBF1AD76BCA00D1ABD8 /* CategoryTableViewCell.h */,
+				4F4D6EC01AD76BCA00D1ABD8 /* CategoryTableViewCell.m */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		4FE3E28C1ADA0ABB00B174F4 /* ImageDetail */ = {
+			isa = PBXGroup;
+			children = (
+				4F4D6EC51AD76C7900D1ABD8 /* ImageViewController.h */,
+				4F4D6EC61AD76C7900D1ABD8 /* ImageViewController.m */,
+				4FE3E28D1ADA0AE200B174F4 /* Navigation */,
+			);
+			name = ImageDetail;
+			sourceTree = "<group>";
+		};
+		4FE3E28D1ADA0AE200B174F4 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				4F4D6EC81AD76FD000D1ABD8 /* BottomNavImageViewController.h */,
+				4F4D6EC91AD76FD000D1ABD8 /* BottomNavImageViewController.m */,
+			);
+			name = Navigation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -356,6 +392,7 @@
 				4F4D6EB81AD75EB800D1ABD8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

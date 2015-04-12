@@ -1,24 +1,29 @@
 //
-//  Store.h
-//  FiveHundredPixelsDaily
+//  ASStore.h
+//  
 //
 //  Created by Alex Semenikhine on 2015-04-11.
-//  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
+//
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
 @class ASCategory;
+@class ASBaseOperation;
 
-@interface Store : NSManagedObject
+@interface ASStore : NSManagedObject
 
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * id;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *type;
 @property (nonatomic, retain) NSSet *categories;
+
+- (ASBaseOperation *)operation;
+- (void)updateCategories;
+
 @end
 
-@interface Store (CoreDataGeneratedAccessors)
+@interface ASStore (CoreDataGeneratedAccessors)
 
 - (void)addCategoriesObject:(ASCategory *)value;
 - (void)removeCategoriesObject:(ASCategory *)value;

@@ -1,21 +1,22 @@
 //
-//  ASCategory.m
+//  ASImage.m
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-11.
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import "ASCategory.h"
 #import "ASImage.h"
-#import "Store.h"
+#import "ASCategory.h"
 
 
-@implementation ASCategory
+@implementation ASImage
 
-@dynamic id;
 @dynamic name;
-@dynamic images;
-@dynamic store;
+@dynamic thumbnailURL;
+@dynamic fullURL;
+@dynamic thumbnail;
+@dynamic full;
+@dynamic categories;
 
 @end

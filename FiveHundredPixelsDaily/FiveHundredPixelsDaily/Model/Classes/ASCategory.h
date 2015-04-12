@@ -13,7 +13,6 @@
 
 @interface ASCategory : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * id;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSSet *images;
 @property (nonatomic, retain) Store *store;

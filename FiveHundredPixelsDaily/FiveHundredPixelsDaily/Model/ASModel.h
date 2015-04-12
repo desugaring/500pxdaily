@@ -10,6 +10,8 @@
 
 @interface ASModel : NSObject
 
+- (void)saveContext;
+
 // has all the core data cruft
 
 // stores array

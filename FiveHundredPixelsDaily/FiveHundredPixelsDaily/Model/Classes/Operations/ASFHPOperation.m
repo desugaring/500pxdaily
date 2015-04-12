@@ -1,17 +1,13 @@
 //
-//  ASRemoteStore.h
+//  ASFHPOperation.m
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-11.
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-#import "Store.h"
+#import "ASFHPOperation.h"
 
-
-@interface ASRemoteStore : Store
-
+@implementation ASFHPOperation
 
 @end

@@ -7,10 +7,19 @@
 //
 
 @import Foundation;
+@import CoreData;
+@class ASLocalStore;
+@class ASRemoteStore;
+
+static NSString * const DefaultsLocalCategoryNameKey = @"PhotosCategoryName";
 
 @interface ASModel : NSObject
 
-- (void)saveContext;
+@property NSManagedObjectContext *moc;
+@property ASLocalStore *photosStore;
+@property ASRemoteStore *fhpStore;
+
+- (void)save;
 
 // has all the core data cruft
 

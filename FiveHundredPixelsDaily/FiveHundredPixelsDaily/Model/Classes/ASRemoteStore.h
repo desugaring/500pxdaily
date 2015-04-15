@@ -6,12 +6,15 @@
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+@import Foundation;
+@import CoreData;
 #import "ASStore.h"
+#import "ASCategory.h"
 
 
 @interface ASRemoteStore : ASStore
 
+@property (readonly) ASCategory *activeCategory;
+-(void)setActiveCategory:(ASCategory *)activeCategory;
 
 @end

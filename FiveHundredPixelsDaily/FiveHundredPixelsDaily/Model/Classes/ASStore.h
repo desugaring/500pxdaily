@@ -6,15 +6,15 @@
 //
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+@import Foundation;
+@import CoreData;
+#import "ASBaseObject.h"
 
 @class ASCategory;
 @class ASBaseOperation;
 
-@interface ASStore : NSManagedObject
+@interface ASStore : ASBaseObject
 
-@property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *type;
 @property (nonatomic, retain) NSSet *categories;
 

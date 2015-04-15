@@ -7,8 +7,10 @@
 //
 
 #import "CategoryCollectionViewController.h"
+#import "ASRemoteStore.h"
+#import "ASCategory.h"
 
-@interface CategoryCollectionViewController ()
+@interface CategoryCollectionViewController()
 
 @end
 
@@ -53,7 +55,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 0;
+    return self.model.fhpStore.activeCategory.images.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {

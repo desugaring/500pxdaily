@@ -6,16 +6,21 @@
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+@import Foundation;
+@import CoreData;
+#import "ASBaseObject.h"
 
-@class ASImage, Store;
+@class ASImage, ASStore;
 
-@interface ASCategory : NSManagedObject
+@interface ASCategory : ASBaseObject
 
-@property (nonatomic, retain) NSString * name;
+@property (nonatomic) BOOL isActive;
 @property (nonatomic, retain) NSSet *images;
-@property (nonatomic, retain) Store *store;
+@property (nonatomic, retain) ASStore *store;
+
+- (void)resetImages;
+- (void)requestImages;
+
 @end
 
 @interface ASCategory (CoreDataGeneratedAccessors)

@@ -20,13 +20,11 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    CategoryCollectionViewController *vc = (CategoryCollectionViewController *)navigationController.topViewController;
-//    MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
-//    controller.managedObjectContext = self.managedObjectContext;
     self.model = [[ASModel alloc] init];
 
+    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+    CategoryCollectionViewController *vc = (CategoryCollectionViewController *)navigationController.topViewController;
+    vc.model = self.model;
 
     return YES;
 }
@@ -53,7 +51,7 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
 
-    //[self.model saveContext];
+    [self.model save];
 }
 
 @end

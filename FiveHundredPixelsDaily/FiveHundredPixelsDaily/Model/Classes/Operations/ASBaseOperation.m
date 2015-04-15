@@ -7,11 +7,21 @@
 //
 
 #import "ASBaseOperation.h"
+#import "ASCategory.h"
+#import "ASImage.h"
 
 @implementation ASBaseOperation
 
-- (void)fetchDataWithObject:(NSManagedObject *)object userInfo:(NSDictionary *)userInfo completion:(void(^)())completion {
-    completion();
+- (void)fetchDataWithObject:(NSManagedObject *)object userInfo:(NSDictionary *)userInfo completion:(CompletionBlock)completion {
+    if ([object isKindOfClass: ASCategory.class]) {
+        NSNumber *page = userInfo[@"page"];
+        NSNumber *perPage = userInfo[@"perPage"];
+        // get category data
+    } else if ([object isKindOfClass: ASImage.class]) {
+        NSString *size = userInfo[@"size"];
+        // get image
+    }
+
 }
 
 @end

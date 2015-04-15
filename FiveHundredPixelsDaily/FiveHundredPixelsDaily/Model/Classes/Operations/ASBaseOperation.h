@@ -9,13 +9,11 @@
 @import Foundation;
 @import CoreData;
 
-//typedef void(^CompletionBlock)(NSString *someString, NSString *someOtherString);
+typedef void(^CompletionBlock)(NSArray *results, NSError *error);
 
 @interface ASBaseOperation : NSOperation
 
-//- (instancetype)initWithURL:(NSURL *)url delegate:(NSObject *)delegate
-//- (instancetype)initWithExternalDataFetcher:(PDExternalDataFetcher *)externalDataFetcher secondaryDataFetcher:(PDExternalDataFetcher *)secondaryDataFetcher;
-- (void)fetchDataWithObject:(NSManagedObject *)object userInfo:(NSDictionary *)userInfo completion:(void(^)())completion;
+- (void)fetchDataWithObject:(NSManagedObject *)object userInfo:(NSDictionary *)userInfo completion:(CompletionBlock)completion;
 
 // fetchDataForObject(Anyobject, userInfo: Dictionary?, completion: (data, error))
 

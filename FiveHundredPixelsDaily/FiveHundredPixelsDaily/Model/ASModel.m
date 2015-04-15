@@ -7,16 +7,13 @@
 //
 
 #import "ASModel.h"
-#import "ASStore.h"
-@import CoreData;
+#import "ASRemoteStore.h"
+#import "ASLocalStore.h"
 
 @interface ASModel()
 
-@property NSManagedObjectContext *moc;
 @property NSManagedObjectModel *mom;
 @property NSPersistentStoreCoordinator *psc;
-@property ASStore *photosStore;
-@property ASStore *fhpStore;
 
 @end
 
@@ -26,32 +23,38 @@
 {
     self = [super init];
     if (self) {
-        [self configureStore];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:@{ @"PhotosCategoryName": @"500px Daily" }];
+
+        // Store inits, create if they don't already exist
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Store"];
+        NSError *error;
+        NSArray *stores = [self.managedObjectContext executeFetchRequest:request error:&error];
+
+        if ([stores count] != 2) {
+            self.fhpStore = [[ASRemoteStore alloc] initWithEntity:[NSEntityDescription entityForName:@"Store" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.managedObjectContext];
+            self.fhpStore.name = @"500px";
+
+            self.photosStore = [[ASLocalStore alloc] initWithEntity:[NSEntityDescription entityForName:@"Store" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.moc];
+            self.photosStore.name = @"Photos";
+        } else {
+            for (ASStore *store in stores) {
+                if ([store isKindOfClass: ASLocalStore.class]) {
+                    self.photosStore = (ASLocalStore *)store;
+                } else if ([store isKindOfClass: ASRemoteStore.class]) {
+                    self.fhpStore = (ASRemoteStore *)store;
+                }
+            }
+        }
     }
+    
     return self;
 }
 
-- (void)configureStore {
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Store"];
-
-    NSError *error;
-    NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
-    if ([result count] != 2) {
-
-        self.fhpStore = [[ASStore alloc] initWithEntity:[NSEntityDescription entityForName:@"Store" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.managedObjectContext];
-        self.fhpStore.name = @"500px";
-        self.fhpStore.type = @"fhp";
-
-        self.photosStore = [[ASStore alloc] initWithEntity:[NSEntityDescription entityForName:@"Store" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.moc];
-        self.photosStore.name = @"Photos";
-        self.photosStore.type = @"photos";
-    }
-
-    [self.photosStore updateCategories];
-
-}
-
 #pragma mark - Core Data stack
+
+- (void)save {
+    [self saveContext];
+}
 
 - (NSURL *)applicationDocumentsDirectory {
     // The directory the application uses to store the Core Data store file. This code uses a directory named "com.desugaring.FiveHundredPixelsDaily" in the application's documents directory.

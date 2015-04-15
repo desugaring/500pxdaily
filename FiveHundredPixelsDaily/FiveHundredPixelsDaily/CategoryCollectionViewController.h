@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ASModel.h"
 
 @interface CategoryCollectionViewController : UICollectionViewController
+
+@property (weak) ASModel *model;
 
 @end

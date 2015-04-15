@@ -6,19 +6,23 @@
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+@import Foundation;
+@import CoreData;
+#import "ASBaseObject.h"
 
 @class ASCategory;
 
-@interface ASImage : NSManagedObject
+@interface ASImage : ASBaseObject
 
-@property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * thumbnailURL;
 @property (nonatomic, retain) NSString * fullURL;
 @property (nonatomic, retain) id thumbnail;
 @property (nonatomic, retain) id full;
 @property (nonatomic, retain) NSSet *categories;
+
+- (void)requestThumbnail;
+- (void)requestFull;
+
 @end
 
 @interface ASImage (CoreDataGeneratedAccessors)

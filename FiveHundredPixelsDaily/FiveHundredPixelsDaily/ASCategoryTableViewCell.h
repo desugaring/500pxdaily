@@ -1,5 +1,5 @@
 //
-//  CategoryTableViewCell.h
+//  ASCategoryTableViewCell.h
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-09.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CategoryTableViewCell : UITableViewCell
+@interface ASCategoryTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (weak, nonatomic) IBOutlet UIImageView *icon;

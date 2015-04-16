@@ -1,20 +1,20 @@
 //
-//  CategoryCollectionViewController.m
+//  ASCategoryCollectionViewController.m
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-09.
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import "CategoryCollectionViewController.h"
+#import "ASCategoryCollectionViewController.h"
 #import "ASFHPStore.h"
 #import "ASCategory.h"
 
-@interface CategoryCollectionViewController()
+@interface ASCategoryCollectionViewController()
 
 @end
 
-@implementation CategoryCollectionViewController
+@implementation ASCategoryCollectionViewController
 
 static NSString * const reuseIdentifier = @"Cell";
 
@@ -55,7 +55,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.model.fhpStore.activeCategory.images.count;
+    return [self.model activeCategory].images.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {

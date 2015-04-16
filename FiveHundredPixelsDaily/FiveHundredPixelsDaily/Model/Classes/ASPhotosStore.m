@@ -19,7 +19,7 @@
 
 
 - (void)awakeCommon {
-    NSLog(@"hi local");
+    NSLog(@"awake local");
     if (self.categories.allObjects.count == 0) {
         ASCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"Category" inManagedObjectContext:self.managedObjectContext];
         category.store = self;

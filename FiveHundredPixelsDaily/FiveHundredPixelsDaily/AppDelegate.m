@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ASModel.h"
-#import "CategoryCollectionViewController.h"
+#import "ASCategoryCollectionViewController.h"
 
 @interface AppDelegate ()
 
@@ -23,7 +23,7 @@
     self.model = [[ASModel alloc] init];
 
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    CategoryCollectionViewController *vc = (CategoryCollectionViewController *)navigationController.topViewController;
+    ASCategoryCollectionViewController *vc = (ASCategoryCollectionViewController *)navigationController.topViewController;
     vc.model = self.model;
 
     return YES;

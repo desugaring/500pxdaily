@@ -10,14 +10,15 @@
 @import CoreData;
 @class ASPhotosStore;
 @class ASFHPStore;
+#import "ASCategory.h"
 
 static NSString * const DefaultsLocalCategoryNameKey = @"PhotosCategoryName";
 
 @interface ASModel : NSObject
 
-@property NSManagedObjectContext *moc;
-@property ASPhotosStore *photosStore;
-@property ASFHPStore *fhpStore;
+@property (nonatomic) ASPhotosStore *photosStore;
+@property (nonatomic)  ASFHPStore *fhpStore;
+- (ASCategory *)activeCategory;
 
 - (void)save;
 

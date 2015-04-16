@@ -11,6 +11,12 @@
 #import "ASStore.h"
 #import "ASBaseOperation.h"
 
+@interface ASCategory()
+
+@property NSOperationQueue *imagesDataQueue;
+
+@end
+
 @implementation ASCategory
 
 @dynamic isVisible;
@@ -18,9 +24,35 @@
 @dynamic store;
 @synthesize maxNumberOfImages;
 @synthesize isFullsizeMode;
+@synthesize imagesDataQueue;
+@synthesize imageThumbnailQueue;
+@synthesize imageFullQueue;
 
 - (ASBaseOperation *)operation {
     return self.store.operation;
+}
+
+- (void)awakeCommon {
+    [super awakeCommon];
+
+    self.maxNumberOfImages = 0;
+    self.isFullsizeMode = false;
+
+    self.imagesDataQueue = [[NSOperationQueue alloc] init];
+    self.imagesDataQueue.maxConcurrentOperationCount = 1;
+
+    self.imageThumbnailQueue = [[NSOperationQueue alloc] init];
+    self.imageThumbnailQueue.maxConcurrentOperationCount = 1;
+
+    self.imageFullQueue = [[NSOperationQueue alloc] init];
+    self.imageFullQueue.maxConcurrentOperationCount = 1;
+
+    [self addObserver:self forKeyPath:@"isVisible" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew) context:nil];
+}
+
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"isVisible"];
 }
 
 - (void)resetImages {
@@ -30,6 +62,8 @@
 }
 
 - (void)requestImageData {
+    if (self.imagesDataQueue.operationCount != 0 || self.images.count == self.maxNumberOfImages) return;
+
     NSLog(@"requesting image data for category %@", self.name);
     ASBaseOperation *operation = [self operation];
     operation.object = self;
@@ -44,33 +78,38 @@
             if (error != nil) {
                 NSLog(@"json parsing error: %@", error);
             } else {
-                // parse json
-                NSLog(@"json dict: %@", jsonDict);
+                [self parseImageData:jsonDict];
             }
         }
     };
 
-    
+    [self.imagesDataQueue addOperation:operation];
 }
 
-- (void)awakeCommon {
-    [super awakeCommon];
-
-    self.isFullsizeMode = false;
-    [self addObserver:self forKeyPath:@"isVisible" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew) context:nil];
-}
-
-- (void)dealloc
-{
-    [self removeObserver:self forKeyPath:@"isVisible"];
+- (void)parseImageData:(NSDictionary *)imageData {
+    if (self.maxNumberOfImages == 0) {
+        self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
+    }
+    NSArray *photos = imageData[@"photos"];
+    for (NSDictionary *photoData in photos) {
+        ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
+        image.identifier = photoData[@"id"];
+        image.name = photoData[@"name"];
+        image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
+        image.fullURL = (NSString *)photoData[@"image_url"][1];
+    }
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == self && [keyPath isEqualToString:@"isVisible"]) {
-        if ((BOOL)change[NSKeyValueChangeNewKey] == TRUE) {
+        if ((BOOL)change[NSKeyValueChangeNewKey] == true) {
             if (self.images.count == 0) {
                 [self requestImageData];
             }
+        } else if ((BOOL)change[NSKeyValueChangeNewKey] == false) {
+            [self.imagesDataQueue cancelAllOperations];
+            [self.imageThumbnailQueue cancelAllOperations];
+            [self.imageFullQueue cancelAllOperations];
         }
     }
 }

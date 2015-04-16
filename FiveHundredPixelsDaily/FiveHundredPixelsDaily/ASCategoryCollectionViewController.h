@@ -1,5 +1,5 @@
 //
-//  CategoryCollectionViewController.h
+//  ASCategoryCollectionViewController.h
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-09.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ASModel.h"
 
-@interface CategoryCollectionViewController : UICollectionViewController
+@interface ASCategoryCollectionViewController : UICollectionViewController
 
 @property (weak) ASModel *model;
 

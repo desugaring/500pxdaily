@@ -14,6 +14,7 @@
 
 @property NSManagedObjectModel *mom;
 @property NSPersistentStoreCoordinator *psc;
+@property NSManagedObjectContext *moc;
 
 @end
 
@@ -31,11 +32,11 @@
         NSArray *stores = [self.managedObjectContext executeFetchRequest:request error:&error];
 
         if ([stores count] != 2) {
-            self.fhpStore = [[ASFHPStore alloc] initWithEntity:[NSEntityDescription entityForName:@"Store" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.managedObjectContext];
+            self.fhpStore = [[ASFHPStore alloc] initWithEntity:[NSEntityDescription entityForName:@"FHPStore" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.managedObjectContext];
             self.fhpStore.name = @"500px";
             self.fhpStore.type = @"fhp";
 
-            self.photosStore = [[ASPhotosStore alloc] initWithEntity:[NSEntityDescription entityForName:@"Store" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.moc];
+            self.photosStore = [[ASPhotosStore alloc] initWithEntity:[NSEntityDescription entityForName:@"PhotosStore" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.moc];
             self.photosStore.name = @"Photos";
             self.photosStore.type = @"photos";
         } else {
@@ -47,9 +48,20 @@
                 }
             }
         }
+        [self.moc save:&error];
     }
     
     return self;
+}
+
+- (ASCategory *)activeCategory {
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Category"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isVisible == TRUE"];
+    request.predicate = predicate;
+    NSError *error;
+    NSArray *visibleCategoryResult = [self.moc executeFetchRequest:request error:&error];
+
+    return (ASCategory *)visibleCategoryResult[0];
 }
 
 #pragma mark - Core Data stack

@@ -1,5 +1,5 @@
 //
-//  CategoriesTableViewController.h
+//  ASCategoriesTableViewController.h
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-09.
@@ -9,7 +9,7 @@
 @import UIKit;
 #import "ASModel.h"
 
-@interface CategoriesTableViewController : UITableViewController
+@interface ASCategoriesTableViewController : UITableViewController
 
 @property (weak) ASModel *model;
 

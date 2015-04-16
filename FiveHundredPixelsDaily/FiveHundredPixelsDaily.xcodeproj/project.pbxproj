@@ -19,9 +19,9 @@
 		4F4D6EA21AD75EB800D1ABD8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F4D6EA01AD75EB800D1ABD8 /* Main.storyboard */; };
 		4F4D6EA41AD75EB800D1ABD8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4D6EA31AD75EB800D1ABD8 /* Images.xcassets */; };
 		4F4D6EA71AD75EB800D1ABD8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F4D6EA51AD75EB800D1ABD8 /* LaunchScreen.xib */; };
-		4F4D6EBE1AD76BAE00D1ABD8 /* CategoriesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EBD1AD76BAE00D1ABD8 /* CategoriesTableViewController.m */; };
-		4F4D6EC11AD76BCA00D1ABD8 /* CategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC01AD76BCA00D1ABD8 /* CategoryTableViewCell.m */; };
-		4F4D6EC41AD76C5B00D1ABD8 /* CategoryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC31AD76C5B00D1ABD8 /* CategoryCollectionViewController.m */; };
+		4F4D6EBE1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EBD1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.m */; };
+		4F4D6EC11AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC01AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m */; };
+		4F4D6EC41AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC31AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m */; };
 		4F4D6EC71AD76C7900D1ABD8 /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC61AD76C7900D1ABD8 /* ImageViewController.m */; };
 		4F4D6ECA1AD76FD000D1ABD8 /* BottomNavImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC91AD76FD000D1ABD8 /* BottomNavImageViewController.m */; };
 		4F717E8B1ADE122D004B8722 /* ASBaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E8A1ADE122D004B8722 /* ASBaseObject.m */; };
@@ -54,12 +54,12 @@
 		4F4D6EA11AD75EB800D1ABD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4F4D6EA31AD75EB800D1ABD8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4F4D6EA61AD75EB800D1ABD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		4F4D6EBC1AD76BAE00D1ABD8 /* CategoriesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoriesTableViewController.h; sourceTree = "<group>"; };
-		4F4D6EBD1AD76BAE00D1ABD8 /* CategoriesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoriesTableViewController.m; sourceTree = "<group>"; };
-		4F4D6EBF1AD76BCA00D1ABD8 /* CategoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryTableViewCell.h; sourceTree = "<group>"; };
-		4F4D6EC01AD76BCA00D1ABD8 /* CategoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoryTableViewCell.m; sourceTree = "<group>"; };
-		4F4D6EC21AD76C5B00D1ABD8 /* CategoryCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryCollectionViewController.h; sourceTree = "<group>"; };
-		4F4D6EC31AD76C5B00D1ABD8 /* CategoryCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoryCollectionViewController.m; sourceTree = "<group>"; };
+		4F4D6EBC1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategoriesTableViewController.h; sourceTree = "<group>"; };
+		4F4D6EBD1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategoriesTableViewController.m; sourceTree = "<group>"; };
+		4F4D6EBF1AD76BCA00D1ABD8 /* ASCategoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategoryTableViewCell.h; sourceTree = "<group>"; };
+		4F4D6EC01AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategoryTableViewCell.m; sourceTree = "<group>"; };
+		4F4D6EC21AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategoryCollectionViewController.h; sourceTree = "<group>"; };
+		4F4D6EC31AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategoryCollectionViewController.m; sourceTree = "<group>"; };
 		4F4D6EC51AD76C7900D1ABD8 /* ImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewController.h; sourceTree = "<group>"; };
 		4F4D6EC61AD76C7900D1ABD8 /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewController.m; sourceTree = "<group>"; };
 		4F4D6EC81AD76FD000D1ABD8 /* BottomNavImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BottomNavImageViewController.h; sourceTree = "<group>"; };
@@ -137,8 +137,8 @@
 			isa = PBXGroup;
 			children = (
 				4FE3E28C1ADA0ABB00B174F4 /* ImageDetail */,
-				4F4D6EC21AD76C5B00D1ABD8 /* CategoryCollectionViewController.h */,
-				4F4D6EC31AD76C5B00D1ABD8 /* CategoryCollectionViewController.m */,
+				4F4D6EC21AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.h */,
+				4F4D6EC31AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m */,
 				4FE3E28A1ADA0A9800B174F4 /* Categories */,
 			);
 			name = Views;
@@ -178,8 +178,8 @@
 		4FE3E28A1ADA0A9800B174F4 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				4F4D6EBC1AD76BAE00D1ABD8 /* CategoriesTableViewController.h */,
-				4F4D6EBD1AD76BAE00D1ABD8 /* CategoriesTableViewController.m */,
+				4F4D6EBC1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.h */,
+				4F4D6EBD1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.m */,
 				4FE3E28B1ADA0AA600B174F4 /* Cells */,
 			);
 			name = Categories;
@@ -188,8 +188,8 @@
 		4FE3E28B1ADA0AA600B174F4 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				4F4D6EBF1AD76BCA00D1ABD8 /* CategoryTableViewCell.h */,
-				4F4D6EC01AD76BCA00D1ABD8 /* CategoryTableViewCell.m */,
+				4F4D6EBF1AD76BCA00D1ABD8 /* ASCategoryTableViewCell.h */,
+				4F4D6EC01AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -304,12 +304,12 @@
 				4F4D6E9C1AD75EB800D1ABD8 /* MasterViewController.m in Sources */,
 				4F4C1E441ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld in Sources */,
 				4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */,
-				4F4D6EC11AD76BCA00D1ABD8 /* CategoryTableViewCell.m in Sources */,
+				4F4D6EC11AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m in Sources */,
 				4F4D6E961AD75EB800D1ABD8 /* AppDelegate.m in Sources */,
 				4F4D6E931AD75EB800D1ABD8 /* main.m in Sources */,
 				4F4D6EC71AD76C7900D1ABD8 /* ImageViewController.m in Sources */,
-				4F4D6EC41AD76C5B00D1ABD8 /* CategoryCollectionViewController.m in Sources */,
-				4F4D6EBE1AD76BAE00D1ABD8 /* CategoriesTableViewController.m in Sources */,
+				4F4D6EC41AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m in Sources */,
+				4F4D6EBE1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.m in Sources */,
 				4F4D6ECA1AD76FD000D1ABD8 /* BottomNavImageViewController.m in Sources */,
 				4FE3E2D01ADA160800B174F4 /* ASFHPOperation.m in Sources */,
 				4F4C1E4C1ADA198F00109166 /* ASPhotosStore.m in Sources */,

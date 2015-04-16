@@ -1,19 +1,22 @@
 //
-//  CategoriesTableViewController.m
+//  ASCategoriesTableViewController.m
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-09.
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import "CategoriesTableViewController.h"
-#import "aspho"
+#import "ASCategoriesTableViewController.h"
+#import "ASPhotosStore.h"
+#import "ASFHPStore.h"
+#import "ASCategory.h"
+#import "ASCategoryTableViewCell.h"
 
-@interface CategoriesTableViewController ()
+@interface ASCategoriesTableViewController ()
 
 @end
 
-@implementation CategoriesTableViewController
+@implementation ASCategoriesTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -39,21 +42,26 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    if (section == 1) {
-        return self.model.photosStore.cate
+    if (section == 0) {
+        return self.model.photosStore.categories.count;
+    } else if (section == 1) {
+        return self.model.fhpStore.categories.count;
     }
     return 0;
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
+    ASCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Category" forIndexPath:indexPath];
+    if (indexPath.section == 0) {
+        cell.title.text = ((ASCategory *)self.model.photosStore.categories.allObjects[0]).name;
+    } else {
+        cell.title.text = ((ASCategory *)self.model.fhpStore.categories.allObjects[indexPath.row]).name;
+    }
     // Configure the cell...
     
     return cell;
 }
-*/
 
 /*
 // Override to support conditional editing of the table view.

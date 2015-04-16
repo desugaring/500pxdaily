@@ -20,7 +20,7 @@
 }
 
 - (void)awakeCommon {
-    NSLog(@"hi remote ");
+    NSLog(@"awake remote");
     // Create categories if they don't already exist
     if (self.categories.count != self.categoryNames.count) {
         for (NSString *categoryName in self.categoryNames) {

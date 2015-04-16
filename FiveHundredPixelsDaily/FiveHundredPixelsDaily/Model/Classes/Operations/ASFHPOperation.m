@@ -53,9 +53,10 @@ NSString * const PHOTOS_PER_REQUEST = @"20";
                                  [NSURLQueryItem queryItemWithName:@"rpp" value:PHOTOS_PER_REQUEST],
                                  [NSURLQueryItem queryItemWithName:@"feature" value:@"upcoming"],
                                  [NSURLQueryItem queryItemWithName:@"sort" value:@"times_viewed"],
-                                 [NSURLQueryItem queryItemWithName:@"image_size[]" value:@"2&image_size[]=4"],
+                                 [NSURLQueryItem queryItemWithName:@"image_size[0]" value:@"2"],
+                                 [NSURLQueryItem queryItemWithName:@"image_size[1]" value:@"4"],
                                  [NSURLQueryItem queryItemWithName:@"page" value:[@(page) stringValue]]];
-    NSLog(@"url: %@", urlComponents.string);
+    NSLog(@"request url: %@", urlComponents.string);
 
     return urlComponents.URL;
 }

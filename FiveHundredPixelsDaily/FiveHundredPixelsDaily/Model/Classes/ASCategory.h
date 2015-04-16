@@ -23,6 +23,9 @@
 @property BOOL isFullsizeMode;
 - (ASBaseOperation *)operation;
 
+@property NSOperationQueue *imageThumbnailQueue;
+@property NSOperationQueue *imageFullQueue;
+
 - (void)resetImages;
 - (void)requestImageData;
 

@@ -19,20 +19,12 @@
 @property (nonatomic, retain) NSString * fullURL;
 @property (nonatomic, retain) id thumbnail;
 @property (nonatomic, retain) id full;
-@property (nonatomic, retain) NSSet *categories;
+@property (nonatomic, retain) ASCategory *category;
+@property (nonatomic, retain) NSNumber * identifier;
 
 @property BOOL isVisible;
 @property BOOL isFullsizeMode;
 
 - (ASBaseOperation *)operation;
-
-@end
-
-@interface ASImage (CoreDataGeneratedAccessors)
-
-- (void)addCategoriesObject:(ASCategory *)value;
-- (void)removeCategoriesObject:(ASCategory *)value;
-- (void)addCategories:(NSSet *)values;
-- (void)removeCategories:(NSSet *)values;
 
 @end

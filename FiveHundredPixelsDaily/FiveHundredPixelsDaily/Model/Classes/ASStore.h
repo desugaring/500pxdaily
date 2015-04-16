@@ -17,7 +17,6 @@
 
 @property (nonatomic, retain) NSString *type;
 @property (nonatomic, retain) NSSet *categories;
-
 - (ASBaseOperation *)operation;
 
 @end

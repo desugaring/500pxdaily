@@ -24,13 +24,13 @@
         <!--Categories-->
         <scene sceneID="R3L-2f-dDc">
             <objects>
-                <tableViewController id="PWw-QZ-mmv" customClass="CategoriesTableViewController" sceneMemberID="viewController">
+                <tableViewController id="PWw-QZ-mmv" customClass="ASCategoriesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Xea-J9-e9O">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="Category" id="epK-UR-7Yq" customClass="CategoryTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="Category" id="epK-UR-7Yq" customClass="ASCategoryTableViewCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="epK-UR-7Yq" id="AdE-Fv-AJm">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -76,7 +76,7 @@
         <!--Category Collection View Controller-->
         <scene sceneID="Aqb-C8-FqA">
             <objects>
-                <collectionViewController id="cJZ-AX-HRa" customClass="CategoryCollectionViewController" sceneMemberID="viewController">
+                <collectionViewController id="cJZ-AX-HRa" customClass="ASCategoryCollectionViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="HlL-y4-YMO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

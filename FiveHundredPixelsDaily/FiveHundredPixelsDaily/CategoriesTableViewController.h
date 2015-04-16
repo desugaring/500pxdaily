@@ -6,8 +6,11 @@
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
+#import "ASModel.h"
 
 @interface CategoriesTableViewController : UITableViewController
+
+@property (weak) ASModel *model;
 
 @end

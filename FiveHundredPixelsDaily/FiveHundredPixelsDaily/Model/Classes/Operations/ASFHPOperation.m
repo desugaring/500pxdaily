@@ -13,23 +13,51 @@
 
 @implementation ASFHPOperation
 
-- (void)fetchDataWithObject:(NSManagedObject *)object userInfo:(NSDictionary *)userInfo completion:(CompletionBlock)completion {
-    //    if ([userInfo[@"name"] isKindOfClass: NSString.class]) {
-    //        completion(userInfo[@"name"]);
-    //    } else {
-    //        completion(@"fuck");
-    //    }
-    if ([object isKindOfClass: ASStore.class]) {
+NSString * const FIVE_HUNDRED_PX_URL = @"https://api.500px.com/v1/photos";
+NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
+NSString * const PHOTOS_PER_REQUEST = @"20";
 
-    } else if ([object isKindOfClass: ASCategory.class]) {
+- (void)main {
+    if ([self.object isKindOfClass: ASCategory.class]) {
+        ASCategory *category = (ASCategory *)self.object;
+        // Determine page
+        NSUInteger page = 1;
 
-    } else if ([object isKindOfClass: ASImage.class]) {
+        // Get category data
+        NSURL *url = [self urlForCategoryPage:page];
+        [self sendRequestWithURL:url];
 
+    } else if ([self.object isKindOfClass: ASImage.class]) {
+        ASImage *image = (ASImage *)self.object;
+        NSString *size = self.userInfo[@"size"];
+
+        // Get image
+        NSURL *url = [size isEqualToString:@"thumbnail"] ? [NSURL URLWithString:image.thumbnailURL] : [NSURL URLWithString:image.fullURL];
+        [self sendRequestWithURL:url];
     }
 }
 
-- (NSArray *)categories {
-    return @[@"Abstract", @"Animals", @"Black and White", @"Celebrities", @"City & Architecture", @"Commercial", @"Concert", @"Family", @"Fashion", @"Film", @"Fine Art", @"Food", @"Journalism", @"Landscapes", @"Macro", @"Nature", @"People", @"Performing Arts", @"Sport", @"Still Life", @"Street", @"Transportation", @"Travel", @"Underwater", @"Urban Exploration", @"Wedding"];
+- (void)sendRequestWithURL:(NSURL *)url {
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:(NSTimeInterval)20];
+    NSURLResponse *response;
+    NSError *error;
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+
+    self.completion(@[responseData], error);
+}
+
+- (NSURL *)urlForCategoryPage:(NSUInteger)page {
+    NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
+    urlComponents.queryItems = @[[NSURLQueryItem queryItemWithName:@"consumer_key" value:CONSUMER_KEY],
+                                 [NSURLQueryItem queryItemWithName:@"only" value:self.name],
+                                 [NSURLQueryItem queryItemWithName:@"rpp" value:PHOTOS_PER_REQUEST],
+                                 [NSURLQueryItem queryItemWithName:@"feature" value:@"upcoming"],
+                                 [NSURLQueryItem queryItemWithName:@"sort" value:@"times_viewed"],
+                                 [NSURLQueryItem queryItemWithName:@"image_size[]" value:@"2&image_size[]=4"],
+                                 [NSURLQueryItem queryItemWithName:@"page" value:[@(page) stringValue]]];
+    NSLog(@"url: %@", urlComponents.string);
+
+    return urlComponents.URL;
 }
 
 @end

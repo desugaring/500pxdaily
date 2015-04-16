@@ -9,17 +9,22 @@
 @import Foundation;
 @import CoreData;
 #import "ASBaseObject.h"
+#import "ASBaseOperation.h"
 
 @class ASImage, ASStore;
 
 @interface ASCategory : ASBaseObject
 
-@property (nonatomic) BOOL isActive;
+@property (nonatomic) BOOL isVisible;
 @property (nonatomic, retain) NSSet *images;
 @property (nonatomic, retain) ASStore *store;
 
+@property NSInteger maxNumberOfImages;
+@property BOOL isFullsizeMode;
+- (ASBaseOperation *)operation;
+
 - (void)resetImages;
-- (void)requestImages;
+- (void)requestImageData;
 
 @end
 

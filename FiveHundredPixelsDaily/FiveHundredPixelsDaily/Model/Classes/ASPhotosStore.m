@@ -1,16 +1,16 @@
 //
-//  ASLocalStore.m
+//  ASPhotosStore.m
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-11.
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import "ASLocalStore.h"
+#import "ASPhotosStore.h"
 #import "ASCategory.h"
 #import "ASModel.h"
 
-@implementation ASLocalStore
+@implementation ASPhotosStore
 
 - (ASCategory *)category {
     return ((ASCategory *)self.categories.allObjects[0]);

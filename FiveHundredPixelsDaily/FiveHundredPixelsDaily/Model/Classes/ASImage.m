@@ -9,7 +9,6 @@
 #import "ASImage.h"
 #import "ASCategory.h"
 #import "ASStore.h"
-#import "ASBaseOperation.h"
 
 @implementation ASImage
 
@@ -18,25 +17,47 @@
 @dynamic thumbnail;
 @dynamic full;
 @dynamic categories;
+@synthesize isVisible;
+@synthesize isFullsizeMode;
 
-- (void)requestFull {
-    [((ASCategory *)self.categories.allObjects[0]).store.operation fetchDataWithObject:self userInfo:@{ @"size": @"full" } completion:^(NSArray *results, NSError *error) {
-        if (error == nil) {
-            // add image
-        } else {
-            // handle error
-        }
-    }];
+-(ASBaseOperation *)operation {
+    return ((ASCategory *)self.categories.allObjects[0]).operation;
+}
+
+-(void)awakeCommon {
+    [super awakeCommon];
+
+    self.isFullsizeMode = false;
+    self.isVisible = false;
+
+    [self addObserver:self forKeyPath:@"isVisible" options:NSKeyValueObservingOptionNew context:nil];
+    [self addObserver:self forKeyPath:@"isFullsizeMode" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"isVisible"];
+    [self removeObserver:self forKeyPath:@"isFullsizeMode"];
 }
 
 - (void)requestThumbnail {
-    [((ASCategory *)self.categories.allObjects[0]).store.operation fetchDataWithObject:self userInfo:@{ @"size": @"thumbnail" } completion:^(NSArray *results, NSError *error) {
-        if (error == nil) {
-            // add image
-        } else {
-            // handle error
+
+}
+
+- (void)requestFullsize {
+
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (object == self && [keyPath isEqualToString:@"isVisible"]) {
+        if ((BOOL)change[NSKeyValueChangeNewKey] == true) {
+            [self requestThumbnail];
         }
-    }];
+    } else if (object == self && [keyPath isEqualToString:@"isFullsizeMode"]) {
+        if ((BOOL)change[NSKeyValueChangeNewKey] == true) {
+            [self requestFullsize];
+        }
+    }
 }
 
 @end

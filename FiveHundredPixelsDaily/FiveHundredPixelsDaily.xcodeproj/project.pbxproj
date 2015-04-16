@@ -10,8 +10,8 @@
 		4F4C1E411ADA17FA00109166 /* ASBaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E401ADA17FA00109166 /* ASBaseOperation.m */; };
 		4F4C1E441ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E421ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld */; };
 		4F4C1E471ADA18CF00109166 /* ASStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E461ADA18CF00109166 /* ASStore.m */; };
-		4F4C1E4C1ADA198F00109166 /* ASLocalStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E491ADA198F00109166 /* ASLocalStore.m */; };
-		4F4C1E4D1ADA198F00109166 /* ASRemoteStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E4B1ADA198F00109166 /* ASRemoteStore.m */; };
+		4F4C1E4C1ADA198F00109166 /* ASPhotosStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E491ADA198F00109166 /* ASPhotosStore.m */; };
+		4F4C1E4D1ADA198F00109166 /* ASFHPStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E4B1ADA198F00109166 /* ASFHPStore.m */; };
 		4F4D6E931AD75EB800D1ABD8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6E921AD75EB800D1ABD8 /* main.m */; };
 		4F4D6E961AD75EB800D1ABD8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6E951AD75EB800D1ABD8 /* AppDelegate.m */; };
 		4F4D6E9C1AD75EB800D1ABD8 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6E9B1AD75EB800D1ABD8 /* MasterViewController.m */; };
@@ -38,10 +38,10 @@
 		4F4C1E431ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FiveHundredPixelsDaily.xcdatamodel; sourceTree = "<group>"; };
 		4F4C1E451ADA18CF00109166 /* ASStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASStore.h; sourceTree = "<group>"; };
 		4F4C1E461ADA18CF00109166 /* ASStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASStore.m; sourceTree = "<group>"; };
-		4F4C1E481ADA198F00109166 /* ASLocalStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASLocalStore.h; sourceTree = "<group>"; };
-		4F4C1E491ADA198F00109166 /* ASLocalStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASLocalStore.m; sourceTree = "<group>"; };
-		4F4C1E4A1ADA198F00109166 /* ASRemoteStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASRemoteStore.h; sourceTree = "<group>"; };
-		4F4C1E4B1ADA198F00109166 /* ASRemoteStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASRemoteStore.m; sourceTree = "<group>"; };
+		4F4C1E481ADA198F00109166 /* ASPhotosStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPhotosStore.h; sourceTree = "<group>"; };
+		4F4C1E491ADA198F00109166 /* ASPhotosStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASPhotosStore.m; sourceTree = "<group>"; };
+		4F4C1E4A1ADA198F00109166 /* ASFHPStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASFHPStore.h; sourceTree = "<group>"; };
+		4F4C1E4B1ADA198F00109166 /* ASFHPStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASFHPStore.m; sourceTree = "<group>"; };
 		4F4D6E8D1AD75EB800D1ABD8 /* FiveHundredPixelsDaily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FiveHundredPixelsDaily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4D6E911AD75EB800D1ABD8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F4D6E921AD75EB800D1ABD8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -162,10 +162,10 @@
 				4F717E8A1ADE122D004B8722 /* ASBaseObject.m */,
 				4F4C1E451ADA18CF00109166 /* ASStore.h */,
 				4F4C1E461ADA18CF00109166 /* ASStore.m */,
-				4F4C1E481ADA198F00109166 /* ASLocalStore.h */,
-				4F4C1E491ADA198F00109166 /* ASLocalStore.m */,
-				4F4C1E4A1ADA198F00109166 /* ASRemoteStore.h */,
-				4F4C1E4B1ADA198F00109166 /* ASRemoteStore.m */,
+				4F4C1E481ADA198F00109166 /* ASPhotosStore.h */,
+				4F4C1E491ADA198F00109166 /* ASPhotosStore.m */,
+				4F4C1E4A1ADA198F00109166 /* ASFHPStore.h */,
+				4F4C1E4B1ADA198F00109166 /* ASFHPStore.m */,
 				4FE3E2B51ADA107800B174F4 /* ASCategory.h */,
 				4FE3E2B61ADA107800B174F4 /* ASCategory.m */,
 				4FE3E2B81ADA107800B174F4 /* ASImage.h */,
@@ -312,10 +312,10 @@
 				4F4D6EBE1AD76BAE00D1ABD8 /* CategoriesTableViewController.m in Sources */,
 				4F4D6ECA1AD76FD000D1ABD8 /* BottomNavImageViewController.m in Sources */,
 				4FE3E2D01ADA160800B174F4 /* ASFHPOperation.m in Sources */,
-				4F4C1E4C1ADA198F00109166 /* ASLocalStore.m in Sources */,
+				4F4C1E4C1ADA198F00109166 /* ASPhotosStore.m in Sources */,
 				4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */,
 				4F4C1E411ADA17FA00109166 /* ASBaseOperation.m in Sources */,
-				4F4C1E4D1ADA198F00109166 /* ASRemoteStore.m in Sources */,
+				4F4C1E4D1ADA198F00109166 /* ASFHPStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

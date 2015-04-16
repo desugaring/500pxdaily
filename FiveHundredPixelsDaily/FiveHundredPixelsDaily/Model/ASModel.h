@@ -8,16 +8,16 @@
 
 @import Foundation;
 @import CoreData;
-@class ASLocalStore;
-@class ASRemoteStore;
+@class ASPhotosStore;
+@class ASFHPStore;
 
 static NSString * const DefaultsLocalCategoryNameKey = @"PhotosCategoryName";
 
 @interface ASModel : NSObject
 
 @property NSManagedObjectContext *moc;
-@property ASLocalStore *photosStore;
-@property ASRemoteStore *fhpStore;
+@property ASPhotosStore *photosStore;
+@property ASFHPStore *fhpStore;
 
 - (void)save;
 

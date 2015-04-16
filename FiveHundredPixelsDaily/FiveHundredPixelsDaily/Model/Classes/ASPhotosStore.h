@@ -1,5 +1,5 @@
 //
-//  ASLocalStore.h
+//  ASPhotosStore.h
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-11.
@@ -11,7 +11,7 @@
 #import "ASStore.h"
 
 
-@interface ASLocalStore : ASStore
+@interface ASPhotosStore : ASStore
 
 
 @end

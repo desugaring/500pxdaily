@@ -7,7 +7,7 @@
 //
 
 #import "CategoryCollectionViewController.h"
-#import "ASRemoteStore.h"
+#import "ASFHPStore.h"
 #import "ASCategory.h"
 
 @interface CategoryCollectionViewController()

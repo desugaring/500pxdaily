@@ -7,8 +7,8 @@
 //
 
 #import "ASModel.h"
-#import "ASRemoteStore.h"
-#import "ASLocalStore.h"
+#import "ASFHPStore.h"
+#import "ASPhotosStore.h"
 
 @interface ASModel()
 
@@ -31,17 +31,19 @@
         NSArray *stores = [self.managedObjectContext executeFetchRequest:request error:&error];
 
         if ([stores count] != 2) {
-            self.fhpStore = [[ASRemoteStore alloc] initWithEntity:[NSEntityDescription entityForName:@"Store" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.managedObjectContext];
+            self.fhpStore = [[ASFHPStore alloc] initWithEntity:[NSEntityDescription entityForName:@"Store" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.managedObjectContext];
             self.fhpStore.name = @"500px";
+            self.fhpStore.type = @"fhp";
 
-            self.photosStore = [[ASLocalStore alloc] initWithEntity:[NSEntityDescription entityForName:@"Store" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.moc];
+            self.photosStore = [[ASPhotosStore alloc] initWithEntity:[NSEntityDescription entityForName:@"Store" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.moc];
             self.photosStore.name = @"Photos";
+            self.photosStore.type = @"photos";
         } else {
             for (ASStore *store in stores) {
-                if ([store isKindOfClass: ASLocalStore.class]) {
-                    self.photosStore = (ASLocalStore *)store;
-                } else if ([store isKindOfClass: ASRemoteStore.class]) {
-                    self.fhpStore = (ASRemoteStore *)store;
+                if ([store isKindOfClass: ASPhotosStore.class]) {
+                    self.photosStore = (ASPhotosStore *)store;
+                } else if ([store isKindOfClass: ASFHPStore.class]) {
+                    self.fhpStore = (ASFHPStore *)store;
                 }
             }
         }

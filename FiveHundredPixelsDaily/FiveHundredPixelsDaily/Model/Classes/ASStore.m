@@ -18,15 +18,6 @@
 @dynamic categories;
 @dynamic type;
 
-- (void)updateCategories {
-//    [self.operation fetchDataWithObject:self userInfo:@{@"name": @"Alex"} completion: ^(NSString *someThing){
-//        NSLog(@"jesus christ, %@", someThing);
-//    }];
-    [self.operation fetchDataWithObject:self userInfo:nil completion:^(NSString *someString) {
-        NSLog(@"someString is: %@", someString);
-    }];
-}
-
 - (ASBaseOperation *)operation {
     if ([self.type isEqualToString:@"photos"]) {
         NSLog(@"photos");

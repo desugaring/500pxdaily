@@ -19,7 +19,6 @@
 @property (nonatomic, retain) NSSet *categories;
 
 - (ASBaseOperation *)operation;
-- (void)updateCategories;
 
 @end
 

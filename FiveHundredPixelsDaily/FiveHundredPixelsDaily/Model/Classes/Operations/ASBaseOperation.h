@@ -13,9 +13,9 @@ typedef void(^CompletionBlock)(NSArray *results, NSError *error);
 
 @interface ASBaseOperation : NSOperation
 
-- (void)fetchDataWithObject:(NSManagedObject *)object userInfo:(NSDictionary *)userInfo completion:(CompletionBlock)completion;
-
-// fetchDataForObject(Anyobject, userInfo: Dictionary?, completion: (data, error))
+@property NSManagedObject *object;
+@property NSDictionary *userInfo;
+@property (copy) CompletionBlock completion;
 
 // get categories
 // get category metadata

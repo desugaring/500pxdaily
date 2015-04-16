@@ -9,6 +9,7 @@
 @import Foundation;
 @import CoreData;
 #import "ASBaseObject.h"
+#import "ASBaseOperation.h"
 
 @class ASCategory;
 
@@ -20,8 +21,10 @@
 @property (nonatomic, retain) id full;
 @property (nonatomic, retain) NSSet *categories;
 
-- (void)requestThumbnail;
-- (void)requestFull;
+@property BOOL isVisible;
+@property BOOL isFullsizeMode;
+
+- (ASBaseOperation *)operation;
 
 @end
 

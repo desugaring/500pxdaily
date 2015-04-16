@@ -1,4 +1,4 @@
-//
+
 //  ASCategory.m
 //  FiveHundredPixelsDaily
 //
@@ -13,9 +13,15 @@
 
 @implementation ASCategory
 
-@dynamic isActive;
+@dynamic isVisible;
 @dynamic images;
 @dynamic store;
+@synthesize maxNumberOfImages;
+@synthesize isFullsizeMode;
+
+- (ASBaseOperation *)operation {
+    return self.store.operation;
+}
 
 - (void)resetImages {
     for (ASImage *image in self.images.allObjects) {
@@ -23,31 +29,48 @@
     }
 }
 
-- (void)requestImages {
-    [self.store.operation fetchDataWithObject:self userInfo:@{ @"numberOfImages": @20 } completion:^(NSArray *results, NSError *error) {
-        if (error == nil) {
-            // add images
-        } else {
-            // handle error
+- (void)requestImageData {
+    NSLog(@"requesting image data for category %@", self.name);
+    ASBaseOperation *operation = [self operation];
+    operation.object = self;
+    operation.completion = ^(NSArray *results, NSError *error) {
+        if (error != nil) {
+            NSLog(@"url response error: %@", error);
+        } else if ([results[0] isKindOfClass:NSData.class]){
+            NSData *data = (NSData *)results[0];
+            //            NSDictionary *jsonDict = [[NSDictionary alloc] init]
+            NSError *error;
+            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+            if (error != nil) {
+                NSLog(@"json parsing error: %@", error);
+            } else {
+                // parse json
+                NSLog(@"json dict: %@", jsonDict);
+            }
         }
-    }];
+    };
+
+    
 }
 
 - (void)awakeCommon {
     [super awakeCommon];
 
-    [self addObserver:self forKeyPath:@"isActive" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew) context:nil];
+    self.isFullsizeMode = false;
+    [self addObserver:self forKeyPath:@"isVisible" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew) context:nil];
 }
 
 - (void)dealloc
 {
-    [self removeObserver:self forKeyPath:@"isActive"];
+    [self removeObserver:self forKeyPath:@"isVisible"];
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (object == self && [keyPath isEqualToString:@"isActive"]) {
+    if (object == self && [keyPath isEqualToString:@"isVisible"]) {
         if ((BOOL)change[NSKeyValueChangeNewKey] == TRUE) {
-            
+            if (self.images.count == 0) {
+                [self requestImageData];
+            }
         }
     }
 }

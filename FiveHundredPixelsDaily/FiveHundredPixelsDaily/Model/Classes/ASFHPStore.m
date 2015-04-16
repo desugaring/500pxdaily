@@ -1,28 +1,19 @@
 //
-//  ASRemoteStore.m
+//  ASFHPStore.m
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-11.
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import "ASRemoteStore.h"
+#import "ASFHPStore.h"
 #import "ASCategory.h"
 
-@interface ASRemoteStore()
+@interface ASFHPStore()
 
 @end
 
-@implementation ASRemoteStore
-
-@synthesize activeCategory = _activeCategory;
-
--(void)setActiveCategory:(ASCategory *)activeCategory {
-    if (_activeCategory != nil) {
-        _activeCategory.isActive = false;
-    }
-    _activeCategory = activeCategory;
-}
+@implementation ASFHPStore
 
 - (NSArray *)categoryNames {
     return @[@"Abstract", @"Animals", @"Black and White", @"Celebrities", @"City & Architecture", @"Commercial", @"Concert", @"Family", @"Fashion", @"Film", @"Fine Art", @"Food", @"Journalism", @"Landscapes", @"Macro", @"Nature", @"People", @"Performing Arts", @"Sport", @"Still Life", @"Street", @"Transportation", @"Travel", @"Underwater", @"Urban Exploration", @"Wedding"];
@@ -47,22 +38,22 @@
         }
     }
 
-    // Set active category if it is not set
+    // Set visible category if it is not set
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Category"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isActive == TRUE"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isVisible == TRUE"];
     request.predicate = predicate;
     NSError *error;
-    NSArray *activeCategoryResults = [self.managedObjectContext executeFetchRequest:request error:&error];
+    NSArray *visibleCategoryResult = [self.managedObjectContext executeFetchRequest:request error:&error];
 
-    if (activeCategoryResults.count == 0) {
+    if (visibleCategoryResult.count == 0) {
         NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Category"];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name like 'Landscapes'"];
         request.predicate = predicate;
         NSError *error;
         NSArray *landscapeCategoryResult = [self.managedObjectContext executeFetchRequest:request error:&error];
-        self.activeCategory = (ASCategory *)landscapeCategoryResult[0];
+        ((ASCategory *)landscapeCategoryResult[0]).isVisible = true;
     } else {
-        self.activeCategory = (ASCategory *)activeCategoryResults[0];
+        ((ASCategory *)visibleCategoryResult[0]).isVisible = true;
     }
 }
 

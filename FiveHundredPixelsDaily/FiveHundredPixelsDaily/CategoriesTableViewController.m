@@ -7,6 +7,7 @@
 //
 
 #import "CategoriesTableViewController.h"
+#import "aspho"
 
 @interface CategoriesTableViewController ()
 
@@ -32,14 +33,15 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
+    if (section == 1) {
+        return self.model.photosStore.cate
+    }
     return 0;
 }
 

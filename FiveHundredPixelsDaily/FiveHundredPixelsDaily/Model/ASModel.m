@@ -67,7 +67,18 @@
 #pragma mark - Core Data stack
 
 - (void)save {
+    [self deleteAllImages];
     [self saveContext];
+}
+
+- (void)deleteAllImages {
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Image"];
+    NSError *error;
+    NSArray *images = [self.moc executeFetchRequest:request error:&error];
+
+    for (ASImage *image in images) {
+        [self.moc deleteObject:(NSManagedObject *)image];
+    }
 }
 
 - (NSURL *)applicationDocumentsDirectory {

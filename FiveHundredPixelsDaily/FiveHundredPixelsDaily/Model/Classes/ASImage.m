@@ -16,12 +16,12 @@
 @dynamic fullURL;
 @dynamic thumbnail;
 @dynamic full;
-@dynamic categories;
+@dynamic category;
 @synthesize isVisible;
 @synthesize isFullsizeMode;
 
 -(ASBaseOperation *)operation {
-    return ((ASCategory *)self.categories.allObjects[0]).operation;
+    return self.category.operation;
 }
 
 -(void)awakeCommon {

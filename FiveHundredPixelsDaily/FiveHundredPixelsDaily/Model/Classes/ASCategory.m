@@ -35,7 +35,7 @@
 - (void)awakeCommon {
     [super awakeCommon];
 
-    self.maxNumberOfImages = 0;
+    self.maxNumberOfImages = -1;
     self.isFullsizeMode = false;
 
     self.imagesDataQueue = [[NSOperationQueue alloc] init];
@@ -93,7 +93,7 @@
     NSArray *photos = imageData[@"photos"];
     for (NSDictionary *photoData in photos) {
         ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
-        image.identifier = photoData[@"id"];
+//        image.identifier = photoData[@"id"];
         image.name = photoData[@"name"];
         image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
         image.fullURL = (NSString *)photoData[@"image_url"][1];

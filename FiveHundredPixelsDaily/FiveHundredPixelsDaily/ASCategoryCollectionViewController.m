@@ -12,6 +12,9 @@
 
 @interface ASCategoryCollectionViewController()
 
+@property ASCategory *activeCategory;
+@property NSArray *visibleCellsIndexPaths;
+
 @end
 
 @implementation ASCategoryCollectionViewController
@@ -21,15 +24,22 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.visibleCellsIndexPaths = [NSArray new];
+}
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Register cell classes
-//    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    self.navigationItem.title = [self.model activeCategory].name;
 
-    // Do any additional setup after loading the view.
+    self.activeCategory = [self.model activeCategory];
+    [self.activeCategory addObserver:self forKeyPath:@"images" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
+    [self.activeCategory removeObserver:self forKeyPath:@"images"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,7 +65,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self.model activeCategory].images.count;
+    return self.activeCategory.images.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -64,6 +74,29 @@ static NSString * const reuseIdentifier = @"Cell";
     // Configure the cell
     
     return cell;
+}
+
+#pragma mark - ScrollView Delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    NSArray *visibleCells = [self.collectionView indexPathsForVisibleItems];
+    // if the same images are on screen, don't do anything
+    if ([self.visibleCellsIndexPaths isEqualToArray:visibleCells]) {
+        return;
+        // otherwise request thumbnails and check if we're approaching the bottom of the scrollview
+    } else {
+        self.visibleCellsIndexPaths = visibleCells;
+        self.activeCategory.ima
+        NSUInteger distantImageIndex = [[visibleCells lastObject] row]+50;
+        if ([self.category.images count] < distantImageIndex) {
+            if (self.category.numberOfImagesAvailable > [self.category.images count]) {
+                [self.category requestImagesWithCompletionBlock:^{
+                    [self.collectionView reloadData];
+                }];
+            }
+        }
+    }
 }
 
 #pragma mark <UICollectionViewDelegate>

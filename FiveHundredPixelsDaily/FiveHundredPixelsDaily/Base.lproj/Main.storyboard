@@ -73,29 +73,47 @@
             </objects>
             <point key="canvasLocation" x="334.5" y="-860.5"/>
         </scene>
-        <!--Category Collection View Controller-->
+        <!--Category Name-->
         <scene sceneID="Aqb-C8-FqA">
             <objects>
                 <collectionViewController id="cJZ-AX-HRa" customClass="ASCategoryCollectionViewController" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="HlL-y4-YMO">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" id="HlL-y4-YMO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="lrU-YD-q5P">
-                            <size key="itemSize" width="50" height="50"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="lrU-YD-q5P">
+                            <size key="itemSize" width="120" height="120"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Thumbnail" id="k3L-rv-55w">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Thumbnail" id="k3L-rv-55w" customClass="ASImageCollectionViewCell">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nxo-eW-B9c">
+                                            <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                        </imageView>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="4OX-0c-ydK">
+                                            <rect key="frame" x="50" y="50" width="20" height="20"/>
+                                        </activityIndicatorView>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="nxo-eW-B9c" secondAttribute="trailing" id="GsA-dE-JoC"/>
+                                    <constraint firstItem="nxo-eW-B9c" firstAttribute="leading" secondItem="k3L-rv-55w" secondAttribute="leading" id="Izj-Fd-6m7"/>
+                                    <constraint firstAttribute="bottom" secondItem="nxo-eW-B9c" secondAttribute="bottom" id="Jzm-JX-8yc"/>
+                                    <constraint firstItem="nxo-eW-B9c" firstAttribute="top" secondItem="k3L-rv-55w" secondAttribute="top" id="Ldi-Jj-Nhj"/>
+                                    <constraint firstItem="nxo-eW-B9c" firstAttribute="centerX" secondItem="4OX-0c-ydK" secondAttribute="centerX" id="vb1-Fu-arO"/>
+                                    <constraint firstItem="nxo-eW-B9c" firstAttribute="centerY" secondItem="4OX-0c-ydK" secondAttribute="centerY" id="xfY-jU-aLk"/>
+                                </constraints>
                                 <connections>
+                                    <outlet property="imageView" destination="nxo-eW-B9c" id="PV7-Kh-i0g"/>
+                                    <outlet property="spinner" destination="4OX-0c-ydK" id="292-yS-fma"/>
                                     <segue destination="g2S-Lx-1Bt" kind="show" id="76N-r8-h7i"/>
                                 </connections>
                             </collectionViewCell>
@@ -105,7 +123,10 @@
                             <outlet property="delegate" destination="cJZ-AX-HRa" id="zK1-Xi-4xY"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="b6Y-Gm-Twd"/>
+                    <navigationItem key="navigationItem" title="Category Name" id="b6Y-Gm-Twd">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="ThL-85-YHq"/>
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="g5A-2H-EyP"/>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bMG-vM-k9f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

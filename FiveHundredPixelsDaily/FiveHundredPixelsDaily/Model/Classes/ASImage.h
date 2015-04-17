@@ -20,7 +20,6 @@
 @property (nonatomic, retain) id thumbnail;
 @property (nonatomic, retain) id full;
 @property (nonatomic, retain) ASCategory *category;
-@property (nonatomic, retain) NSNumber * identifier;
 
 @property BOOL isVisible;
 @property BOOL isFullsizeMode;

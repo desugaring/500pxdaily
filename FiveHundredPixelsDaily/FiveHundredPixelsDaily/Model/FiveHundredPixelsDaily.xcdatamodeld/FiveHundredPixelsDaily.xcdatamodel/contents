@@ -5,14 +5,13 @@
     </entity>
     <entity name="Category" representedClassName="ASCategory" parentEntity="BaseObject" syncable="YES">
         <attribute name="isVisible" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Image" inverseName="category" inverseEntity="Image" syncable="YES"/>
+        <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Image" inverseName="category" inverseEntity="Image" syncable="YES"/>
         <relationship name="store" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="categories" inverseEntity="Store" syncable="YES"/>
     </entity>
     <entity name="FHPStore" representedClassName="ASFHPStore" parentEntity="Store" syncable="YES"/>
     <entity name="Image" representedClassName="ASImage" parentEntity="BaseObject" syncable="YES">
         <attribute name="full" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="fullURL" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="identifier" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="thumbnail" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="images" inverseEntity="Category" syncable="YES"/>
@@ -25,7 +24,7 @@
     </entity>
     <elements>
         <element name="Category" positionX="261" positionY="216" width="128" height="90"/>
-        <element name="Image" positionX="270" positionY="225" width="128" height="135"/>
+        <element name="Image" positionX="270" positionY="225" width="128" height="120"/>
         <element name="Store" positionX="261" positionY="189" width="128" height="75"/>
         <element name="PhotosStore" positionX="270" positionY="261" width="128" height="45"/>
         <element name="FHPStore" positionX="279" positionY="270" width="128" height="45"/>

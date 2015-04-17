@@ -15,13 +15,11 @@
 
 @interface ASCategory : ASBaseObject
 
-@property (nonatomic) BOOL isVisible;
-@property (nonatomic, retain) NSSet *images;
+@property (nonatomic, retain) NSNumber * isVisible;
+@property (nonatomic, retain) NSOrderedSet *images;
 @property (nonatomic, retain) ASStore *store;
 
 @property NSInteger maxNumberOfImages;
-@property BOOL isFullsizeMode;
-- (ASBaseOperation *)operation;
 
 @property NSOperationQueue *imageThumbnailQueue;
 @property NSOperationQueue *imageFullQueue;
@@ -33,9 +31,15 @@
 
 @interface ASCategory (CoreDataGeneratedAccessors)
 
+- (void)insertObject:(ASImage *)value inImagesAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromImagesAtIndex:(NSUInteger)idx;
+- (void)insertImages:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeImagesAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInImagesAtIndex:(NSUInteger)idx withObject:(ASImage *)value;
+- (void)replaceImagesAtIndexes:(NSIndexSet *)indexes withImages:(NSArray *)values;
 - (void)addImagesObject:(ASImage *)value;
 - (void)removeImagesObject:(ASImage *)value;
-- (void)addImages:(NSSet *)values;
-- (void)removeImages:(NSSet *)values;
-
+- (void)addImages:(NSOrderedSet *)values;
+- (void)removeImages:(NSOrderedSet *)values;
 @end
+

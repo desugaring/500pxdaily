@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-@import Foundation;
+@import UIKit;
 @import CoreData;
 #import "ASBaseObject.h"
 #import "ASBaseOperation.h"
@@ -17,12 +17,12 @@
 
 @property (nonatomic, retain) NSString * thumbnailURL;
 @property (nonatomic, retain) NSString * fullURL;
-@property (nonatomic, retain) id thumbnail;
-@property (nonatomic, retain) id full;
+@property (nonatomic, retain) UIImage thumbnail;
+@property (nonatomic, retain) UIImage full;
 @property (nonatomic, retain) ASCategory *category;
 
-@property BOOL isVisible;
-@property BOOL isFullsizeMode;
+@property BOOL thumbnailVisible;
+@property BOOL fullVisible;
 
 - (ASBaseOperation *)operation;
 

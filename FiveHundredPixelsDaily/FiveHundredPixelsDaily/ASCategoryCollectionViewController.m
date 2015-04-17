@@ -7,13 +7,15 @@
 //
 
 #import "ASCategoryCollectionViewController.h"
+#import "ASImageCollectionViewCell.h"
 #import "ASFHPStore.h"
 #import "ASCategory.h"
+#import "ASImage.h"
 
 @interface ASCategoryCollectionViewController()
 
 @property ASCategory *activeCategory;
-@property NSArray *visibleCellsIndexPaths;
+@property NSSet *visibleCells;
 
 @end
 
@@ -24,7 +26,7 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.visibleCellsIndexPaths = [NSArray new];
+    self.visibleCells = [NSSet new];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -69,10 +71,14 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell
-    
+    ASImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+
+    ASImage *image = self.activeCategory.images[indexPath.row];
+    if (image.thumbnail != nil) {
+        cell.imageView.image = image.thumbnail;
+        [cell.spinner stopAnimating];
+    }
+
     return cell;
 }
 
@@ -80,22 +86,26 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSArray *visibleCells = [self.collectionView indexPathsForVisibleItems];
-    // if the same images are on screen, don't do anything
-    if ([self.visibleCellsIndexPaths isEqualToArray:visibleCells]) {
-        return;
-        // otherwise request thumbnails and check if we're approaching the bottom of the scrollview
-    } else {
-        self.visibleCellsIndexPaths = visibleCells;
-        self.activeCategory.ima
-        NSUInteger distantImageIndex = [[visibleCells lastObject] row]+50;
-        if ([self.category.images count] < distantImageIndex) {
-            if (self.category.numberOfImagesAvailable > [self.category.images count]) {
-                [self.category requestImagesWithCompletionBlock:^{
-                    [self.collectionView reloadData];
-                }];
-            }
+    NSSet *newVisibleCells = [NSSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
+    if ([newVisibleCells isEqualToSet:self.visibleCells] == false) {
+        // Mark images that are no longer visible, by subtracting new visible cells from the old. Anything left over is no longer visible.
+        NSMutableSet *oldCells = [self.visibleCells mutableCopy];
+        [oldCells minusSet:newVisibleCells];
+        for (NSIndexPath *indexPath in oldCells) {
+            ((ASImage *)self.activeCategory.images[indexPath.row]).thumbnailVisible = false;
         }
+        // Mark images that are newly visible, by subtracting old visible cells from the new.
+        NSMutableSet *newCells = [newVisibleCells mutableCopy];
+        [newCells minusSet:self.visibleCells];
+        for (NSIndexPath *indexPath in newCells) {
+            ((ASImage *)self.activeCategory.images[indexPath.row]).thumbnailVisible = true;
+        }
+    }
+
+    // Load more images if needed
+    NSInteger distantImageIndex = ((NSIndexPath *)newVisibleCells.allObjects.lastObject).row + 50;
+    if (self.activeCategory.images.count < distantImageIndex && self.activeCategory.images.count != self.activeCategory.maxNumberOfImages) {
+        [self.activeCategory requestImageData];
     }
 }
 

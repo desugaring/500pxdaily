@@ -16,16 +16,20 @@
 @interface ASStore : ASBaseObject
 
 @property (nonatomic, retain) NSString *type;
-@property (nonatomic, retain) NSSet *categories;
-- (ASBaseOperation *)operation;
+@property (nonatomic, retain) NSOrderedSet *categories;
 
 @end
 
 @interface ASStore (CoreDataGeneratedAccessors)
 
+- (void)insertObject:(ASCategory *)value inCategoriesAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromCategoriesAtIndex:(NSUInteger)idx;
+- (void)insertCategories:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeCategoriesAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInCategoriesAtIndex:(NSUInteger)idx withObject:(ASCategory *)value;
+- (void)replaceCategoriesAtIndexes:(NSIndexSet *)indexes withCategories:(NSArray *)values;
 - (void)addCategoriesObject:(ASCategory *)value;
 - (void)removeCategoriesObject:(ASCategory *)value;
-- (void)addCategories:(NSSet *)values;
-- (void)removeCategories:(NSSet *)values;
-
+- (void)addCategories:(NSOrderedSet *)values;
+- (void)removeCategories:(NSOrderedSet *)values;
 @end

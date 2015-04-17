@@ -9,6 +9,7 @@
 #import "ASPhotosStore.h"
 #import "ASCategory.h"
 #import "ASModel.h"
+#import "ASPhotosOperation.h"
 
 @implementation ASPhotosStore
 
@@ -16,7 +17,9 @@
     return ((ASCategory *)self.categories.allObjects[0]);
 }
 
-
+-(ASBaseOperation *)operation {
+    return [[ASPhotosOperation alloc] init];
+}
 
 - (void)awakeCommon {
     NSLog(@"awake local");

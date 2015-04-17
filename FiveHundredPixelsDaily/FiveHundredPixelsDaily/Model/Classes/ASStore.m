@@ -18,16 +18,4 @@
 @dynamic categories;
 @dynamic type;
 
-- (ASBaseOperation *)operation {
-    if ([self.type isEqualToString:@"photos"]) {
-        NSLog(@"photos");
-        return [[ASPhotosOperation alloc] init];
-    } else if ([self.type isEqualToString:@"fhp"]) {
-        NSLog(@"fhp");
-        return [[ASFHPOperation alloc] init];
-    }
-
-    return [[ASBaseOperation alloc] init];
-}
-
 @end

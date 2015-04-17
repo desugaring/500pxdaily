@@ -19,7 +19,7 @@
     <entity name="PhotosStore" representedClassName="ASPhotosStore" parentEntity="Store" syncable="YES"/>
     <entity name="Store" representedClassName="ASStore" isAbstract="YES" parentEntity="BaseObject">
         <attribute name="type" attributeType="String" syncable="YES"/>
-        <relationship name="categories" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="store" inverseEntity="Category" syncable="YES"/>
+        <relationship name="categories" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Category" inverseName="store" inverseEntity="Category" syncable="YES"/>
         <userInfo/>
     </entity>
     <elements>

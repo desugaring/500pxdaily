@@ -8,7 +8,6 @@
 
 @import Foundation;
 @import CoreData;
-#import "ASStore.h"
 
 @interface ASFHPStore : ASStore
 

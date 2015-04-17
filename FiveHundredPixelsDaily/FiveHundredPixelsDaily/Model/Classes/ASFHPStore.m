@@ -8,12 +8,17 @@
 
 #import "ASFHPStore.h"
 #import "ASCategory.h"
+#import "ASFHPOperation.h"
 
 @interface ASFHPStore()
 
 @end
 
 @implementation ASFHPStore
+
+-(ASBaseOperation *)operation {
+    return [[ASFHPOperation alloc] init];
+}
 
 - (NSArray *)categoryNames {
     return @[@"Abstract", @"Animals", @"Black and White", @"Celebrities", @"City & Architecture", @"Commercial", @"Concert", @"Family", @"Fashion", @"Film", @"Fine Art", @"Food", @"Journalism", @"Landscapes", @"Macro", @"Nature", @"People", @"Performing Arts", @"Sport", @"Still Life", @"Street", @"Transportation", @"Travel", @"Underwater", @"Urban Exploration", @"Wedding"];
@@ -25,7 +30,7 @@
     if (self.categories.count != self.categoryNames.count) {
         for (NSString *categoryName in self.categoryNames) {
             BOOL containsName = FALSE;
-            for (ASCategory *category in self.categories.allObjects) {
+            for (ASCategory *category in self.categories) {
                 if ([category.name isEqualToString:categoryName]) {
                     containsName = TRUE;
                 }
@@ -51,9 +56,9 @@
         request.predicate = predicate;
         NSError *error;
         NSArray *landscapeCategoryResult = [self.managedObjectContext executeFetchRequest:request error:&error];
-        ((ASCategory *)landscapeCategoryResult[0]).isVisible = true;
+        ((ASCategory *)landscapeCategoryResult[0]).isVisible = @(true);
     } else {
-        ((ASCategory *)visibleCategoryResult[0]).isVisible = true;
+        ((ASCategory *)visibleCategoryResult[0]).isVisible = @(true);
     }
 }
 

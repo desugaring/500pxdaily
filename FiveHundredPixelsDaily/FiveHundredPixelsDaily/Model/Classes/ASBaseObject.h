@@ -6,14 +6,15 @@
 //
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-
+@import Foundation;
+@import CoreData;
+#import "ASBaseOperation.h"
 
 @interface ASBaseObject : NSManagedObject
 
-@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString *name;
 
 - (void)awakeCommon;
+- (ASBaseOperation *)operation;
 
 @end

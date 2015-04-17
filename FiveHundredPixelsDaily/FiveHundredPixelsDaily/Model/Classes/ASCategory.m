@@ -23,7 +23,6 @@
 @dynamic images;
 @dynamic store;
 @synthesize maxNumberOfImages;
-@synthesize isFullsizeMode;
 @synthesize imagesDataQueue;
 @synthesize imageThumbnailQueue;
 @synthesize imageFullQueue;
@@ -36,7 +35,6 @@
     [super awakeCommon];
 
     self.maxNumberOfImages = -1;
-    self.isFullsizeMode = false;
 
     self.imagesDataQueue = [[NSOperationQueue alloc] init];
     self.imagesDataQueue.maxConcurrentOperationCount = 1;

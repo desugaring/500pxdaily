@@ -4,6 +4,8 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Category" representedClassName="ASCategory" parentEntity="BaseObject" syncable="YES">
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="status" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Image" inverseName="category" inverseEntity="Image" syncable="YES"/>
         <relationship name="store" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="categories" inverseEntity="Store" syncable="YES"/>
     </entity>
@@ -21,7 +23,7 @@
         <userInfo/>
     </entity>
     <elements>
-        <element name="Category" positionX="261" positionY="216" width="128" height="75"/>
+        <element name="Category" positionX="261" positionY="216" width="128" height="105"/>
         <element name="Image" positionX="270" positionY="225" width="128" height="120"/>
         <element name="Store" positionX="261" positionY="189" width="128" height="60"/>
         <element name="PhotosStore" positionX="270" positionY="261" width="128" height="45"/>

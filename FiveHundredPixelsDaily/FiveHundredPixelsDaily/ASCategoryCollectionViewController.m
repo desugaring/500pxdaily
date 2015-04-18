@@ -14,8 +14,7 @@
 
 @interface ASCategoryCollectionViewController()
 
-@property ASCategory *activeCategory;
-@property NSSet *visibleCells;
+@property NSArray *visibleIndexPaths;
 
 @end
 
@@ -25,23 +24,10 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.visibleCells = [NSSet new];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
-    self.navigationItem.title = [self.model activeCategory].name;
-
-    self.activeCategory = [self.model activeCategory];
-    [self.activeCategory addObserver:self forKeyPath:@"images" options:NSKeyValueObservingOptionNew context:nil];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-
-    [self.activeCategory removeObserver:self forKeyPath:@"images"];
+    
+    self.navigationItem.title = self.category.name;
+    self.visibleIndexPaths = [NSArray new];
+    self.category.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,13 +53,13 @@ static NSString * const reuseIdentifier = @"Cell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.activeCategory.images.count;
+    return self.category.images.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ASImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
-    ASImage *image = self.activeCategory.images[indexPath.row];
+    ASImage *image = self.category.images[indexPath.row];
     if (image.thumbnail != nil) {
         cell.imageView.image = image.thumbnail;
         [cell.spinner stopAnimating];
@@ -86,27 +72,25 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSSet *newVisibleCells = [NSSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
-    if ([newVisibleCells isEqualToSet:self.visibleCells] == false) {
-        // Mark images that are no longer visible, by subtracting new visible cells from the old. Anything left over is no longer visible.
-        NSMutableSet *oldCells = [self.visibleCells mutableCopy];
-        [oldCells minusSet:newVisibleCells];
-        for (NSIndexPath *indexPath in oldCells) {
-            ((ASImage *)self.activeCategory.images[indexPath.row]).thumbnailVisible = false;
-        }
-        // Mark images that are newly visible, by subtracting old visible cells from the new.
-        NSMutableSet *newCells = [newVisibleCells mutableCopy];
-        [newCells minusSet:self.visibleCells];
-        for (NSIndexPath *indexPath in newCells) {
-            ((ASImage *)self.activeCategory.images[indexPath.row]).thumbnailVisible = true;
-        }
-    }
+    if ([[self.collectionView indexPathsForVisibleItems] isEqualToArray:self.visibleIndexPaths] == false) {
+        self.visibleIndexPaths = [self.collectionView indexPathsForVisibleItems];
 
-    // Load more images if needed
-    NSInteger distantImageIndex = ((NSIndexPath *)newVisibleCells.allObjects.lastObject).row + 50;
-    if (self.activeCategory.images.count < distantImageIndex && self.activeCategory.images.count != self.activeCategory.maxNumberOfImages) {
-        [self.activeCategory requestImageData];
+        NSMutableArray *newVisibleImages = [NSMutableArray new];
+        [self.visibleIndexPaths enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL *stop) {
+            [newVisibleImages addObject:self.category.images[indexPath.item]];
+        }];
+        [self.category setVisibleImages:newVisibleImages ofSize:ASImageSizeThumbnail];
     }
+}
+
+#pragma mark - Category Image Delegate
+
+- (void)thumbnailImageUpdated:(ASImage *)image {
+    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0]]];
+}
+
+- (void)numberOfImagesUpdated {
+    [self.collectionView reloadData];
 }
 
 #pragma mark <UICollectionViewDelegate>

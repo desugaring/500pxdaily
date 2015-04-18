@@ -21,9 +21,10 @@
 @property (nonatomic, retain) UIImage *full;
 @property (nonatomic, retain) ASCategory *category;
 
-@property BOOL thumbnailVisible;
-@property BOOL fullVisible;
+- (void)requestThumbnailImageIfNeeded;
+- (void)requestFullImageIfNeeded;
 
-- (ASBaseOperation *)operation;
+- (void)cancelThumbnailRequestIfNeeded;
+- (void)cancelFullImageRequestIfNeeded;
 
 @end

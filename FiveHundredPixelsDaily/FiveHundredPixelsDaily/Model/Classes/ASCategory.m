@@ -22,11 +22,12 @@
 
 @dynamic images;
 @dynamic store;
+@dynamic lastUpdated;
+@dynamic status;
+
 @synthesize maxNumberOfImages;
-@synthesize isActive;
 @synthesize imagesDataQueue;
-@synthesize imageThumbnailQueue;
-@synthesize imageFullQueue;
+@synthesize imageQueue;
 @synthesize delegate;
 
 - (ASBaseOperation *)operation {
@@ -37,32 +38,42 @@
     [super awakeCommon];
 
     self.maxNumberOfImages = -1;
-    self.isActive = false;
 
     self.imagesDataQueue = [[NSOperationQueue alloc] init];
     self.imagesDataQueue.maxConcurrentOperationCount = 1;
 
-    self.imageThumbnailQueue = [[NSOperationQueue alloc] init];
-    self.imageThumbnailQueue.maxConcurrentOperationCount = 1;
-
-    self.imageFullQueue = [[NSOperationQueue alloc] init];
-    self.imageFullQueue.maxConcurrentOperationCount = 1;
-
-    [self addObserver:self forKeyPath:@"isActive" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew) context:nil];
-}
-
-- (void)dealloc {
-    [self removeObserver:self forKeyPath:@"isActive"];
+    self.imageQueue = [[NSOperationQueue alloc] init];
+    self.imageQueue.maxConcurrentOperationCount = 1;
 }
 
 - (void)setVisibleImages:(NSArray *)images ofSize:(ASImageSize)size {
+//    NSSet *newVisibleCells = [NSSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
+//    if ([newVisibleCells isEqualToSet:self.visibleCells] == false) {
+//        // Mark images that are no longer visible, by subtracting new visible cells from the old. Anything left over is no longer visible.
+//        NSMutableSet *oldCells = [self.visibleCells mutableCopy];
+//        [oldCells minusSet:newVisibleCells];
+//        for (NSIndexPath *indexPath in oldCells) {
+//            ((ASImage *)self.activeCategory.images[indexPath.row]).thumbnailVisible = false;
+//        }
+//        // Mark images that are newly visible, by subtracting old visible cells from the new.
+//        NSMutableSet *newCells = [newVisibleCells mutableCopy];
+//        [newCells minusSet:self.visibleCells];
+//        for (NSIndexPath *indexPath in newCells) {
+//            ((ASImage *)self.activeCategory.images[indexPath.row]).thumbnailVisible = true;
+//        }
+//    }
 
+    // Load more images if needed
+//    NSInteger distantImageIndex = ((NSIndexPath *)self.visibleIndexPaths.lastObject).item + 50;
+//    if (self.category.images.count < distantImageIndex && self.category.images.count != self.category.maxNumberOfImages) {
+//        [self.activeCategory requestImageData];
+//    }
 }
 
 - (void)resetImages {
-    for (ASImage *image in self.images) {
-        [self.managedObjectContext deleteObject:image];
-    }
+    [self removeImages:self.images];
+    self.maxNumberOfImages = -1;
+    [self requestImageData];
 }
 
 - (void)requestImageData {
@@ -91,43 +102,35 @@
 }
 
 - (void)parseImageData:(NSDictionary *)imageData {
-    if (self.maxNumberOfImages == 0) {
-        self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
-    }
+    self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
+
+    NSMutableArray *newImages = [NSMutableArray new];
+
     NSArray *photos = imageData[@"photos"];
     for (NSDictionary *photoData in photos) {
-        ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
-//        image.identifier = photoData[@"id"];
+        ASImage *image = [[ASImage alloc] init];
         image.name = photoData[@"name"];
         image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
         image.fullURL = (NSString *)photoData[@"image_url"][1];
+
+        [newImages addObject:image];
     }
+    [self addImages:[NSOrderedSet orderedSetWithArray:newImages]];
+    [self numberOfImagesUpdated];
 }
 
 #pragma mark - Image Delegate
 
 - (void)thumbnailImageUpdated:(ASImage *)image {
-    if (self.delegate != nil) [self.delegate thumbnailImageUpdated:image];
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(thumbnailImageUpdated:)]) [self.delegate thumbnailImageUpdated:image];
 }
 
 - (void)fullImageUpdated:(ASImage *)image {
-    if (self.delegate != nil) [self.delegate fullImageUpdated:image];
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(fullImageUpdated:)]) [self.delegate fullImageUpdated:image];
 }
 
-#pragma mark - KVO
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (object == self && [keyPath isEqualToString:@"isActive"]) {
-        if ((BOOL)change[NSKeyValueChangeNewKey] == true) {
-            if (self.images.count == 0) {
-                [self requestImageData];
-            }
-        } else if ((BOOL)change[NSKeyValueChangeNewKey] == false) {
-            [self.imagesDataQueue cancelAllOperations];
-            [self.imageThumbnailQueue cancelAllOperations];
-            [self.imageFullQueue cancelAllOperations];
-        }
-    }
+- (void)numberOfImagesUpdated {
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(numberOfImagesUpdated)]) [self.delegate numberOfImagesUpdated];
 }
 
 @end

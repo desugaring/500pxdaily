@@ -25,8 +25,7 @@
 @dynamic thumbnail;
 @dynamic full;
 @dynamic category;
-@synthesize thumbnailVisible;
-@synthesize fullVisible;
+
 @synthesize thumbnailOperation;
 @synthesize fullOperation;
 
@@ -36,21 +35,9 @@
 
 -(void)awakeCommon {
     [super awakeCommon];
-
-    self.thumbnailVisible = false;
-    self.fullVisible = false;
-
-    [self addObserver:self forKeyPath:@"thumbnailVisible" options:NSKeyValueObservingOptionNew context:nil];
-    [self addObserver:self forKeyPath:@"fullVisible" options:NSKeyValueObservingOptionNew context:nil];
 }
 
-- (void)dealloc
-{
-    [self removeObserver:self forKeyPath:@"thumbnailVisible"];
-    [self removeObserver:self forKeyPath:@"fullVisible"];
-}
-
-- (void)requestThumbnail {
+- (void)requestThumbnailIfNeeded {
     NSLog(@"requesting image thumbnail for name %@", self.name);
     ASBaseOperation *operation = [self operation];
     operation.object = self;
@@ -60,17 +47,16 @@
         } else if ([results[0] isKindOfClass:NSData.class]){
             NSData *data = (NSData *)results[0];
             self.thumbnail = [UIImage imageWithData:data];
-            if (self.thumbnailVisible == true) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"ThumbnailArrived" object:self];
-                self.thumbnailOperation = nil;
-            }
+            self.thumbnailOperation = nil;
+
+            [self.category thumbnailImageUpdated:self];
         }
     };
 
-    [self.category.imageThumbnailQueue addOperation:operation];
+    [self.category.imageQueue addOperation:operation];
 }
 
-- (void)requestFullsize {
+- (void)requestFullsizeIfNeeded {
     NSLog(@"requesting image full for name %@", self.name);
     ASBaseOperation *operation = [self operation];
     operation.object = self;
@@ -80,30 +66,21 @@
         } else if ([results[0] isKindOfClass:NSData.class]){
             NSData *data = (NSData *)results[0];
             self.full = [UIImage imageWithData:data];
-            if (self.fullVisible == true) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"FullArrived" object:self];
-                self.fullOperation = nil;
-            }
+            self.fullOperation = nil;
+
+            [self.category fullImageUpdated:self];
         }
     };
 
-    [self.category.imageFullQueue addOperation:operation];
+    [self.category.imageQueue addOperation:operation];
 }
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (object == self && [keyPath isEqualToString:@"thumbnailVisible"]) {
-        if ((BOOL)change[NSKeyValueChangeNewKey] == true) {
-            if (self.thumbnail == nil) [self requestThumbnail];
-        } else {
-            if (self.thumbnailOperation != nil) [self.thumbnailOperation.cancel];
-        }
-    } else if (object == self && [keyPath isEqualToString:@"fullVisible"]) {
-        if ((BOOL)change[NSKeyValueChangeNewKey] == true) {
-            if (self.full == nil) [self requestFullsize];
-        } else {
-            if (self.fullOperation != nil) [self.fullOperation cancel];
-        }
-    }
+- (void)cancelThumbnailRequestIfNeeded {
+    if (self.thumbnailOperation != nil) [self.thumbnailOperation cancel];
+}
+
+- (void)cancelFullImageRequestIfNeeded {
+    if (self.fullOperation != nil) [self.fullOperation cancel];
 }
 
 @end

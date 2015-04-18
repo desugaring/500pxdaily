@@ -95,7 +95,7 @@
         if ((BOOL)change[NSKeyValueChangeNewKey] == true) {
             if (self.thumbnail == nil) [self requestThumbnail];
         } else {
-            if (self.thumbnailOperation != nil) [self.thumbnailOperation cancel];
+            if (self.thumbnailOperation != nil) [self.thumbnailOperation.cancel];
         }
     } else if (object == self && [keyPath isEqualToString:@"fullVisible"]) {
         if ((BOOL)change[NSKeyValueChangeNewKey] == true) {

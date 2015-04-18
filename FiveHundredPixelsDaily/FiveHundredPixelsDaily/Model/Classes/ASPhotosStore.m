@@ -14,7 +14,7 @@
 @implementation ASPhotosStore
 
 - (ASCategory *)category {
-    return ((ASCategory *)self.categories.allObjects[0]);
+    return ((ASCategory *)self.categories[0]);
 }
 
 -(ASBaseOperation *)operation {
@@ -23,7 +23,7 @@
 
 - (void)awakeCommon {
     NSLog(@"awake local");
-    if (self.categories.allObjects.count == 0) {
+    if (self.categories.count == 0) {
         ASCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"Category" inManagedObjectContext:self.managedObjectContext];
         category.store = self;
     }

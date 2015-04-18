@@ -14,18 +14,20 @@
 @interface ASCategory()
 
 @property NSOperationQueue *imagesDataQueue;
+@property NSInteger maxNumberOfImages;
 
 @end
 
 @implementation ASCategory
 
-@dynamic isVisible;
 @dynamic images;
 @dynamic store;
 @synthesize maxNumberOfImages;
+@synthesize isActive;
 @synthesize imagesDataQueue;
 @synthesize imageThumbnailQueue;
 @synthesize imageFullQueue;
+@synthesize delegate;
 
 - (ASBaseOperation *)operation {
     return self.store.operation;
@@ -35,6 +37,7 @@
     [super awakeCommon];
 
     self.maxNumberOfImages = -1;
+    self.isActive = false;
 
     self.imagesDataQueue = [[NSOperationQueue alloc] init];
     self.imagesDataQueue.maxConcurrentOperationCount = 1;
@@ -45,16 +48,19 @@
     self.imageFullQueue = [[NSOperationQueue alloc] init];
     self.imageFullQueue.maxConcurrentOperationCount = 1;
 
-    [self addObserver:self forKeyPath:@"isVisible" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew) context:nil];
+    [self addObserver:self forKeyPath:@"isActive" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew) context:nil];
 }
 
-- (void)dealloc
-{
-    [self removeObserver:self forKeyPath:@"isVisible"];
+- (void)dealloc {
+    [self removeObserver:self forKeyPath:@"isActive"];
+}
+
+- (void)setVisibleImages:(NSArray *)images ofSize:(ASImageSize)size {
+
 }
 
 - (void)resetImages {
-    for (ASImage *image in self.images.allObjects) {
+    for (ASImage *image in self.images) {
         [self.managedObjectContext deleteObject:image];
     }
 }
@@ -98,8 +104,20 @@
     }
 }
 
+#pragma mark - Image Delegate
+
+- (void)thumbnailImageUpdated:(ASImage *)image {
+    if (self.delegate != nil) [self.delegate thumbnailImageUpdated:image];
+}
+
+- (void)fullImageUpdated:(ASImage *)image {
+    if (self.delegate != nil) [self.delegate fullImageUpdated:image];
+}
+
+#pragma mark - KVO
+
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (object == self && [keyPath isEqualToString:@"isVisible"]) {
+    if (object == self && [keyPath isEqualToString:@"isActive"]) {
         if ((BOOL)change[NSKeyValueChangeNewKey] == true) {
             if (self.images.count == 0) {
                 [self requestImageData];

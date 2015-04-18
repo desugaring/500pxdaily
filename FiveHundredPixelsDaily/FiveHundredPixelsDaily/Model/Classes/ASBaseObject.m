@@ -8,7 +8,6 @@
 
 #import "ASBaseObject.h"
 
-
 @implementation ASBaseObject
 
 @dynamic name;

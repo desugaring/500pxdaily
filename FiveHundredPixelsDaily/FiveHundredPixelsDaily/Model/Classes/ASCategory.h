@@ -11,21 +11,35 @@
 #import "ASBaseObject.h"
 #import "ASBaseOperation.h"
 
+typedef NS_ENUM(NSInteger, ASImageSize) {
+    ASImageSizeThumbnail,
+    ASImageSizeFull,
+};
+
 @class ASImage, ASStore;
 
-@interface ASCategory : ASBaseObject
+@protocol ASCategoryImageDelegate <NSObject>
 
-@property (nonatomic, retain) NSNumber * isVisible;
+- (void)thumbnailImageUpdated:(ASImage *)image;
+- (void)fullImageUpdated:(ASImage *)image;
+
+@end
+
+@interface ASCategory : ASBaseObject <ASCategoryImageDelegate>
+
 @property (nonatomic, retain) NSOrderedSet *images;
 @property (nonatomic, retain) ASStore *store;
-
-@property NSInteger maxNumberOfImages;
 
 @property NSOperationQueue *imageThumbnailQueue;
 @property NSOperationQueue *imageFullQueue;
 
-- (void)resetImages;
-- (void)requestImageData;
+@property BOOL isActive;
+@property (weak) id<ASCategoryImageDelegate> delegate;
+
+- (void)thumbnailImageUpdated:(ASImage *)image;
+- (void)fullImageUpdated:(ASImage *)image;
+
+- (void)setVisibleImages:(NSArray *)images ofSize:(ASImageSize)size;
 
 @end
 
@@ -41,5 +55,6 @@
 - (void)removeImagesObject:(ASImage *)value;
 - (void)addImages:(NSOrderedSet *)values;
 - (void)removeImages:(NSOrderedSet *)values;
+
 @end
 

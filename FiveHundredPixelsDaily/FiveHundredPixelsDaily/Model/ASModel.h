@@ -16,18 +16,9 @@ static NSString * const DefaultsLocalCategoryNameKey = @"PhotosCategoryName";
 
 @interface ASModel : NSObject
 
-@property (nonatomic) ASPhotosStore *photosStore;
-@property (nonatomic)  ASFHPStore *fhpStore;
-- (ASCategory *)activeCategory;
+@property (readonly) ASStore *activeStore;
 
+- (void)selectCategory:(ASCategory *)category;
 - (void)save;
-
-// has all the core data cruft
-
-// stores array
-
-// singleton that all UI accesses for its data
-
-// init creates local store and populates it if it doesn't exist
 
 @end

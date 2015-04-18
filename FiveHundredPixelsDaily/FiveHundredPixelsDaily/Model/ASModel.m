@@ -16,6 +16,10 @@
 @property NSPersistentStoreCoordinator *psc;
 @property NSManagedObjectContext *moc;
 
+@property (nonatomic) ASPhotosStore *photosStore;
+@property (nonatomic) ASFHPStore *fhpStore;
+@property (nonatomic, readwrite) ASStore *activeStore;
+
 @end
 
 @implementation ASModel
@@ -34,11 +38,9 @@
         if ([stores count] != 2) {
             self.fhpStore = [[ASFHPStore alloc] initWithEntity:[NSEntityDescription entityForName:@"FHPStore" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.managedObjectContext];
             self.fhpStore.name = @"500px";
-            self.fhpStore.type = @"fhp";
 
             self.photosStore = [[ASPhotosStore alloc] initWithEntity:[NSEntityDescription entityForName:@"PhotosStore" inManagedObjectContext:self.moc] insertIntoManagedObjectContext:self.moc];
             self.photosStore.name = @"Photos";
-            self.photosStore.type = @"photos";
         } else {
             for (ASStore *store in stores) {
                 if ([store isKindOfClass: ASPhotosStore.class]) {
@@ -48,20 +50,34 @@
                 }
             }
         }
-        [self.moc save:&error];
+
+        [self.fhpStore createCategoriesIfNeeded];
+
+        // Set active category
+        NSString *activeCategoryName = [[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveCategory"];
+        if (activeCategoryName == nil)  activeCategoryName = @"Landscapes";
+
+        [self.fhpStore.categories enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(ASCategory *category, NSUInteger idx, BOOL *stop) {
+            if ([category.name isEqualToString:activeCategoryName]) {
+                [self selectCategory:category];
+                *stop = true;
+            }
+        }];
     }
     
     return self;
 }
 
-- (ASCategory *)activeCategory {
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Category"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isVisible == TRUE"];
-    request.predicate = predicate;
-    NSError *error;
-    NSArray *visibleCategoryResult = [self.moc executeFetchRequest:request error:&error];
+- (void)selectCategory:(ASCategory *)category {
+    // Previous category now no longer active
+    if (self.activeStore != nil) self.activeStore.activeCategory.isActive = false;
 
-    return (ASCategory *)visibleCategoryResult[0];
+    // Set new store if store changed
+    if (category.store != self.activeStore) self.activeStore = category.store;
+
+    // Set and mark new active category
+    self.activeStore.activeCategory = category;
+    self.activeStore.activeCategory.isActive = true;
 }
 
 #pragma mark - Core Data stack

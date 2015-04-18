@@ -16,6 +16,6 @@
 @implementation ASStore
 
 @dynamic categories;
-@dynamic type;
+@synthesize activeCategory;
 
 @end

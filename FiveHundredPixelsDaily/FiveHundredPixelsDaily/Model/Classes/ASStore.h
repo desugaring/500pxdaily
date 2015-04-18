@@ -15,8 +15,8 @@
 
 @interface ASStore : ASBaseObject
 
-@property (nonatomic, retain) NSString *type;
 @property (nonatomic, retain) NSOrderedSet *categories;
+@property (nonatomic) ASCategory *activeCategory;
 
 @end
 

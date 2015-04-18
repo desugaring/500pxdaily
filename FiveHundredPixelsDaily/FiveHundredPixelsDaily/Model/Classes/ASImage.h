@@ -15,10 +15,10 @@
 
 @interface ASImage : ASBaseObject
 
-@property (nonatomic, retain) NSString * thumbnailURL;
-@property (nonatomic, retain) NSString * fullURL;
-@property (nonatomic, retain) UIImage thumbnail;
-@property (nonatomic, retain) UIImage full;
+@property (nonatomic, retain) NSString *thumbnailURL;
+@property (nonatomic, retain) NSString *fullURL;
+@property (nonatomic, retain) UIImage *thumbnail;
+@property (nonatomic, retain) UIImage *full;
 @property (nonatomic, retain) ASCategory *category;
 
 @property BOOL thumbnailVisible;

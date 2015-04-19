@@ -17,6 +17,9 @@
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="images" inverseEntity="Category" syncable="YES"/>
     </entity>
+    <entity name="Model" representedClassName="ASModel" syncable="YES">
+        <relationship name="stores" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Store" syncable="YES"/>
+    </entity>
     <entity name="PhotosStore" representedClassName="ASPhotosStore" parentEntity="Store" syncable="YES"/>
     <entity name="Store" representedClassName="ASStore" isAbstract="YES" parentEntity="BaseObject">
         <relationship name="categories" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Category" inverseName="store" inverseEntity="Category" syncable="YES"/>
@@ -29,5 +32,6 @@
         <element name="PhotosStore" positionX="270" positionY="261" width="128" height="45"/>
         <element name="FHPStore" positionX="279" positionY="270" width="128" height="45"/>
         <element name="BaseObject" positionX="288" positionY="279" width="128" height="60"/>
+        <element name="Model" positionX="297" positionY="279" width="128" height="60"/>
     </elements>
 </model>

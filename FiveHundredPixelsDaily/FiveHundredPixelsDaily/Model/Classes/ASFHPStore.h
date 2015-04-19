@@ -12,7 +12,5 @@
 
 @interface ASFHPStore : ASStore
 
-- (void)createCategoriesIfNeeded;
-
 @end
 

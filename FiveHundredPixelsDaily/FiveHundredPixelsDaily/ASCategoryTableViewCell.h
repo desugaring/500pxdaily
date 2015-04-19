@@ -7,10 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ASCategory.h"
 
 @interface ASCategoryTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *title;
-@property (weak, nonatomic) IBOutlet UIImageView *icon;
+@property (weak, nonatomic) IBOutlet UIButton *titleButton;
+@property (weak, nonatomic) IBOutlet UIButton *stateButton;
+@property (weak) ASCategory *category;
+
+- (IBAction)stateChange:(UIButton *)sender;
+- (IBAction)categorySelected:(UIButton *)sender;
 
 @end

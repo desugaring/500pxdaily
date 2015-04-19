@@ -37,29 +37,21 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return 2;
+    return self.stores.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    if (section == 0) {
-        return self.model.photosStore.categories.count;
-    } else if (section == 1) {
-        return self.model.fhpStore.categories.count;
-    }
-    return 0;
+    return ((ASStore *)self.stores[section]).categories.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ASCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Category" forIndexPath:indexPath];
-    if (indexPath.section == 0) {
-        cell.title.text = ((ASCategory *)self.model.photosStore.categories.allObjects[0]).name;
-    } else {
-        cell.title.text = ((ASCategory *)self.model.fhpStore.categories.allObjects[indexPath.row]).name;
-    }
-    // Configure the cell...
+    ASStore *store = self.stores[indexPath.section];
+    cell.title.text = ((ASCategory *)store.categories[0]).name;
     
+
     return cell;
 }
 

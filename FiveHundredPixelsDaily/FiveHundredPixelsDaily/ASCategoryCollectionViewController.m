@@ -85,7 +85,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 #pragma mark - Category Image Delegate
 
-- (void)thumbnailImageUpdated:(ASImage *)image {
+- (void)imageThumbnailUpdated:(ASImage *)image {
     [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0]]];
 }
 

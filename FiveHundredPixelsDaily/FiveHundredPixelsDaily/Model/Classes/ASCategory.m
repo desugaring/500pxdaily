@@ -121,12 +121,12 @@
 
 #pragma mark - Image Delegate
 
-- (void)thumbnailImageUpdated:(ASImage *)image {
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(thumbnailImageUpdated:)]) [self.delegate thumbnailImageUpdated:image];
+- (void)imageThumbnailUpdated:(ASImage *)image {
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:)]) [self.delegate imageThumbnailUpdated:image];
 }
 
-- (void)fullImageUpdated:(ASImage *)image {
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(fullImageUpdated:)]) [self.delegate fullImageUpdated:image];
+- (void)imageFullUpdated:(ASImage *)image {
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) [self.delegate imageFullUpdated:image];
 }
 
 - (void)numberOfImagesUpdated {

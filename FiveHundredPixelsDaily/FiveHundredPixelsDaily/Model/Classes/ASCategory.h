@@ -21,8 +21,8 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 @protocol ASCategoryImageDelegate <NSObject>
 
 @optional
-- (void)thumbnailImageUpdated:(ASImage *)image;
-- (void)fullImageUpdated:(ASImage *)image;
+- (void)imageThumbnailUpdated:(ASImage *)image;
+- (void)imageFullUpdated:(ASImage *)image;
 - (void)numberOfImagesUpdated;
 
 @end
@@ -37,8 +37,8 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 @property NSOperationQueue *imageQueue;
 @property (weak) id<ASCategoryImageDelegate> delegate;
 
-- (void)thumbnailImageUpdated:(ASImage *)image;
-- (void)fullImageUpdated:(ASImage *)image;
+- (void)imageThumbnailUpdated:(ASImage *)image;
+- (void)imageFullUpdated:(ASImage *)image;
 - (void)numberOfImagesUpdated;
 
 - (void)setVisibleImages:(NSArray *)images ofSize:(ASImageSize)size;

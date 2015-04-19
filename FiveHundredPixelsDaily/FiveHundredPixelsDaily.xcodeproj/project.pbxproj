@@ -26,7 +26,9 @@
 		4F4D6ECA1AD76FD000D1ABD8 /* BottomNavImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC91AD76FD000D1ABD8 /* BottomNavImageViewController.m */; };
 		4F717E8B1ADE122D004B8722 /* ASBaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E8A1ADE122D004B8722 /* ASBaseObject.m */; };
 		4F717E8E1AE08F2D004B8722 /* ASImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E8D1AE08F2D004B8722 /* ASImageCollectionViewCell.m */; };
-		4FE3E2901ADA0E3C00B174F4 /* ASModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E28F1ADA0E3C00B174F4 /* ASModel.m */; };
+		4F717E951AE2279E004B8722 /* ASModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E941AE2279E004B8722 /* ASModel.m */; };
+		4F717E9B1AE22B12004B8722 /* ASCategoriesPagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E9A1AE22B12004B8722 /* ASCategoriesPagesViewController.m */; };
+		4F717E9E1AE462C1004B8722 /* TODO in Resources */ = {isa = PBXBuildFile; fileRef = 4F717E9D1AE462C1004B8722 /* TODO */; };
 		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
 		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
 		4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2CC1ADA15FC00B174F4 /* ASPhotosOperation.m */; };
@@ -69,8 +71,11 @@
 		4F717E8A1ADE122D004B8722 /* ASBaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASBaseObject.m; sourceTree = "<group>"; };
 		4F717E8C1AE08F2D004B8722 /* ASImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImageCollectionViewCell.h; sourceTree = "<group>"; };
 		4F717E8D1AE08F2D004B8722 /* ASImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASImageCollectionViewCell.m; sourceTree = "<group>"; };
-		4FE3E28E1ADA0E3C00B174F4 /* ASModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASModel.h; sourceTree = "<group>"; };
-		4FE3E28F1ADA0E3C00B174F4 /* ASModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASModel.m; sourceTree = "<group>"; };
+		4F717E931AE2279E004B8722 /* ASModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASModel.h; sourceTree = "<group>"; };
+		4F717E941AE2279E004B8722 /* ASModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASModel.m; sourceTree = "<group>"; };
+		4F717E991AE22B12004B8722 /* ASCategoriesPagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategoriesPagesViewController.h; sourceTree = "<group>"; };
+		4F717E9A1AE22B12004B8722 /* ASCategoriesPagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategoriesPagesViewController.m; sourceTree = "<group>"; };
+		4F717E9D1AE462C1004B8722 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		4FE3E2B51ADA107800B174F4 /* ASCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategory.h; sourceTree = "<group>"; };
 		4FE3E2B61ADA107800B174F4 /* ASCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategory.m; sourceTree = "<group>"; };
 		4FE3E2B81ADA107800B174F4 /* ASImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImage.h; sourceTree = "<group>"; };
@@ -95,6 +100,7 @@
 		4F4D6E841AD75EB800D1ABD8 = {
 			isa = PBXGroup;
 			children = (
+				4F717E9D1AE462C1004B8722 /* TODO */,
 				4F4D6E8F1AD75EB800D1ABD8 /* FiveHundredPixelsDaily */,
 				4F4D6E8E1AD75EB800D1ABD8 /* Products */,
 			);
@@ -136,14 +142,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4FE3E2871ADA07E600B174F4 /* Views */ = {
+		4F717E9C1AE22B20004B8722 /* Category */ = {
 			isa = PBXGroup;
 			children = (
 				4F4D6EC21AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.h */,
 				4F4D6EC31AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m */,
 				4F717E8C1AE08F2D004B8722 /* ASImageCollectionViewCell.h */,
 				4F717E8D1AE08F2D004B8722 /* ASImageCollectionViewCell.m */,
+			);
+			name = Category;
+			sourceTree = "<group>";
+		};
+		4FE3E2871ADA07E600B174F4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
 				4FE3E28A1ADA0A9800B174F4 /* Categories */,
+				4F717E9C1AE22B20004B8722 /* Category */,
+				4F717E991AE22B12004B8722 /* ASCategoriesPagesViewController.h */,
+				4F717E9A1AE22B12004B8722 /* ASCategoriesPagesViewController.m */,
 				4FE3E28C1ADA0ABB00B174F4 /* ImageDetail */,
 			);
 			name = Views;
@@ -153,8 +169,8 @@
 			isa = PBXGroup;
 			children = (
 				4F4C1E421ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld */,
-				4FE3E28E1ADA0E3C00B174F4 /* ASModel.h */,
-				4FE3E28F1ADA0E3C00B174F4 /* ASModel.m */,
+				4F717E931AE2279E004B8722 /* ASModel.h */,
+				4F717E941AE2279E004B8722 /* ASModel.m */,
 				4FE3E2891ADA0A8000B174F4 /* Classes */,
 			);
 			path = Model;
@@ -290,6 +306,7 @@
 			files = (
 				4F4D6EA21AD75EB800D1ABD8 /* Main.storyboard in Resources */,
 				4F4D6EA71AD75EB800D1ABD8 /* LaunchScreen.xib in Resources */,
+				4F717E9E1AE462C1004B8722 /* TODO in Resources */,
 				4F4D6EA41AD75EB800D1ABD8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,7 +320,6 @@
 			files = (
 				4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */,
 				4F717E8B1ADE122D004B8722 /* ASBaseObject.m in Sources */,
-				4FE3E2901ADA0E3C00B174F4 /* ASModel.m in Sources */,
 				4F4D6E9F1AD75EB800D1ABD8 /* DetailViewController.m in Sources */,
 				4F4C1E471ADA18CF00109166 /* ASStore.m in Sources */,
 				4F4D6E9C1AD75EB800D1ABD8 /* MasterViewController.m in Sources */,
@@ -312,11 +328,13 @@
 				4F4D6EC11AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m in Sources */,
 				4F4D6E961AD75EB800D1ABD8 /* AppDelegate.m in Sources */,
 				4F4D6E931AD75EB800D1ABD8 /* main.m in Sources */,
+				4F717E951AE2279E004B8722 /* ASModel.m in Sources */,
 				4F4D6EC71AD76C7900D1ABD8 /* ImageViewController.m in Sources */,
 				4F4D6EC41AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m in Sources */,
 				4F4D6EBE1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.m in Sources */,
 				4F4D6ECA1AD76FD000D1ABD8 /* BottomNavImageViewController.m in Sources */,
 				4F717E8E1AE08F2D004B8722 /* ASImageCollectionViewCell.m in Sources */,
+				4F717E9B1AE22B12004B8722 /* ASCategoriesPagesViewController.m in Sources */,
 				4FE3E2D01ADA160800B174F4 /* ASFHPOperation.m in Sources */,
 				4F4C1E4C1ADA198F00109166 /* ASPhotosStore.m in Sources */,
 				4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */,

@@ -1,24 +1,32 @@
 //
 //  ASModel.h
-//  FiveHundredPixelsDaily
+//  
 //
-//  Created by Alex Semenikhine on 2015-04-11.
-//  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
+//  Created by Alex Semenikhine on 2015-04-18.
+//
 //
 
 @import Foundation;
 @import CoreData;
-@class ASPhotosStore;
-@class ASFHPStore;
-#import "ASCategory.h"
 
-static NSString * const DefaultsLocalCategoryNameKey = @"PhotosCategoryName";
+@class ASStore;
 
-@interface ASModel : NSObject
+@interface ASModel : NSManagedObject
 
-@property (readonly) ASStore *activeStore;
+@property (nonatomic, retain) NSOrderedSet *stores;
+@end
 
-- (void)selectCategory:(ASCategory *)category;
-- (void)save;
+@interface ASModel (CoreDataGeneratedAccessors)
+
+- (void)insertObject:(ASStore *)value inStoresAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromStoresAtIndex:(NSUInteger)idx;
+- (void)insertStores:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeStoresAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInStoresAtIndex:(NSUInteger)idx withObject:(ASStore *)value;
+- (void)replaceStoresAtIndexes:(NSIndexSet *)indexes withStores:(NSArray *)values;
+- (void)addStoresObject:(ASStore *)value;
+- (void)removeStoresObject:(ASStore *)value;
+- (void)addStores:(NSOrderedSet *)values;
+- (void)removeStores:(NSOrderedSet *)values;
 
 @end

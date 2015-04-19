@@ -24,7 +24,7 @@
     return @[@"Abstract", @"Animals", @"Black and White", @"Celebrities", @"City & Architecture", @"Commercial", @"Concert", @"Family", @"Fashion", @"Film", @"Fine Art", @"Food", @"Journalism", @"Landscapes", @"Macro", @"Nature", @"People", @"Performing Arts", @"Sport", @"Still Life", @"Street", @"Transportation", @"Travel", @"Underwater", @"Urban Exploration", @"Wedding"];
 }
 
-- (void)createCategoriesIfNeeded {
+- (void)updateCategoriesIfNeeded {
     // Create categories if they don't already exist
     if (self.categories.count != self.categoryNames.count) {
         NSMutableArray *newCategories = [NSMutableArray new];

@@ -7,15 +7,13 @@
 //
 
 #import "ASStore.h"
-#import "ASCategory.h"
-#import "ASBaseOperation.h"
-#import "ASPhotosOperation.h"
-#import "ASFHPOperation.h"
-
 
 @implementation ASStore
 
 @dynamic categories;
-@synthesize activeCategory;
+
+- (void)updateCategoriesIfNeeded {
+    // Stub
+}
 
 @end

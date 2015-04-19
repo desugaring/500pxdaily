@@ -11,12 +11,11 @@
 #import "ASBaseObject.h"
 
 @class ASCategory;
-@class ASBaseOperation;
 
 @interface ASStore : ASBaseObject
 
 @property (nonatomic, retain) NSOrderedSet *categories;
-@property (nonatomic) ASCategory *activeCategory;
+- (void)updateCategoriesIfNeeded;
 
 @end
 

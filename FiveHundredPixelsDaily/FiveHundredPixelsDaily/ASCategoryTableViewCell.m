@@ -10,8 +10,6 @@
 
 @implementation ASCategoryTableViewCell
 
-
-
 - (void)awakeFromNib {
     // Initialization code
 }
@@ -22,4 +20,11 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)stateChange:(UIButton *)sender {
+    sender.titleLabel.text = @"clicked!";
+}
+
+- (IBAction)categorySelected:(UIButton *)sender {
+    NSLog(@"seleced");
+}
 @end

@@ -49,7 +49,7 @@
             self.thumbnail = [UIImage imageWithData:data];
             self.thumbnailOperation = nil;
 
-            [self.category thumbnailImageUpdated:self];
+            [self.category imageThumbnailUpdated:self];
         }
     };
 
@@ -68,7 +68,7 @@
             self.full = [UIImage imageWithData:data];
             self.fullOperation = nil;
 
-            [self.category fullImageUpdated:self];
+            [self.category imageFullUpdated:self];
         }
     };
 

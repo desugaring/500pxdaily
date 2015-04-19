@@ -7,10 +7,9 @@
 //
 
 @import UIKit;
-#import "ASModel.h"
 
 @interface ASCategoriesTableViewController : UITableViewController
 
-@property (weak) ASModel *model;
+@property (weak) NSOrderedSet *stores;
 
 @end

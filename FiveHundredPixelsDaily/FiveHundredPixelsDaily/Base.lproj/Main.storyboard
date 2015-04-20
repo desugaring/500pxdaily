@@ -145,7 +145,7 @@
         <!--Category Name-->
         <scene sceneID="Aqb-C8-FqA">
             <objects>
-                <collectionViewController storyboardIdentifier="CategoryController" id="cJZ-AX-HRa" customClass="ASCategoryCollectionViewController" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="CategoryCollectionVC" id="cJZ-AX-HRa" customClass="ASCategoryCollectionViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" id="HlL-y4-YMO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

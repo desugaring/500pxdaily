@@ -6,8 +6,10 @@
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 @interface ASImagePagesViewController : UIViewController
+
+@property (weak) ASImage *activeImage;
 
 @end

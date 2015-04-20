@@ -11,10 +11,10 @@
 #import "ASCategoryCollectionViewController.h"
 #import "ASCategory.h"
 
-@interface ASCategoriesPagesViewController : UIViewController <ASCategoryCollectionViewControllerDelegate>
+@interface ASCategoriesPagesViewController : UIViewController <ASCategoryCollectionViewControllerDelegate, UIPageViewControllerDataSource>
 
 @property NSOrderedSet *categories;
-@property ASCategory *activeCategory;
+@property ASCategory *initialActiveCategory;
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIButton *prevCategoryButton;

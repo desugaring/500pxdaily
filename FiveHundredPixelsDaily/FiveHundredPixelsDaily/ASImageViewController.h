@@ -12,7 +12,4 @@
 
 @interface ASImageViewController : UIViewController
 
-@property (weak) ASCategory *category;
-@property (weak) ASImage *activeImage;
-
 @end

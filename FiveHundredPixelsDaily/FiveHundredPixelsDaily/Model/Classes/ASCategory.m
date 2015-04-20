@@ -70,6 +70,10 @@
 //    }
 }
 
+- (void)resetImageRequests {
+    [self.imageQueue cancelAllOperations];
+}
+
 - (void)resetImages {
     [self removeImages:self.images];
     self.maxNumberOfImages = -1;

@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 
 - (void)setVisibleImages:(NSArray *)images ofSize:(ASImageSize)size;
 - (void)resetImages;
+- (void)resetImageRequests;
 
 @end
 

@@ -8,9 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "ASCategory.h"
+#import "ASImage.h"
+
+@protocol ASCategoryCollectionViewControllerDelegate <NSObject>
+
+- (void)categoryImageWasSelected:(ASImage *)image;
+
+@end
 
 @interface ASCategoryCollectionViewController : UICollectionViewController <ASCategoryImageDelegate>
 
 @property (weak) ASCategory *category;
+@property (weak) id<ASCategoryCollectionViewControllerDelegate> delegate;
 
 @end

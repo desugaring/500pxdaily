@@ -36,13 +36,15 @@
         ASModel *model = [NSEntityDescription insertNewObjectForEntityForName:@"Model" inManagedObjectContext:[self managedObjectContext]];
         self.model = model;
 
-        ASPhotosStore *photosStore = [[ASPhotosStore alloc] init];
+        ASPhotosStore *photosStore = [NSEntityDescription insertNewObjectForEntityForName:@"PhotosStore" inManagedObjectContext:[self managedObjectContext]];
         photosStore.name = @"Photos";
 
-        ASFHPStore *fhpStore = [[ASFHPStore alloc] init];
+        ASFHPStore *fhpStore = [NSEntityDescription insertNewObjectForEntityForName:@"FHPStore" inManagedObjectContext:[self managedObjectContext]];
         fhpStore.name = @"500px";
+
+        [self.model addStoresObject:photosStore];
+        [self.model addStoresObject:fhpStore];
         
-        [self.model addStores:[NSOrderedSet orderedSetWithArray:@[photosStore, fhpStore]]];
     }
     for (ASStore *store in self.model.stores) {
         [store updateCategoriesIfNeeded];

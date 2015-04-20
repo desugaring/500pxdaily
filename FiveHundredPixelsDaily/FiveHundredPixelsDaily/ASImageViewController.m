@@ -1,5 +1,5 @@
 //
-//  ImageViewController.m
+//  ASImageViewController.m
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-09.
@@ -8,11 +8,11 @@
 
 #import "ImageViewController.h"
 
-@interface ImageViewController ()
+@interface ASImageViewController ()
 
 @end
 
-@implementation ImageViewController
+@implementation ASImageViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

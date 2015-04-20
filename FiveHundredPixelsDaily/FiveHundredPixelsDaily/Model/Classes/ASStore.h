@@ -16,6 +16,7 @@
 
 @property (nonatomic, retain) NSOrderedSet *categories;
 - (void)updateCategoriesIfNeeded;
+- (NSOrderedSet *)activeCategories;
 
 @end
 

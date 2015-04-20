@@ -27,7 +27,6 @@
 - (void)updateCategoriesIfNeeded {
     // Create categories if they don't already exist
     if (self.categories.count != self.categoryNames.count) {
-        NSMutableArray *newCategories = [NSMutableArray new];
         for (NSString *categoryName in self.categoryNames) {
             BOOL containsName = false;
             for (ASCategory *category in self.categories) {
@@ -36,12 +35,11 @@
                 }
             }
             if (containsName == false) {
-                ASCategory *category = [[ASCategory alloc] init];
+                ASCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"Category" inManagedObjectContext:self.managedObjectContext];
                 category.name = categoryName;
-                [newCategories addObject:category];
+                category.store = self;
             }
         }
-        [self addCategories:[NSOrderedSet orderedSetWithArray:newCategories]];
     }
 }
 

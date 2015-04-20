@@ -11,11 +11,10 @@
 
 @interface ASCategoryTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UIButton *titleButton;
-@property (weak, nonatomic) IBOutlet UIButton *stateButton;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stateLabel;
 @property (weak) ASCategory *category;
 
-- (IBAction)stateChange:(UIButton *)sender;
-- (IBAction)categorySelected:(UIButton *)sender;
+- (void)configureCellWithCategory:(ASCategory *)category;
 
 @end

@@ -104,18 +104,15 @@
 - (void)parseImageData:(NSDictionary *)imageData {
     self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
 
-    NSMutableArray *newImages = [NSMutableArray new];
-
     NSArray *photos = imageData[@"photos"];
     for (NSDictionary *photoData in photos) {
-        ASImage *image = [[ASImage alloc] init];
+        ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
         image.name = photoData[@"name"];
         image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
         image.fullURL = (NSString *)photoData[@"image_url"][1];
 
-        [newImages addObject:image];
+        [self addImagesObject:image];
     }
-    [self addImages:[NSOrderedSet orderedSetWithArray:newImages]];
     [self numberOfImagesUpdated];
 }
 

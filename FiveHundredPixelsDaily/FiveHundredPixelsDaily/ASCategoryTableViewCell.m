@@ -8,7 +8,21 @@
 
 #import "ASCategoryTableViewCell.h"
 
+@interface ASCategoryTableViewCell()
+
+
+- (IBAction)stateChange:(UIButton *)sender;
+//- (IBAction)categorySelected:(UIButton *)sender;
+
+@end
+
 @implementation ASCategoryTableViewCell
+
+- (void)configureCellWithCategory:(ASCategory *)category {
+    self.nameLabel.text = category.name;
+    self.stateLabel.text = category.status.stringValue;
+    self.category = category;
+}
 
 - (void)awakeFromNib {
     // Initialization code
@@ -21,7 +35,8 @@
 }
 
 - (IBAction)stateChange:(UIButton *)sender {
-    sender.titleLabel.text = @"clicked!";
+    self.stateLabel.text = @"clicked!";
+    NSLog(@"category: %@", self.category.name);
 }
 
 - (IBAction)categorySelected:(UIButton *)sender {

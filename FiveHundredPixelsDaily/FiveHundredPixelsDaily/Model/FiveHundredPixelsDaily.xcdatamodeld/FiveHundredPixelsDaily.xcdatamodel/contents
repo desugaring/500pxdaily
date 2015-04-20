@@ -11,9 +11,9 @@
     </entity>
     <entity name="FHPStore" representedClassName="ASFHPStore" parentEntity="Store" syncable="YES"/>
     <entity name="Image" representedClassName="ASImage" parentEntity="BaseObject" syncable="YES">
-        <attribute name="full" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="full" optional="YES" attributeType="Transformable" valueTransformerName="ASImageTransformer" syncable="YES"/>
         <attribute name="fullURL" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="thumbnail" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="thumbnail" optional="YES" attributeType="Transformable" valueTransformerName="ASImageTransformer" syncable="YES"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="images" inverseEntity="Category" syncable="YES"/>
     </entity>

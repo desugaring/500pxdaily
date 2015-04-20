@@ -7,6 +7,7 @@
 //
 
 #import "ASStore.h"
+#import "ASCategory.h"
 
 @implementation ASStore
 
@@ -14,6 +15,14 @@
 
 - (void)updateCategoriesIfNeeded {
     // Stub
+}
+
+- (NSMutableOrderedSet *)activeCategories {
+    NSMutableOrderedSet *activeCategories = [NSMutableOrderedSet new];
+    for (ASCategory *category in self.categories) {
+        if ([category.status isEqualToNumber:@(0)] == false) [activeCategories addObject:category];
+    }
+    return activeCategories;
 }
 
 @end

@@ -26,7 +26,7 @@
 - (void)replaceStoresAtIndexes:(NSIndexSet *)indexes withStores:(NSArray *)values;
 - (void)addStoresObject:(ASStore *)value;
 - (void)removeStoresObject:(ASStore *)value;
-- (void)addStores:(NSOrderedSet *)values;
-- (void)removeStores:(NSOrderedSet *)values;
+- (void)addStores:(NSSet *)values;
+- (void)removeStores:(NSSet *)values;
 
 @end

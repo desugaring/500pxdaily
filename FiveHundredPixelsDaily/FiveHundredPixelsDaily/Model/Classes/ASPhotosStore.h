@@ -13,5 +13,4 @@
 
 @interface ASPhotosStore : ASStore
 
-
 @end

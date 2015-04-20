@@ -1,3 +1,4 @@
+
 //
 //  ASCategoriesPagesViewController.h
 //  FiveHundredPixelsDaily
@@ -7,7 +8,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ASCategoryCollectionViewController.h"
+#import "ASCategory.h"
 
-@interface ASCategoriesPagesViewController : UIViewController
+@interface ASCategoriesPagesViewController : UIViewController <ASCategoryCollectionViewControllerDelegate>
+
+@property NSOrderedSet *categories;
+@property ASCategory *activeCategory;
+
+@property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (weak, nonatomic) IBOutlet UIButton *prevCategoryButton;
+@property (weak, nonatomic) IBOutlet UIButton *nextCategoryButton;
+
+- (IBAction)goToPrevCategory:(id)sender;
+- (IBAction)goToNextCategory:(id)sender;
 
 @end

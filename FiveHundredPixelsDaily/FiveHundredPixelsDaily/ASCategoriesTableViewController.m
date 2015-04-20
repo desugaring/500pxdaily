@@ -11,6 +11,7 @@
 #import "ASFHPStore.h"
 #import "ASCategory.h"
 #import "ASCategoryTableViewCell.h"
+#import "ASCategoriesPagesViewController.h"
 
 @interface ASCategoriesTableViewController ()
 
@@ -48,11 +49,23 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ASCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Category" forIndexPath:indexPath];
+
     ASStore *store = self.stores[indexPath.section];
-    cell.title.text = ((ASCategory *)store.categories[0]).name;
-    
+    [cell configureCellWithCategory:(ASCategory *)store.categories[indexPath.row]];
 
     return cell;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    ASCategoryTableViewCell *cell = (ASCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    if ([cell.category.status isEqualToNumber:@(0)] == false) {
+        return indexPath;
+    }
+    return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self performSegueWithIdentifier:@"ShowPages" sender:self];
 }
 
 /*
@@ -89,14 +102,25 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"ShowPages"]) {
+        NSMutableOrderedSet *activeCategories = [NSMutableOrderedSet new];
+        for (ASStore *store in self.stores) {
+            [activeCategories addObjectsFromArray:[store activeCategories].array];
+        }
+        ASCategoriesPagesViewController *categoriesPagesVC = (ASCategoriesPagesViewController *)segue.destinationViewController;
+        categoriesPagesVC.categories = activeCategories;
+
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        ASCategoryTableViewCell *cell = (ASCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+        categoriesPagesVC.activeCategory = cell.category;
+    }
 }
-*/
 
 @end

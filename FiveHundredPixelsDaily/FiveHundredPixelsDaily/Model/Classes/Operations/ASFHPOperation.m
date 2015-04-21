@@ -21,7 +21,7 @@ NSString * const PHOTOS_PER_REQUEST = @"20";
     if ([self.object isKindOfClass: ASCategory.class]) {
         ASCategory *category = (ASCategory *)self.object;
         // Determine page
-        NSUInteger page = 1;
+        NSUInteger page = category.images.count == 0 ? 1 : (category.images.count / PHOTOS_PER_REQUEST.integerValue)+1;
 
         // Get category data
         NSURL *url = [self urlForCategoryPage:page];
@@ -49,7 +49,7 @@ NSString * const PHOTOS_PER_REQUEST = @"20";
 - (NSURL *)urlForCategoryPage:(NSUInteger)page {
     NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
     urlComponents.queryItems = @[[NSURLQueryItem queryItemWithName:@"consumer_key" value:CONSUMER_KEY],
-                                 [NSURLQueryItem queryItemWithName:@"only" value:self.name],
+                                 [NSURLQueryItem queryItemWithName:@"only" value:((ASCategory *)self.object).name],
                                  [NSURLQueryItem queryItemWithName:@"rpp" value:PHOTOS_PER_REQUEST],
                                  [NSURLQueryItem queryItemWithName:@"feature" value:@"upcoming"],
                                  [NSURLQueryItem queryItemWithName:@"sort" value:@"times_viewed"],

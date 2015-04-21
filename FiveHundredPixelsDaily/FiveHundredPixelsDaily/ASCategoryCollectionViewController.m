@@ -106,7 +106,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 - (void)imageThumbnailUpdated:(ASImage *)image {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0];
-        if ((self.visibleIndexPaths.count == 0) || ([self.visibleIndexPaths containsObject:indexPath] == true)) [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+        [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
     });
 }
 

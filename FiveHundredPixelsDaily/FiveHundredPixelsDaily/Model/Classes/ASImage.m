@@ -37,7 +37,7 @@
 
 - (void)requestThumbnailImageIfNeeded {
     if (self.thumbnail == nil && self.requestOperation == nil) {
-//        NSLog(@"requesting image thumbnail for name %@", self.name);
+        NSLog(@"requesting image thumbnail for name %@", self.name);
         ASBaseOperation *operation = [self operation];
         operation.object = self;
         operation.completion = ^(NSArray *results, NSError *error) {

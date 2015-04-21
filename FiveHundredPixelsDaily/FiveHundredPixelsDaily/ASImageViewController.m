@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import "ImageViewController.h"
+#import "ASImageViewController.h"
 
 @interface ASImageViewController ()
 

@@ -32,18 +32,19 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 @property (nonatomic, retain) NSOrderedSet *images;
 @property (nonatomic, retain) ASStore *store;
 @property (nonatomic, retain) NSDate *lastUpdated;
-@property (nonatomic, retain) NSNumber *status;
+@property (nonatomic, retain) NSNumber *isActive;
 
 @property NSOperationQueue *imageQueue;
 @property (weak) id<ASCategoryImageDelegate> delegate;
+@property NSInteger maxNumberOfImages;
 
 - (void)imageThumbnailUpdated:(ASImage *)image;
 - (void)imageFullUpdated:(ASImage *)image;
 - (void)numberOfImagesUpdated;
 
-- (void)setVisibleImages:(NSArray *)images ofSize:(ASImageSize)size;
 - (void)resetImages;
-- (void)resetImageRequests;
+- (void)cancelImageRequests;
+- (void)requestImageData;
 
 @end
 

@@ -7,6 +7,7 @@
 //
 
 @import UIKit;
+#import "ASImage.h"
 
 @interface ASImagePagesViewController : UIViewController
 

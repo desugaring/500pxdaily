@@ -14,20 +14,35 @@
 
 @interface ASCategoryCollectionViewController()
 
-@property NSArray *visibleIndexPaths;
+@property NSMutableSet *visibleIndexPaths;
 
 @end
 
 @implementation ASCategoryCollectionViewController
 
-static NSString * const reuseIdentifier = @"Cell";
+static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.title = self.category.name;
-    self.visibleIndexPaths = [NSArray new];
+    self.visibleIndexPaths = [NSMutableSet new];
     self.category.delegate = self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (self.category.lastUpdated == nil) {
+        [self.category resetImages];
+        return;
+    }
+    NSInteger hours = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.category.lastUpdated toDate:[NSDate date] options:0] hour];
+    if(hours >= 1) [self.category resetImages];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.category cancelImageRequests];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,10 +74,12 @@ static NSString * const reuseIdentifier = @"Cell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ASImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
-    ASImage *image = self.category.images[indexPath.row];
+    ASImage *image = self.category.images[indexPath.item];
     if (image.thumbnail != nil) {
         cell.imageView.image = image.thumbnail;
         [cell.spinner stopAnimating];
+    } else {
+        [image requestThumbnailImageIfNeeded];
     }
 
     return cell;
@@ -72,25 +89,32 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if ([[self.collectionView indexPathsForVisibleItems] isEqualToArray:self.visibleIndexPaths] == false) {
-        self.visibleIndexPaths = [self.collectionView indexPathsForVisibleItems];
-
-        NSMutableArray *newVisibleImages = [NSMutableArray new];
-        [self.visibleIndexPaths enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL *stop) {
-            [newVisibleImages addObject:self.category.images[indexPath.item]];
-        }];
-        [self.category setVisibleImages:newVisibleImages ofSize:ASImageSizeThumbnail];
+    NSMutableSet *newIndexPaths = [NSMutableSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
+    if ([self.visibleIndexPaths isEqualToSet:newIndexPaths] == false) {
+        // Cancel requests for images that are no longer visible
+        [self.visibleIndexPaths minusSet:newIndexPaths];
+        for (NSIndexPath *indexPath in self.visibleIndexPaths) {
+            [(ASImage *)self.category.images[indexPath.item] cancelThumbnailRequestIfNeeded];
+        }
+        self.visibleIndexPaths = newIndexPaths;
+        if (((NSIndexPath *)self.visibleIndexPaths.allObjects.lastObject).item + 50 >= self.category.images.count) [self.category requestImageData];
     }
 }
 
 #pragma mark - Category Image Delegate
 
 - (void)imageThumbnailUpdated:(ASImage *)image {
-    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0]]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0];
+        if ((self.visibleIndexPaths.count == 0) || ([self.visibleIndexPaths containsObject:indexPath] == true)) [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+    });
 }
 
 - (void)numberOfImagesUpdated {
-    [self.collectionView reloadData];
+    NSLog(@"collection view num o fimages updated for category %@", self.category.name);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView reloadData];
+    });
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -102,12 +126,15 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 */
 
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(categoryImageWasSelected:)]) [self.delegate categoryImageWasSelected:self.category.images[indexPath.item]];
 }
-*/
+
+// Uncomment this method to specify if the specified item should be selected
+//- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+//    return YES;
+//}
+
 
 /*
 // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item

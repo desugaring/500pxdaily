@@ -58,7 +58,7 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     ASCategoryTableViewCell *cell = (ASCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    if ([cell.category.status isEqualToNumber:@(0)] == false) {
+    if ([cell.category.isActive isEqualToNumber:@(1)] == true) {
         return indexPath;
     }
     return nil;
@@ -119,7 +119,7 @@
 
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         ASCategoryTableViewCell *cell = (ASCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-        categoriesPagesVC.activeCategory = cell.category;
+        categoriesPagesVC.initialActiveCategory = cell.category;
     }
 }
 

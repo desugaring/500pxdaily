@@ -10,8 +10,7 @@
 
 @implementation ASImageCollectionViewCell
 
-- (void)prepareForReuse
-{
+- (void)prepareForReuse {
     [super prepareForReuse];
     self.imageView.image = nil;
     [self.spinner startAnimating];

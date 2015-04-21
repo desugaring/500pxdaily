@@ -20,7 +20,7 @@
 - (NSMutableOrderedSet *)activeCategories {
     NSMutableOrderedSet *activeCategories = [NSMutableOrderedSet new];
     for (ASCategory *category in self.categories) {
-        if ([category.status isEqualToNumber:@(0)] == false) [activeCategories addObject:category];
+        if ([category.isActive isEqualToNumber:@(1)] == true) [activeCategories addObject:category];
     }
     return activeCategories;
 }

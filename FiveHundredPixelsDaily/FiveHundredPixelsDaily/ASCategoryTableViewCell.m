@@ -19,9 +19,10 @@
 @implementation ASCategoryTableViewCell
 
 - (void)configureCellWithCategory:(ASCategory *)category {
-    self.nameLabel.text = category.name;
-    self.stateLabel.text = category.status.stringValue;
     self.category = category;
+
+    self.nameLabel.text = category.name;
+    self.stateLabel.text = [category.isActive isEqualToNumber:@(0)] ? @"INACTIVE" : @"ACTIVE";
 }
 
 - (void)awakeFromNib {
@@ -35,11 +36,9 @@
 }
 
 - (IBAction)stateChange:(UIButton *)sender {
-    self.stateLabel.text = @"clicked!";
-    NSLog(@"category: %@", self.category.name);
+    self.category.isActive = [self.category.isActive isEqualToNumber:@(0)] ? @(1) : @(0);
+
+    self.stateLabel.text = [self.category.isActive isEqualToNumber:@(0)] ? @"INACTIVE" : @"ACTIVE";
 }
 
-- (IBAction)categorySelected:(UIButton *)sender {
-    NSLog(@"seleced");
-}
 @end

@@ -11,7 +11,7 @@
 #import "ASCategoryCollectionViewController.h"
 #import "ASCategory.h"
 
-@interface ASCategoriesPagesViewController : UIViewController <ASCategoryCollectionViewControllerDelegate, UIPageViewControllerDataSource>
+@interface ASCategoriesPagesViewController : UIViewController <ASCategoryCollectionViewControllerDelegate, UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
 @property NSOrderedSet *categories;
 @property ASCategory *initialActiveCategory;

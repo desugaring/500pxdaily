@@ -14,7 +14,6 @@
 @interface ASCategory()
 
 @property NSOperationQueue *imagesDataQueue;
-@property NSInteger maxNumberOfImages;
 
 @end
 
@@ -23,7 +22,7 @@
 @dynamic images;
 @dynamic store;
 @dynamic lastUpdated;
-@dynamic status;
+@dynamic isActive;
 
 @synthesize maxNumberOfImages;
 @synthesize imagesDataQueue;
@@ -46,41 +45,20 @@
     self.imageQueue.maxConcurrentOperationCount = 1;
 }
 
-- (void)setVisibleImages:(NSArray *)images ofSize:(ASImageSize)size {
-//    NSSet *newVisibleCells = [NSSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
-//    if ([newVisibleCells isEqualToSet:self.visibleCells] == false) {
-//        // Mark images that are no longer visible, by subtracting new visible cells from the old. Anything left over is no longer visible.
-//        NSMutableSet *oldCells = [self.visibleCells mutableCopy];
-//        [oldCells minusSet:newVisibleCells];
-//        for (NSIndexPath *indexPath in oldCells) {
-//            ((ASImage *)self.activeCategory.images[indexPath.row]).thumbnailVisible = false;
-//        }
-//        // Mark images that are newly visible, by subtracting old visible cells from the new.
-//        NSMutableSet *newCells = [newVisibleCells mutableCopy];
-//        [newCells minusSet:self.visibleCells];
-//        for (NSIndexPath *indexPath in newCells) {
-//            ((ASImage *)self.activeCategory.images[indexPath.row]).thumbnailVisible = true;
-//        }
-//    }
-
-    // Load more images if needed
-//    NSInteger distantImageIndex = ((NSIndexPath *)self.visibleIndexPaths.lastObject).item + 50;
-//    if (self.category.images.count < distantImageIndex && self.category.images.count != self.category.maxNumberOfImages) {
-//        [self.activeCategory requestImageData];
-//    }
-}
-
-- (void)resetImageRequests {
+- (void)cancelImageRequests {
     [self.imageQueue cancelAllOperations];
 }
 
 - (void)resetImages {
-    [self removeImages:self.images];
+    for (ASImage *image in self.images) {
+        [self.managedObjectContext deleteObject:image];
+    }
     self.maxNumberOfImages = -1;
     [self requestImageData];
 }
 
 - (void)requestImageData {
+    NSLog(@"image data requested");
     if (self.imagesDataQueue.operationCount != 0 || self.images.count == self.maxNumberOfImages) return;
 
     NSLog(@"requesting image data for category %@", self.name);
@@ -114,23 +92,29 @@
         image.name = photoData[@"name"];
         image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
         image.fullURL = (NSString *)photoData[@"image_url"][1];
+        image.category = self;
 
-        [self addImagesObject:image];
+        [self.managedObjectContext insertObject:image];
     }
+    NSLog(@"image data parsed for category %@, num of images count: %@", self.name, @(self.images.count));
     [self numberOfImagesUpdated];
 }
 
 #pragma mark - Image Delegate
 
 - (void)imageThumbnailUpdated:(ASImage *)image {
+    self.lastUpdated = [NSDate date];
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:)]) [self.delegate imageThumbnailUpdated:image];
 }
 
 - (void)imageFullUpdated:(ASImage *)image {
+    self.lastUpdated = [NSDate date];
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) [self.delegate imageFullUpdated:image];
 }
 
 - (void)numberOfImagesUpdated {
+    NSLog(@"number of images updated in category %@", self.name);
+    self.lastUpdated = [NSDate date];
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(numberOfImagesUpdated)]) [self.delegate numberOfImagesUpdated];
 }
 

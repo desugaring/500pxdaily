@@ -13,8 +13,7 @@
 
 @interface ASImage()
 
-@property ASBaseOperation *thumbnailOperation;
-@property ASBaseOperation *fullOperation;
+@property (weak) ASBaseOperation *requestOperation;
 
 @end
 
@@ -26,61 +25,66 @@
 @dynamic full;
 @dynamic category;
 
-@synthesize thumbnailOperation;
-@synthesize fullOperation;
+@synthesize requestOperation;
 
--(ASBaseOperation *)operation {
+- (ASBaseOperation *)operation {
     return self.category.operation;
 }
 
--(void)awakeCommon {
-    [super awakeCommon];
+- (void)awakeCommon {
+    self.requestOperation = nil;
 }
 
-- (void)requestThumbnailIfNeeded {
-    NSLog(@"requesting image thumbnail for name %@", self.name);
-    ASBaseOperation *operation = [self operation];
-    operation.object = self;
-    operation.completion = ^(NSArray *results, NSError *error) {
-        if (error != nil) {
-            NSLog(@"url response error: %@", error);
-        } else if ([results[0] isKindOfClass:NSData.class]){
-            NSData *data = (NSData *)results[0];
-            self.thumbnail = [UIImage imageWithData:data];
-            self.thumbnailOperation = nil;
+- (void)requestThumbnailImageIfNeeded {
+    if (self.thumbnail == nil && self.requestOperation == nil) {
+//        NSLog(@"requesting image thumbnail for name %@", self.name);
+        ASBaseOperation *operation = [self operation];
+        operation.object = self;
+        operation.completion = ^(NSArray *results, NSError *error) {
+            if (error != nil) {
+                NSLog(@"url response error: %@", error);
+            } else if ([results[0] isKindOfClass:NSData.class]){
+                NSData *data = (NSData *)results[0];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.thumbnail = [UIImage imageWithData:data];
+                    [self.category imageThumbnailUpdated:self];
+                });
+            }
+        };
 
-            [self.category imageThumbnailUpdated:self];
-        }
-    };
-
-    [self.category.imageQueue addOperation:operation];
+        [self.category.imageQueue addOperation:operation];
+        self.requestOperation = operation;
+    }
 }
 
-- (void)requestFullsizeIfNeeded {
-    NSLog(@"requesting image full for name %@", self.name);
-    ASBaseOperation *operation = [self operation];
-    operation.object = self;
-    operation.completion = ^(NSArray *results, NSError *error) {
-        if (error != nil) {
-            NSLog(@"url response error: %@", error);
-        } else if ([results[0] isKindOfClass:NSData.class]){
-            NSData *data = (NSData *)results[0];
-            self.full = [UIImage imageWithData:data];
-            self.fullOperation = nil;
+- (void)requestFullImageIfNeeded {
+    if (self.full == nil && self.requestOperation == nil) {
+        NSLog(@"requesting image full for name %@", self.name);
+        ASBaseOperation *operation = [self operation];
+        operation.object = self;
+        operation.completion = ^(NSArray *results, NSError *error) {
+            if (error != nil) {
+                NSLog(@"url response error: %@", error);
+            } else if ([results[0] isKindOfClass:NSData.class]){
+                NSData *data = (NSData *)results[0];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.full = [UIImage imageWithData:data];
+                    [self.category imageFullUpdated:self];
+                });
+            }
+        };
 
-            [self.category imageFullUpdated:self];
-        }
-    };
-
-    [self.category.imageQueue addOperation:operation];
+        [self.category.imageQueue addOperation:operation];
+        self.requestOperation = operation;
+    }
 }
 
 - (void)cancelThumbnailRequestIfNeeded {
-    if (self.thumbnailOperation != nil) [self.thumbnailOperation cancel];
+    if (self.requestOperation != nil) [self.requestOperation cancel];
 }
 
 - (void)cancelFullImageRequestIfNeeded {
-    if (self.fullOperation != nil) [self.fullOperation cancel];
+    if (self.requestOperation != nil) [self.requestOperation cancel];
 }
 
 @end

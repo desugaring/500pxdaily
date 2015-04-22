@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 @optional
 - (void)imageThumbnailUpdated:(ASImage *)image;
 - (void)imageFullUpdated:(ASImage *)image;
-- (void)numberOfImagesUpdated;
+- (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages;
 
 @end
 
@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 
 - (void)imageThumbnailUpdated:(ASImage *)image;
 - (void)imageFullUpdated:(ASImage *)image;
-- (void)numberOfImagesUpdated;
+- (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages;
 
 - (void)resetImages;
 - (void)cancelImageRequests;

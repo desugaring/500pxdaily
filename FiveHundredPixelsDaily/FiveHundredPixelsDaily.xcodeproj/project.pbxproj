@@ -14,8 +14,6 @@
 		4F4C1E4D1ADA198F00109166 /* ASFHPStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E4B1ADA198F00109166 /* ASFHPStore.m */; };
 		4F4D6E931AD75EB800D1ABD8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6E921AD75EB800D1ABD8 /* main.m */; };
 		4F4D6E961AD75EB800D1ABD8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6E951AD75EB800D1ABD8 /* AppDelegate.m */; };
-		4F4D6E9C1AD75EB800D1ABD8 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6E9B1AD75EB800D1ABD8 /* MasterViewController.m */; };
-		4F4D6E9F1AD75EB800D1ABD8 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6E9E1AD75EB800D1ABD8 /* DetailViewController.m */; };
 		4F4D6EA21AD75EB800D1ABD8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F4D6EA01AD75EB800D1ABD8 /* Main.storyboard */; };
 		4F4D6EA41AD75EB800D1ABD8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4D6EA31AD75EB800D1ABD8 /* Images.xcassets */; };
 		4F4D6EA71AD75EB800D1ABD8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F4D6EA51AD75EB800D1ABD8 /* LaunchScreen.xib */; };
@@ -52,10 +50,6 @@
 		4F4D6E921AD75EB800D1ABD8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4F4D6E941AD75EB800D1ABD8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4F4D6E951AD75EB800D1ABD8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4F4D6E9A1AD75EB800D1ABD8 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		4F4D6E9B1AD75EB800D1ABD8 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
-		4F4D6E9D1AD75EB800D1ABD8 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		4F4D6E9E1AD75EB800D1ABD8 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		4F4D6EA11AD75EB800D1ABD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4F4D6EA31AD75EB800D1ABD8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4F4D6EA61AD75EB800D1ABD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -125,10 +119,6 @@
 			children = (
 				4FE3E2881ADA0A7600B174F4 /* Model */,
 				4FE3E2871ADA07E600B174F4 /* Views */,
-				4F4D6E9A1AD75EB800D1ABD8 /* MasterViewController.h */,
-				4F4D6E9B1AD75EB800D1ABD8 /* MasterViewController.m */,
-				4F4D6E9D1AD75EB800D1ABD8 /* DetailViewController.h */,
-				4F4D6E9E1AD75EB800D1ABD8 /* DetailViewController.m */,
 				4F4D6E901AD75EB800D1ABD8 /* Supporting Files */,
 			);
 			path = FiveHundredPixelsDaily;
@@ -338,9 +328,7 @@
 			files = (
 				4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */,
 				4F717E8B1ADE122D004B8722 /* ASBaseObject.m in Sources */,
-				4F4D6E9F1AD75EB800D1ABD8 /* DetailViewController.m in Sources */,
 				4F4C1E471ADA18CF00109166 /* ASStore.m in Sources */,
-				4F4D6E9C1AD75EB800D1ABD8 /* MasterViewController.m in Sources */,
 				4F4C1E441ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld in Sources */,
 				4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */,
 				4F4D6EC11AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m in Sources */,

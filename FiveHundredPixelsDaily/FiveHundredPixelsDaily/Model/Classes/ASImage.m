@@ -13,8 +13,6 @@
 
 @interface ASImage()
 
-@property (weak) ASBaseOperation *requestOperation;
-
 @end
 
 @implementation ASImage
@@ -25,19 +23,19 @@
 @dynamic full;
 @dynamic category;
 
-@synthesize requestOperation;
+@synthesize activeRequest;
 
 - (ASBaseOperation *)operation {
     return self.category.operation;
 }
 
 - (void)awakeCommon {
-    self.requestOperation = nil;
+    self.activeRequest = nil;
 }
 
 - (void)requestThumbnailImageIfNeeded {
-    if (self.thumbnail == nil && self.requestOperation == nil) {
-        NSLog(@"requesting image thumbnail for name %@", self.name);
+    if (self.thumbnail == nil && self.activeRequest == nil) {
+//        NSLog(@"requesting thumbnail for image named %@", self.name);
         ASBaseOperation *operation = [self operation];
         operation.object = self;
         operation.completion = ^(NSArray *results, NSError *error) {
@@ -53,13 +51,13 @@
         };
 
         [self.category.imageQueue addOperation:operation];
-        self.requestOperation = operation;
+        self.activeRequest = operation;
     }
 }
 
 - (void)requestFullImageIfNeeded {
-    if (self.full == nil && self.requestOperation == nil) {
-        NSLog(@"requesting image full for name %@", self.name);
+    if (self.full == nil && self.activeRequest == nil) {
+        NSLog(@"requesting full for image named %@", self.name);
         ASBaseOperation *operation = [self operation];
         operation.object = self;
         operation.completion = ^(NSArray *results, NSError *error) {
@@ -75,16 +73,8 @@
         };
 
         [self.category.imageQueue addOperation:operation];
-        self.requestOperation = operation;
+        self.activeRequest = operation;
     }
-}
-
-- (void)cancelThumbnailRequestIfNeeded {
-    if (self.requestOperation != nil) [self.requestOperation cancel];
-}
-
-- (void)cancelFullImageRequestIfNeeded {
-    if (self.requestOperation != nil) [self.requestOperation cancel];
 }
 
 @end

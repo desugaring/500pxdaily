@@ -58,7 +58,6 @@
 }
 
 - (void)requestImageData {
-    NSLog(@"image data requested");
     if (self.imagesDataQueue.operationCount != 0 || self.images.count == self.maxNumberOfImages) return;
 
     NSLog(@"requesting image data for category %@", self.name);
@@ -84,38 +83,54 @@
 }
 
 - (void)parseImageData:(NSDictionary *)imageData {
-    self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
+        self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
 
-    NSArray *photos = imageData[@"photos"];
-    for (NSDictionary *photoData in photos) {
-        ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
-        image.name = photoData[@"name"];
-        image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
-        image.fullURL = (NSString *)photoData[@"image_url"][1];
-        image.category = self;
+        NSArray *photos = imageData[@"photos"];
+        for (NSDictionary *photoData in photos) {
+            ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
+            image.name = photoData[@"name"];
+            image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
+            image.fullURL = (NSString *)photoData[@"image_url"][1];
+            image.category = self;
 
-        [self.managedObjectContext insertObject:image];
-    }
-    NSLog(@"image data parsed for category %@, num of images count: %@", self.name, @(self.images.count));
-    [self numberOfImagesUpdated];
+            [self.managedObjectContext insertObject:image];
+        }
+//        [self.managedObjectContext save:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"image data parsed for category %@, num of images count: %@", self.name, @(self.images.count));
+        [self numberOfImagesUpdatedTo:self.images.count];
+    });
 }
 
 #pragma mark - Image Delegate
 
 - (void)imageThumbnailUpdated:(ASImage *)image {
     self.lastUpdated = [NSDate date];
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:)]) [self.delegate imageThumbnailUpdated:image];
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:)]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate imageThumbnailUpdated:image];
+        });
+    }
+
 }
 
 - (void)imageFullUpdated:(ASImage *)image {
     self.lastUpdated = [NSDate date];
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) [self.delegate imageFullUpdated:image];
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate imageFullUpdated:image];
+        });
+    }
 }
 
-- (void)numberOfImagesUpdated {
+- (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages {
     NSLog(@"number of images updated in category %@", self.name);
     self.lastUpdated = [NSDate date];
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(numberOfImagesUpdated)]) [self.delegate numberOfImagesUpdated];
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(numberOfImagesUpdatedTo:)]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate numberOfImagesUpdatedTo:numberOfImages];
+        });
+    }
 }
 
 @end

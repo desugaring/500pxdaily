@@ -20,6 +20,7 @@
 @property (nonatomic, retain) UIImage *thumbnail;
 @property (nonatomic, retain) UIImage *full;
 @property (nonatomic, retain) ASCategory *category;
+@property (weak) ASBaseOperation *activeRequest;
 
 - (void)requestThumbnailImageIfNeeded;
 - (void)requestFullImageIfNeeded;

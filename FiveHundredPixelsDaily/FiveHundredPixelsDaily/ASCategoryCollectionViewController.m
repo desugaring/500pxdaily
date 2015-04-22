@@ -15,6 +15,7 @@
 @interface ASCategoryCollectionViewController()
 
 @property NSMutableSet *visibleIndexPaths;
+@property NSUInteger numberOfImages;
 
 @end
 
@@ -28,6 +29,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
     self.navigationItem.title = self.category.name;
     self.visibleIndexPaths = [NSMutableSet new];
     self.category.delegate = self;
+    self.numberOfImages = self.category.images.count;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -38,6 +40,8 @@ static NSString * const reuseIdentifier = @"Thumbnail";
     }
     NSInteger hours = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.category.lastUpdated toDate:[NSDate date] options:0] hour];
     if(hours >= 1) [self.category resetImages];
+
+    [self.collectionView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -68,17 +72,20 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.category.images.count;
+    return self.numberOfImages;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ASImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
     ASImage *image = self.category.images[indexPath.item];
+    NSLog(@"image index is %@", @(indexPath.item));
     if (image.thumbnail != nil) {
         cell.imageView.image = image.thumbnail;
         [cell.spinner stopAnimating];
     } else {
+        NSLog(@"requesting thumb for category: %@", image.category.name);
+        [cell.spinner startAnimating];
         [image requestThumbnailImageIfNeeded];
     }
 
@@ -94,7 +101,11 @@ static NSString * const reuseIdentifier = @"Thumbnail";
         // Cancel requests for images that are no longer visible
         [self.visibleIndexPaths minusSet:newIndexPaths];
         for (NSIndexPath *indexPath in self.visibleIndexPaths) {
-            [(ASImage *)self.category.images[indexPath.item] cancelThumbnailRequestIfNeeded];
+            ASImage *image = (ASImage *)self.category.images[indexPath.item];
+            if (image.activeRequest != nil && image.thumbnail == nil) {
+                [image.activeRequest cancel];
+                NSLog(@"cancelling %@", image.name);
+            }
         }
         self.visibleIndexPaths = newIndexPaths;
         if (((NSIndexPath *)self.visibleIndexPaths.allObjects.lastObject).item + 50 >= self.category.images.count) [self.category requestImageData];
@@ -104,17 +115,13 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 #pragma mark - Category Image Delegate
 
 - (void)imageThumbnailUpdated:(ASImage *)image {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0];
-        [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-    });
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0];
+    [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
-- (void)numberOfImagesUpdated {
-    NSLog(@"collection view num o fimages updated for category %@", self.category.name);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.collectionView reloadData];
-    });
+- (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages {
+    self.numberOfImages = numberOfImages;
+    [self.collectionView reloadData];
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -130,10 +137,9 @@ static NSString * const reuseIdentifier = @"Thumbnail";
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(categoryImageWasSelected:)]) [self.delegate categoryImageWasSelected:self.category.images[indexPath.item]];
 }
 
-// Uncomment this method to specify if the specified item should be selected
-//- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-//    return YES;
-//}
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    return ((ASImage *)self.category.images[indexPath.item]).thumbnail != nil;
+}
 
 
 /*

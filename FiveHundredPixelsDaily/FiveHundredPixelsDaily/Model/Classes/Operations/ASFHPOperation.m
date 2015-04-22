@@ -15,7 +15,7 @@
 
 NSString * const FIVE_HUNDRED_PX_URL = @"https://api.500px.com/v1/photos";
 NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
-NSString * const PHOTOS_PER_REQUEST = @"20";
+NSString * const PHOTOS_PER_REQUEST = @"30";
 
 - (void)main {
     if ([self.object isKindOfClass: ASCategory.class]) {

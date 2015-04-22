@@ -11,7 +11,7 @@
 @implementation ASImageTransformer
 
 + (Class)transformedValueClass {
-    return [UIImage class];
+    return [NSData class];
 }
 
 + (BOOL)allowsReverseTransformation {
@@ -19,13 +19,13 @@
 }
 
 - (id)transformedValue:(id)value {
-    NSData *data = (NSData *)value;
-    return [UIImage imageWithData:data];
+    UIImage *image = (UIImage *)value;
+    return [NSData dataWithData:UIImagePNGRepresentation(image)];
 }
 
 - (id)reverseTransformedValue:(id)value {
-    UIImage *image = (UIImage *)value;
-    return [NSData dataWithData:UIImagePNGRepresentation(image)];
+    NSData *data = (NSData *)value;
+    return [UIImage imageWithData:data];
 }
 
 @end

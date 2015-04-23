@@ -13,7 +13,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Xea-J9-e9O">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="Category" id="epK-UR-7Yq" customClass="ASCategoryTableViewCell">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -89,11 +89,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xh9-QS-fqP">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </containerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rhi-Do-w41" userLabel="PrevButton">
                                 <rect key="frame" x="0.0" y="611" width="188" height="56"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="0.10000000000000001" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Prev Category">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -102,18 +106,16 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uah-XO-kyz" userLabel="NextButton">
                                 <rect key="frame" x="188" y="611" width="187" height="56"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="0.10000000000000001" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Next Category">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="goToNextCategory:" destination="fmn-Sy-uaX" eventType="touchUpInside" id="sQ9-jf-wdA"/>
                                 </connections>
                             </button>
-                            <containerView opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xh9-QS-fqP">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -201,7 +203,47 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bMG-vM-k9f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="385.5" y="736.5"/>
+            <point key="canvasLocation" x="182.5" y="722.5"/>
+        </scene>
+        <!--Image View Controller-->
+        <scene sceneID="nYT-bQ-B2p">
+            <objects>
+                <viewController storyboardIdentifier="FullImageVC" id="HzC-Ja-fnf" customClass="ASImageViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="DDZ-tU-Ows"/>
+                        <viewControllerLayoutGuide type="bottom" id="Pnx-dE-PnF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="evL-gu-dbH">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q1I-r6-kB6">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </scrollView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="mYK-ef-Ayt">
+                                <rect key="frame" x="177" y="334" width="20" height="20"/>
+                                <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Q1I-r6-kB6" secondAttribute="trailing" id="2Rn-1o-ojd"/>
+                            <constraint firstItem="Q1I-r6-kB6" firstAttribute="leading" secondItem="evL-gu-dbH" secondAttribute="leading" id="EQm-vf-Wpc"/>
+                            <constraint firstItem="Q1I-r6-kB6" firstAttribute="top" secondItem="DDZ-tU-Ows" secondAttribute="bottom" id="Q4Y-1Z-pgv"/>
+                            <constraint firstItem="Q1I-r6-kB6" firstAttribute="centerX" secondItem="mYK-ef-Ayt" secondAttribute="centerX" id="RqM-2O-8ex"/>
+                            <constraint firstItem="Q1I-r6-kB6" firstAttribute="centerY" secondItem="mYK-ef-Ayt" secondAttribute="centerY" id="YzL-FG-kGc"/>
+                            <constraint firstItem="Pnx-dE-PnF" firstAttribute="top" secondItem="Q1I-r6-kB6" secondAttribute="bottom" id="nwL-NL-ONj"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="scrollView" destination="Q1I-r6-kB6" id="bUS-mW-lW3"/>
+                        <outlet property="spinner" destination="mYK-ef-Ayt" id="QDi-7c-PeS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6lL-7E-hce" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="712.5" y="722.5"/>
         </scene>
         <!--Image Pages View Controller-->
         <scene sceneID="RMV-DM-6md">
@@ -224,6 +266,9 @@
                                 <state key="normal" title="Button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="downloadImage:" destination="g2S-Lx-1Bt" eventType="touchUpInside" id="5zg-ub-Xle"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -240,6 +285,8 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="containerView" destination="IfM-G7-5m5" id="yRC-U0-6TH"/>
+                        <outlet property="downloadButton" destination="4zl-bK-cf9" id="3VA-rO-DGk"/>
                         <outlet property="imageContainerView" destination="IfM-G7-5m5" id="6eR-3c-fu8"/>
                     </connections>
                 </viewController>
@@ -253,9 +300,10 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="FIi-6c-SEf" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fjk-qt-jd6">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="fjk-qt-jd6">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.60190672892720309" green="0.70433868616965012" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

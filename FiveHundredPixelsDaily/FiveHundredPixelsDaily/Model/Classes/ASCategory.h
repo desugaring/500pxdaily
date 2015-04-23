@@ -62,4 +62,3 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 - (void)removeImages:(NSOrderedSet *)values;
 
 @end
-

@@ -21,8 +21,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = self.initialActiveCategory.name;
-
     // Create category controllers
     ASCategoryCollectionViewController *initialPageVC;
 
@@ -52,6 +50,7 @@
 
     // Add Contraints
     [self.pageViewController.view setTranslatesAutoresizingMaskIntoConstraints:false];
+//    self.pageViewController.view.bounds = self.containerView.frame;
     [self.containerView addConstraints:@[
                                                    [NSLayoutConstraint constraintWithItem:self.containerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.pageViewController.view attribute:NSLayoutAttributeTop multiplier:1.0 constant:0],
                                                    [NSLayoutConstraint constraintWithItem:self.containerView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.pageViewController.view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0],
@@ -61,6 +60,9 @@
 
     // For easier swiping
     self.view.gestureRecognizers = self.pageViewController.gestureRecognizers;
+
+    // Buttons and title setup
+    [self categoryChangedTo:self.initialActiveCategory];
 }
 
 #pragma mark - UIPageViewController DataSource

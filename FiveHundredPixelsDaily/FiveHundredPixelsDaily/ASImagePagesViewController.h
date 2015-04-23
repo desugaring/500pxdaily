@@ -12,5 +12,9 @@
 @interface ASImagePagesViewController : UIViewController
 
 @property (weak) ASImage *activeImage;
+@property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (weak, nonatomic) IBOutlet UIButton *downloadButton;
+
+- (IBAction)downloadImage:(UIButton *)sender;
 
 @end

@@ -22,7 +22,6 @@
 }
 
 - (void)awakeCommon {
-    NSLog(@"awake local");
 
 //    [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:DefaultsLocalCategoryNameKey options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew) context:nil];
 }

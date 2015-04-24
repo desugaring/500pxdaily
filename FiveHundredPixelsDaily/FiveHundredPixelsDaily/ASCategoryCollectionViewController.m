@@ -31,12 +31,23 @@ static NSString * const reuseIdentifier = @"Thumbnail";
     self.category.delegate = self;
     self.numberOfImages = self.category.images.count;
     if (self.numberOfImages == 0) [self.category requestImageData];
-    NSLog(@"num: %lu, cat num: %lu", self.numberOfImages, self.category.images.count);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    if (self.category.lastUpdated == nil) {
+        self.numberOfImages = 0;
+        [self.category resetImages];
+        return;
+    }
+    NSInteger hours = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.category.lastUpdated toDate:[NSDate date] options:0] hour];
+    if(hours >= 1) {
+        self.numberOfImages = 0;
+        [self.category resetImages];
+    } else {
+        [self.collectionView reloadData];
+    }
 }
 
 //- (void)resetIfNeeded {
@@ -82,14 +93,11 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ASImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
-    NSLog(@"images count: %lu, number of images: %lu", self.category.images.count, self.numberOfImages);
     ASImage *image = self.category.images[indexPath.item];
-    NSLog(@"image index is %@", @(indexPath.item));
     if (image.thumbnail != nil) {
         cell.imageView.image = image.thumbnail;
         [cell.spinner stopAnimating];
     } else {
-        NSLog(@"requesting thumb for category: %@", image.category.name);
         [cell.spinner startAnimating];
         [image requestThumbnailImageIfNeeded];
     }
@@ -120,14 +128,11 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 #pragma mark - Category Image Delegate
 
 - (void)imageThumbnailUpdated:(ASImage *)image {
-    NSLog(@"im1: %@, %@, %@, %@", self.category.name, image.category.name, image.thumbnailURL, image.thumbnail);
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0];
     [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-    NSLog(@"im2");
 }
 
 - (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages {
-    NSLog(@"number of images updated in categoryVC %@ to %lu", self.category.name, numberOfImages);
     self.numberOfImages = numberOfImages;
     [self.collectionView reloadData];
 }

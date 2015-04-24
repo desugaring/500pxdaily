@@ -15,17 +15,20 @@
 
 NSString * const FIVE_HUNDRED_PX_URL = @"https://api.500px.com/v1/photos";
 NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
-NSString * const PHOTOS_PER_REQUEST = @"30";
 
 - (void)main {
     if ([self.object isKindOfClass: ASCategory.class]) {
-        ASCategory *category = (ASCategory *)self.object;
-        // Determine page
-        NSUInteger page = category.images.count == 0 ? 1 : (category.images.count / PHOTOS_PER_REQUEST.integerValue)+1;
-
-        // Get category data
-        NSURL *url = [self urlForCategoryPage:page];
-        [self sendRequestWithURL:url];
+        NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
+        urlComponents.queryItems = @[[NSURLQueryItem queryItemWithName:@"consumer_key" value:CONSUMER_KEY],
+                                     [NSURLQueryItem queryItemWithName:@"only" value:((ASCategory *)self.object).name],
+                                     [NSURLQueryItem queryItemWithName:@"rpp" value:self.userInfo[@"perPage"]],
+                                     [NSURLQueryItem queryItemWithName:@"feature" value:@"upcoming"],
+                                     [NSURLQueryItem queryItemWithName:@"sort" value:@"times_viewed"],
+                                     [NSURLQueryItem queryItemWithName:@"image_size[0]" value:@"2"],
+                                     [NSURLQueryItem queryItemWithName:@"image_size[1]" value:@"4"],
+                                     [NSURLQueryItem queryItemWithName:@"page" value:self.userInfo[@"page"]]];
+        [self sendRequestWithURL:urlComponents.URL];
+        NSLog(@"request url: %@", urlComponents.string);
 
     } else if ([self.object isKindOfClass: ASImage.class]) {
         ASImage *image = (ASImage *)self.object;
@@ -45,21 +48,6 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
     if (error != nil) NSLog(@"error not nil");
     if (responseData == nil) NSLog(@"no response");
     self.completion(@[responseData], error);
-}
-
-- (NSURL *)urlForCategoryPage:(NSUInteger)page {
-    NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
-    urlComponents.queryItems = @[[NSURLQueryItem queryItemWithName:@"consumer_key" value:CONSUMER_KEY],
-                                 [NSURLQueryItem queryItemWithName:@"only" value:((ASCategory *)self.object).name],
-                                 [NSURLQueryItem queryItemWithName:@"rpp" value:PHOTOS_PER_REQUEST],
-                                 [NSURLQueryItem queryItemWithName:@"feature" value:@"upcoming"],
-                                 [NSURLQueryItem queryItemWithName:@"sort" value:@"times_viewed"],
-                                 [NSURLQueryItem queryItemWithName:@"image_size[0]" value:@"2"],
-                                 [NSURLQueryItem queryItemWithName:@"image_size[1]" value:@"4"],
-                                 [NSURLQueryItem queryItemWithName:@"page" value:[@(page) stringValue]]];
-    NSLog(@"request url: %@", urlComponents.string);
-
-    return urlComponents.URL;
 }
 
 @end

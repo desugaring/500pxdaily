@@ -67,10 +67,10 @@
     // Update buttons
     if (self.categoriesLinkedList.prev == nil) {
         [self.prevCategoryButton setTitle:@"" forState:UIControlStateNormal];
-        self.nextCategoryButton.enabled = false;
+        self.prevCategoryButton.enabled = false;
     } else {
         [self.prevCategoryButton setTitle:((ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.prev).categoryVC.category.name forState:UIControlStateNormal];
-        self.nextCategoryButton.enabled = true;
+        self.prevCategoryButton.enabled = true;
     }
 
     if (self.categoriesLinkedList.next == nil) {
@@ -113,6 +113,7 @@
 }
 
 - (IBAction)goToPrevCategory:(UIButton *)sender {
+    self.prevCategoryButton.enabled = false;
     self.categoriesLinkedList = (ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.prev;
 
     [self.pageViewController setViewControllers:@[self.categoriesLinkedList.categoryVC]
@@ -123,6 +124,7 @@
 }
 
 - (IBAction)goToNextCategory:(UIButton *)sender {
+    self.nextCategoryButton.enabled = false;
     self.categoriesLinkedList = (ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.next;
 
     [self.pageViewController setViewControllers:@[self.categoriesLinkedList.categoryVC]
@@ -135,7 +137,7 @@
 #pragma mark - CategoryCollectionVC Delegate
 
 - (void)categoryImageWasSelected:(ASImage *)image {
-    [self performSegueWithIdentifier:@"ShowImage" sender:image];
+//    [self performSegueWithIdentifier:@"ShowImage" sender:image];
 }
 
 #pragma mark - Navigation

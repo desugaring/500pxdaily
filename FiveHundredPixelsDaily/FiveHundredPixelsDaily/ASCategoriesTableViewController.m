@@ -112,7 +112,7 @@
     if ([segue.identifier isEqualToString:@"ShowPages"]) {
         NSMutableArray *activeCategories = [NSMutableArray new];
         for (ASStore *store in self.stores) {
-            [activeCategories addObjectsFromArray:[store activeCategories].array];
+            [activeCategories addObjectsFromArray:[store activeCategories]];
         }
         ASCategoriesPagesViewController *categoriesPagesVC = (ASCategoriesPagesViewController *)segue.destinationViewController;
         categoriesPagesVC.categories = activeCategories;

@@ -17,8 +17,8 @@
     // Stub
 }
 
-- (NSMutableOrderedSet *)activeCategories {
-    NSMutableOrderedSet *activeCategories = [NSMutableOrderedSet new];
+- (NSArray *)activeCategories {
+    NSMutableArray *activeCategories = [NSMutableArray new];
     for (ASCategory *category in self.categories) {
         if ([category.isActive isEqualToNumber:@(1)] == true) [activeCategories addObject:category];
     }

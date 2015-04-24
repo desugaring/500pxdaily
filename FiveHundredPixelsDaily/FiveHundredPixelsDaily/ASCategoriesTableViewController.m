@@ -110,7 +110,7 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     if ([segue.identifier isEqualToString:@"ShowPages"]) {
-        NSMutableOrderedSet *activeCategories = [NSMutableOrderedSet new];
+        NSMutableArray *activeCategories = [NSMutableArray new];
         for (ASStore *store in self.stores) {
             [activeCategories addObjectsFromArray:[store activeCategories].array];
         }

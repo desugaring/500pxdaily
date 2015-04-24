@@ -13,7 +13,7 @@
 
 @interface ASCategoriesPagesViewController : UIViewController <ASCategoryCollectionViewControllerDelegate, UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
-@property NSOrderedSet *categories;
+@property NSArray *categories;
 @property ASCategory *initialActiveCategory;
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;

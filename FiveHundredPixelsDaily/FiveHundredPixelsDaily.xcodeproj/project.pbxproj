@@ -31,7 +31,7 @@
 		4F717EA51AE4A470004B8722 /* ASImagePagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EA41AE4A470004B8722 /* ASImagePagesViewController.m */; };
 		4F717EA81AE75D33004B8722 /* ASNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EA71AE75D33004B8722 /* ASNavigationViewController.m */; };
 		4F717EB51AE989C3004B8722 /* ASLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EB31AE989C3004B8722 /* ASLinkedList.m */; };
-		4F717EB81AE98BA9004B8722 /* ASCategoryVCLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EB71AE98BA9004B8722 /* ASCategoryVCLinkedList.m */; };
+		4F717EB81AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EB71AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m */; };
 		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
 		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
 		4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2CC1ADA15FC00B174F4 /* ASPhotosOperation.m */; };
@@ -83,8 +83,8 @@
 		4F717EA71AE75D33004B8722 /* ASNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASNavigationViewController.m; sourceTree = "<group>"; };
 		4F717EB21AE989C3004B8722 /* ASLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASLinkedList.h; sourceTree = "<group>"; };
 		4F717EB31AE989C3004B8722 /* ASLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASLinkedList.m; sourceTree = "<group>"; };
-		4F717EB61AE98BA9004B8722 /* ASCategoryVCLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategoryVCLinkedList.h; sourceTree = "<group>"; };
-		4F717EB71AE98BA9004B8722 /* ASCategoryVCLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategoryVCLinkedList.m; sourceTree = "<group>"; };
+		4F717EB61AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASActiveCategoryVCLinkedList.h; sourceTree = "<group>"; };
+		4F717EB71AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASActiveCategoryVCLinkedList.m; sourceTree = "<group>"; };
 		4FE3E2B51ADA107800B174F4 /* ASCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategory.h; sourceTree = "<group>"; };
 		4FE3E2B61ADA107800B174F4 /* ASCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategory.m; sourceTree = "<group>"; };
 		4FE3E2B81ADA107800B174F4 /* ASImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImage.h; sourceTree = "<group>"; };
@@ -174,8 +174,8 @@
 			children = (
 				4F717EB21AE989C3004B8722 /* ASLinkedList.h */,
 				4F717EB31AE989C3004B8722 /* ASLinkedList.m */,
-				4F717EB61AE98BA9004B8722 /* ASCategoryVCLinkedList.h */,
-				4F717EB71AE98BA9004B8722 /* ASCategoryVCLinkedList.m */,
+				4F717EB61AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.h */,
+				4F717EB71AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m */,
 			);
 			path = DataStructures;
 			sourceTree = "<group>";
@@ -357,7 +357,7 @@
 				4F4C1E441ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld in Sources */,
 				4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */,
 				4F4D6EC11AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m in Sources */,
-				4F717EB81AE98BA9004B8722 /* ASCategoryVCLinkedList.m in Sources */,
+				4F717EB81AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m in Sources */,
 				4F4D6E961AD75EB800D1ABD8 /* AppDelegate.m in Sources */,
 				4F4D6E931AD75EB800D1ABD8 /* main.m in Sources */,
 				4F717E951AE2279E004B8722 /* ASModel.m in Sources */,

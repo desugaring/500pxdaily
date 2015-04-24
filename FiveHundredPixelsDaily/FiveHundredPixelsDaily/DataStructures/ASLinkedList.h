@@ -12,7 +12,7 @@
 
 @property (nonatomic) ASLinkedList *prev;
 @property (nonatomic) ASLinkedList *next;
-@property NSObject *object;
+@property (readonly) NSObject *object;
 
 - (instancetype)initWithObject:(NSObject *)object;
 

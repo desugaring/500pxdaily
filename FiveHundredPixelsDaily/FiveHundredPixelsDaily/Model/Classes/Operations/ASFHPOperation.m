@@ -42,7 +42,8 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
     NSURLResponse *response;
     NSError *error;
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-
+    if (error != nil) NSLog(@"error not nil");
+    if (responseData == nil) NSLog(@"no response");
     self.completion(@[responseData], error);
 }
 

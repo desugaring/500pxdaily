@@ -8,11 +8,17 @@
 
 #import "ASLinkedList.h"
 
+@interface ASLinkedList()
+
+@property (readwrite) NSObject *object;
+
+@end
+
 @implementation ASLinkedList
 
 -(instancetype)initWithObject:(NSObject *)object {
     if (self = [super init]) {
-        self.object = object;
+        _object = object;
     }
 
     return self;

@@ -54,6 +54,7 @@
         [self.managedObjectContext deleteObject:image];
     }
     self.maxNumberOfImages = -1;
+    [self numberOfImagesUpdatedTo:0];
     [self requestImageData];
 }
 
@@ -83,6 +84,7 @@
 }
 
 - (void)parseImageData:(NSDictionary *)imageData {
+    dispatch_async(dispatch_get_main_queue(), ^{
         self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
 
         NSArray *photos = imageData[@"photos"];
@@ -96,7 +98,6 @@
             [self.managedObjectContext insertObject:image];
         }
 //        [self.managedObjectContext save:nil];
-    dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"image data parsed for category %@, num of images count: %@", self.name, @(self.images.count));
         [self numberOfImagesUpdatedTo:self.images.count];
     });
@@ -105,12 +106,16 @@
 #pragma mark - Image Delegate
 
 - (void)imageThumbnailUpdated:(ASImage *)image {
+    NSLog(@"cat1");
     self.lastUpdated = [NSDate date];
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:)]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"man1");
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:)]) {
             [self.delegate imageThumbnailUpdated:image];
-        });
-    }
+            NSLog(@"cat2");
+        }
+    });
+    NSLog(@"cat2");
 
 }
 
@@ -124,13 +129,13 @@
 }
 
 - (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages {
-    NSLog(@"number of images updated in category %@", self.name);
+    NSLog(@"number of images updated in category %@ to %lu", self.name, numberOfImages);
     self.lastUpdated = [NSDate date];
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(numberOfImagesUpdatedTo:)]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(numberOfImagesUpdatedTo:)]) {
             [self.delegate numberOfImagesUpdatedTo:numberOfImages];
-        });
-    }
+        }
+    });
 }
 
 @end

@@ -6,13 +6,14 @@
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import "ASLinkedList.h"
 #import "ASCategoryCollectionViewController.h"
 
-@interface ASActiveCategoryVCLinkedList : ASLinkedList
+@interface ASActiveCategoryVCLinkedList : NSObject
 
 @property (readonly) ASCategoryCollectionViewController *categoryVC;
 @property (readonly) NSArray *categories;
+@property (nonatomic) ASActiveCategoryVCLinkedList *next;
+@property (nonatomic) ASActiveCategoryVCLinkedList *prev;
 
 - (instancetype)initWithCategoryVC:(ASCategoryCollectionViewController *)categoryVC categories:(NSArray *)categories;
 

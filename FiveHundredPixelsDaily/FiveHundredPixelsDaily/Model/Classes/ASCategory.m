@@ -52,14 +52,11 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
 }
 
 - (void)resetImages {
-    NSLog(@"num of images BEFORE reset: %lu", self.images.count);
-
     for (ASImage *image in [NSSet setWithSet:self.images.set]) {
         [self.managedObjectContext deleteObject:image];
     }
     self.maxNumberOfImages = -1;
     [self numberOfImagesUpdatedTo:0];
-    NSLog(@"num of images after reset: %lu", self.images.count);
     [self requestImageDataForPage:0];
 }
 

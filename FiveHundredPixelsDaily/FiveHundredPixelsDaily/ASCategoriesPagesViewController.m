@@ -69,7 +69,7 @@
         [self.prevCategoryButton setTitle:@"" forState:UIControlStateNormal];
         self.prevCategoryButton.enabled = false;
     } else {
-        [self.prevCategoryButton setTitle:((ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.prev).categoryVC.category.name forState:UIControlStateNormal];
+        [self.prevCategoryButton setTitle:(self.categoriesLinkedList.prev).categoryVC.category.name forState:UIControlStateNormal];
         self.prevCategoryButton.enabled = true;
     }
 
@@ -77,7 +77,7 @@
         [self.nextCategoryButton setTitle:@"" forState:UIControlStateNormal];
         self.nextCategoryButton.enabled = false;
     } else {
-        [self.nextCategoryButton setTitle:((ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.next).categoryVC.category.name forState:UIControlStateNormal];
+        [self.nextCategoryButton setTitle:(self.categoriesLinkedList.next).categoryVC.category.name forState:UIControlStateNormal];
         self.nextCategoryButton.enabled = true;
     }
 }
@@ -87,7 +87,7 @@
     if (completed == YES) {
         ASCategoryCollectionViewController *newCategoryVC = (ASCategoryCollectionViewController *)self.pageViewController.viewControllers.firstObject;
         // Set pointer to current linked list item, either we went to previous or next item in the linked list, we check which way here
-        self.categoriesLinkedList = [self.categoriesLinkedList.next.object isEqual:newCategoryVC] ? (ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.next : (ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.prev;
+        self.categoriesLinkedList = [self.categoriesLinkedList.next.categoryVC isEqual:newCategoryVC] ? self.categoriesLinkedList.next : self.categoriesLinkedList.prev;
         [self updateUI];
     }
 
@@ -95,14 +95,14 @@
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(ASCategoryCollectionViewController *)viewController
 {
-    ASActiveCategoryVCLinkedList *next = (ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.next;
+    ASActiveCategoryVCLinkedList *next = self.categoriesLinkedList.next;
 
     return (next != nil) ? next.categoryVC : nil;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(ASCategoryCollectionViewController *)viewController
 {
-    ASActiveCategoryVCLinkedList *prev = (ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.prev;
+    ASActiveCategoryVCLinkedList *prev = self.categoriesLinkedList.prev;
 
     return (prev != nil) ? prev.categoryVC : nil;
 }
@@ -114,7 +114,7 @@
 
 - (IBAction)goToPrevCategory:(UIButton *)sender {
     self.prevCategoryButton.enabled = false;
-    self.categoriesLinkedList = (ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.prev;
+    self.categoriesLinkedList = self.categoriesLinkedList.prev;
 
     [self.pageViewController setViewControllers:@[self.categoriesLinkedList.categoryVC]
                                       direction:UIPageViewControllerNavigationDirectionReverse
@@ -125,7 +125,7 @@
 
 - (IBAction)goToNextCategory:(UIButton *)sender {
     self.nextCategoryButton.enabled = false;
-    self.categoriesLinkedList = (ASActiveCategoryVCLinkedList *)self.categoriesLinkedList.next;
+    self.categoriesLinkedList = self.categoriesLinkedList.next;
 
     [self.pageViewController setViewControllers:@[self.categoriesLinkedList.categoryVC]
                                       direction:UIPageViewControllerNavigationDirectionForward

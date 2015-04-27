@@ -10,46 +10,65 @@
 #import "ASCategory.h"
 #import "ASStore.h"
 
+@interface ASActiveCategoryVCLinkedList()
+
+@property NSLock *prevLock;
+@property NSLock *nextLock;
+@property ASActiveCategoryVCLinkedList *nextCategory;
+@property ASActiveCategoryVCLinkedList *prevCategory;
+@property BOOL nextExists;
+@property BOOL prevExists;
+
+@end
+
 @implementation ASActiveCategoryVCLinkedList
 
 - (instancetype)initWithCategoryVC:(ASCategoryCollectionViewController *)categoryVC categories:(NSArray *)categories {
-    if (self = [super initWithObject:categoryVC]) {
+    if (self = [super init]) {
         _categoryVC = categoryVC;
         _categories = categories;
+        _nextExists = true;
+        _prevExists = true;
     }
     return self;
 }
 
-- (ASLinkedList *)prev {
-    if (super.prev == nil) {
-        NSUInteger categoryIndex = [self.categories indexOfObject:self.categoryVC.category];
-        
-        if (categoryIndex != 0) {
-            ASCategoryCollectionViewController *newCategoryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CategoryCollectionVC"];
-            newCategoryVC.category = self.categories[categoryIndex-1];
-            newCategoryVC.delegate = self.categoryVC.delegate;
+- (ASActiveCategoryVCLinkedList *)prev {
+    if (self.prevExists == false) return nil;
+    if (self.prevExists == true && _prev != nil) return _prev;
 
-            super.prev = [[ASActiveCategoryVCLinkedList alloc] initWithCategoryVC:newCategoryVC categories:self.categories];
-            super.prev.next = self;
-        }
+    NSUInteger categoryIndex = [self.categories indexOfObject:self.categoryVC.category];
+    if (categoryIndex != 0) {
+        ASCategoryCollectionViewController *newCategoryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CategoryCollectionVC"];
+        newCategoryVC.category = self.categories[categoryIndex-1];
+        newCategoryVC.delegate = self.categoryVC.delegate;
+
+        _prev = [[ASActiveCategoryVCLinkedList alloc] initWithCategoryVC:newCategoryVC categories:self.categories];
+        _prev.next = self;
+        return _prev;
+    } else {
+        self.prevExists = false;
+        return nil;
     }
-    return super.prev;
 }
 
-- (ASLinkedList *)next {
-    if (super.next == nil) {
-        NSUInteger categoryIndex = [self.categories indexOfObject:self.categoryVC.category];
+- (ASActiveCategoryVCLinkedList *)next {
+    if (self.nextExists == false) return nil;
+    if (self.nextExists == true && _next != nil) return _next;
 
-        if (categoryIndex != self.categories.count-1) {
-            ASCategoryCollectionViewController *newCategoryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CategoryCollectionVC"];
-            newCategoryVC.category = self.categories[categoryIndex+1];
-            newCategoryVC.delegate = self.categoryVC.delegate;
+    NSUInteger categoryIndex = [self.categories indexOfObject:self.categoryVC.category];
+    if (categoryIndex != self.categories.count-1) {
+        ASCategoryCollectionViewController *newCategoryVC = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"CategoryCollectionVC"];
+        newCategoryVC.category = self.categories[categoryIndex+1];
+        newCategoryVC.delegate = self.categoryVC.delegate;
 
-            super.next = [[ASActiveCategoryVCLinkedList alloc] initWithCategoryVC:newCategoryVC categories:self.categories];
-            super.next.prev = self;
-        }
+        _next = [[ASActiveCategoryVCLinkedList alloc] initWithCategoryVC:newCategoryVC categories:self.categories];
+        _next.prev = self;
+        return _next;
+    } else {
+        self.nextExists = false;
+        return nil;
     }
-    return super.next;
 }
 
 @end

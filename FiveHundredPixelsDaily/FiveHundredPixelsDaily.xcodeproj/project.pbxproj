@@ -30,7 +30,6 @@
 		4F717EA11AE497FB004B8722 /* ASImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EA01AE497FB004B8722 /* ASImageTransformer.m */; };
 		4F717EA51AE4A470004B8722 /* ASImagePagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EA41AE4A470004B8722 /* ASImagePagesViewController.m */; };
 		4F717EA81AE75D33004B8722 /* ASNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EA71AE75D33004B8722 /* ASNavigationViewController.m */; };
-		4F717EB51AE989C3004B8722 /* ASLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EB31AE989C3004B8722 /* ASLinkedList.m */; };
 		4F717EB81AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EB71AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m */; };
 		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
 		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
@@ -81,8 +80,6 @@
 		4F717EA41AE4A470004B8722 /* ASImagePagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASImagePagesViewController.m; sourceTree = "<group>"; };
 		4F717EA61AE75D33004B8722 /* ASNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASNavigationViewController.h; sourceTree = "<group>"; };
 		4F717EA71AE75D33004B8722 /* ASNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASNavigationViewController.m; sourceTree = "<group>"; };
-		4F717EB21AE989C3004B8722 /* ASLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASLinkedList.h; sourceTree = "<group>"; };
-		4F717EB31AE989C3004B8722 /* ASLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASLinkedList.m; sourceTree = "<group>"; };
 		4F717EB61AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASActiveCategoryVCLinkedList.h; sourceTree = "<group>"; };
 		4F717EB71AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASActiveCategoryVCLinkedList.m; sourceTree = "<group>"; };
 		4FE3E2B51ADA107800B174F4 /* ASCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategory.h; sourceTree = "<group>"; };
@@ -172,8 +169,6 @@
 		4F717EAC1AE9875E004B8722 /* DataStructures */ = {
 			isa = PBXGroup;
 			children = (
-				4F717EB21AE989C3004B8722 /* ASLinkedList.h */,
-				4F717EB31AE989C3004B8722 /* ASLinkedList.m */,
 				4F717EB61AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.h */,
 				4F717EB71AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m */,
 			);
@@ -353,7 +348,6 @@
 				4F717E8B1ADE122D004B8722 /* ASBaseObject.m in Sources */,
 				4F4C1E471ADA18CF00109166 /* ASStore.m in Sources */,
 				4F717EA81AE75D33004B8722 /* ASNavigationViewController.m in Sources */,
-				4F717EB51AE989C3004B8722 /* ASLinkedList.m in Sources */,
 				4F4C1E441ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld in Sources */,
 				4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */,
 				4F4D6EC11AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m in Sources */,

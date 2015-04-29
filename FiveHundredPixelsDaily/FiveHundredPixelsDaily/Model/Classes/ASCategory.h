@@ -33,6 +33,7 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 @property (nonatomic, retain) ASStore *store;
 @property (nonatomic, retain) NSDate *lastUpdated;
 @property (nonatomic, retain) NSNumber *isActive;
+@property (nonatomic, retain) NSNumber *isDaily;
 
 @property NSOperationQueue *imageQueue;
 @property (weak) id<ASCategoryImageDelegate> delegate;

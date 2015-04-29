@@ -1,27 +1,25 @@
 //
-//  ASActiveCategoryVCLinkedList.m
+//  ASCategoryVCLinkedList.m
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-23.
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import "ASActiveCategoryVCLinkedList.h"
+#import "ASCategoryVCLinkedList.h"
 #import "ASCategory.h"
 #import "ASStore.h"
 
-@interface ASActiveCategoryVCLinkedList()
+@interface ASCategoryVCLinkedList()
 
-@property NSLock *prevLock;
-@property NSLock *nextLock;
-@property ASActiveCategoryVCLinkedList *nextCategory;
-@property ASActiveCategoryVCLinkedList *prevCategory;
+@property ASCategoryVCLinkedList *nextCategory;
+@property ASCategoryVCLinkedList *prevCategory;
 @property BOOL nextExists;
 @property BOOL prevExists;
 
 @end
 
-@implementation ASActiveCategoryVCLinkedList
+@implementation ASCategoryVCLinkedList
 
 - (instancetype)initWithCategoryVC:(ASCategoryCollectionViewController *)categoryVC categories:(NSArray *)categories {
     if (self = [super init]) {
@@ -33,7 +31,7 @@
     return self;
 }
 
-- (ASActiveCategoryVCLinkedList *)prev {
+- (ASCategoryVCLinkedList *)prev {
     if (self.prevExists == false) return nil;
     if (self.prevExists == true && _prev != nil) return _prev;
 
@@ -43,7 +41,7 @@
         newCategoryVC.category = self.categories[categoryIndex-1];
         newCategoryVC.delegate = self.categoryVC.delegate;
 
-        _prev = [[ASActiveCategoryVCLinkedList alloc] initWithCategoryVC:newCategoryVC categories:self.categories];
+        _prev = [[ASCategoryVCLinkedList alloc] initWithCategoryVC:newCategoryVC categories:self.categories];
         _prev.next = self;
         return _prev;
     } else {
@@ -52,7 +50,7 @@
     }
 }
 
-- (ASActiveCategoryVCLinkedList *)next {
+- (ASCategoryVCLinkedList *)next {
     if (self.nextExists == false) return nil;
     if (self.nextExists == true && _next != nil) return _next;
 
@@ -62,7 +60,7 @@
         newCategoryVC.category = self.categories[categoryIndex+1];
         newCategoryVC.delegate = self.categoryVC.delegate;
 
-        _next = [[ASActiveCategoryVCLinkedList alloc] initWithCategoryVC:newCategoryVC categories:self.categories];
+        _next = [[ASCategoryVCLinkedList alloc] initWithCategoryVC:newCategoryVC categories:self.categories];
         _next.prev = self;
         return _next;
     } else {

@@ -23,6 +23,7 @@
 @dynamic full;
 @dynamic category;
 
+@synthesize delegate;
 @synthesize activeRequest;
 
 - (ASBaseOperation *)operation {
@@ -41,7 +42,7 @@
         operation.completion = ^(NSArray *results, NSError *error) {
             if (error != nil) {
                 NSLog(@"url response error: %@", error);
-            } else if ([results[0] isKindOfClass:NSData.class]){
+            } else if (results.count > 0 && [results[0] isKindOfClass:NSData.class]){
                 NSData *data = (NSData *)results[0];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.thumbnail = [UIImage imageWithData:data];
@@ -49,7 +50,6 @@
                 });
             }
         };
-
         [self.category.imageQueue addOperation:operation];
         self.activeRequest = operation;
     }
@@ -63,15 +63,15 @@
         operation.completion = ^(NSArray *results, NSError *error) {
             if (error != nil) {
                 NSLog(@"url response error: %@", error);
-            } else if ([results[0] isKindOfClass:NSData.class]){
+            } else if (results.count > 0 && [results[0] isKindOfClass:NSData.class]){
                 NSData *data = (NSData *)results[0];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.full = [UIImage imageWithData:data];
                     [self.category imageFullUpdated:self];
+                    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) [self.delegate imageFullUpdated:self];
                 });
             }
         };
-
         [self.category.imageQueue addOperation:operation];
         self.activeRequest = operation;
     }

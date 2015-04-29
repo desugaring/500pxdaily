@@ -17,10 +17,4 @@ typedef void(^CompletionBlock)(NSArray *results, NSError *error);
 @property NSDictionary *userInfo;
 @property (copy) CompletionBlock completion;
 
-// get categories
-// get category metadata
-// get category page X
-// get image thumbnail
-// get image full
-
 @end

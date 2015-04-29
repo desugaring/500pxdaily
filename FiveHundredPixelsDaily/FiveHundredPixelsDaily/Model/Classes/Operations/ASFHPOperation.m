@@ -45,9 +45,12 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     NSURLResponse *response;
     NSError *error;
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (error != nil) NSLog(@"error not nil");
-    if (responseData == nil) NSLog(@"no response");
-    self.completion(@[responseData], error);
+    if (error != nil || responseData == nil) {
+        NSLog(@"error not nil: %@", error);
+        self.completion(@[], error);
+    } else {
+        self.completion(@[responseData], error);
+    }
 }
 
 @end

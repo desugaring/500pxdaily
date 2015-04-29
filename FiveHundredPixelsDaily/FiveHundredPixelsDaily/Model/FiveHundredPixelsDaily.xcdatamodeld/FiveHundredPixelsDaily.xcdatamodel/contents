@@ -5,6 +5,7 @@
     </entity>
     <entity name="Category" representedClassName="ASCategory" parentEntity="BaseObject" syncable="YES">
         <attribute name="isActive" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
+        <attribute name="isDaily" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="lastUpdated" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Image" inverseName="category" inverseEntity="Image" syncable="YES"/>
         <relationship name="store" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="categories" inverseEntity="Store" syncable="YES"/>
@@ -26,12 +27,12 @@
         <userInfo/>
     </entity>
     <elements>
-        <element name="Category" positionX="261" positionY="216" width="128" height="105"/>
-        <element name="Image" positionX="270" positionY="225" width="128" height="120"/>
-        <element name="Store" positionX="261" positionY="189" width="128" height="60"/>
-        <element name="PhotosStore" positionX="270" positionY="261" width="128" height="45"/>
-        <element name="FHPStore" positionX="279" positionY="270" width="128" height="45"/>
         <element name="BaseObject" positionX="288" positionY="279" width="128" height="60"/>
+        <element name="Category" positionX="261" positionY="216" width="128" height="120"/>
+        <element name="FHPStore" positionX="279" positionY="270" width="128" height="45"/>
+        <element name="Image" positionX="270" positionY="225" width="128" height="120"/>
         <element name="Model" positionX="297" positionY="279" width="128" height="60"/>
+        <element name="PhotosStore" positionX="270" positionY="261" width="128" height="45"/>
+        <element name="Store" positionX="261" positionY="189" width="128" height="60"/>
     </elements>
 </model>

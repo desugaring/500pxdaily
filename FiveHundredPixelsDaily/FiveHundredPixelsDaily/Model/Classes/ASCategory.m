@@ -25,6 +25,7 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
 @dynamic store;
 @dynamic lastUpdated;
 @dynamic isActive;
+@dynamic isDaily;
 
 @synthesize maxNumberOfImages;
 @synthesize imagesDataQueue;
@@ -44,7 +45,7 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
     self.imagesDataQueue.maxConcurrentOperationCount = 1;
 
     self.imageQueue = [[NSOperationQueue alloc] init];
-    self.imageQueue.maxConcurrentOperationCount = 1;
+    self.imageQueue.maxConcurrentOperationCount = 5;
 }
 
 - (void)cancelImageRequests {

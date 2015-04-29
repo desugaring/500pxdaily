@@ -1,5 +1,5 @@
 //
-//  ASActiveCategoryVCLinkedList.h
+//  ASCategoryVCLinkedList.h
 //  FiveHundredPixelsDaily
 //
 //  Created by Alex Semenikhine on 2015-04-23.
@@ -8,12 +8,12 @@
 
 #import "ASCategoryCollectionViewController.h"
 
-@interface ASActiveCategoryVCLinkedList : NSObject
+@interface ASCategoryVCLinkedList : NSObject
 
 @property (readonly) ASCategoryCollectionViewController *categoryVC;
 @property (readonly) NSArray *categories;
-@property (nonatomic) ASActiveCategoryVCLinkedList *next;
-@property (nonatomic) ASActiveCategoryVCLinkedList *prev;
+@property (nonatomic) ASCategoryVCLinkedList *next;
+@property (nonatomic) ASCategoryVCLinkedList *prev;
 
 - (instancetype)initWithCategoryVC:(ASCategoryCollectionViewController *)categoryVC categories:(NSArray *)categories;
 

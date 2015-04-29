@@ -1,0 +1,14 @@
+Ver 1.0:
+
+- Get rid of Photos store and just have an album you can pick to download to
+- Settings tab
+- Proper sizing/rotation of images in full mode
+
+- Background fetching of images
+- Color scheme made dark across the board
+- Make categories background a vibrant blur of the category
+
+Ver 1.1:
+
+- iPad support?
+- use UISplitVC?

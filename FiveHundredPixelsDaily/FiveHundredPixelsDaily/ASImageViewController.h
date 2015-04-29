@@ -10,9 +10,12 @@
 #import "ASImage.h"
 #import "ASCategory.h"
 
-@interface ASImageViewController : UIViewController
+@interface ASImageViewController : UIViewController <ASImageDelegate, UIScrollViewDelegate>
 
+@property (weak) ASImage *image;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+
+- (void)imageFullUpdated:(ASImage *)image;
 
 @end

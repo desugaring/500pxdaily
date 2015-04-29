@@ -12,6 +12,7 @@
 #import "ASBaseOperation.h"
 
 @class ASCategory;
+@protocol ASImageDelegate;
 
 @interface ASImage : ASBaseObject
 
@@ -21,11 +22,15 @@
 @property (nonatomic, retain) UIImage *full;
 @property (nonatomic, retain) ASCategory *category;
 @property (weak) ASBaseOperation *activeRequest;
+@property (weak) id<ASImageDelegate> delegate;
 
 - (void)requestThumbnailImageIfNeeded;
 - (void)requestFullImageIfNeeded;
 
-- (void)cancelThumbnailRequestIfNeeded;
-- (void)cancelFullImageRequestIfNeeded;
+@end
+
+@protocol ASImageDelegate <NSObject>
+
+- (void)imageFullUpdated:(ASImage *)image;
 
 @end

@@ -21,12 +21,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+//    UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DarkScratch"]];
+//    bgView.frame = self.view.bounds;
+//    bgView.contentMode = UIViewContentModeTopLeft;
+//    bgView.alpha = 0.7;
+//    self.tableView.backgroundView = bgView;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+
 }
 
 - (void)didReceiveMemoryWarning {

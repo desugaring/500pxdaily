@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F489A7A1AEED11B0028F4F7 /* ASImageVCLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F489A791AEED11B0028F4F7 /* ASImageVCLinkedList.m */; };
 		4F4C1E411ADA17FA00109166 /* ASBaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E401ADA17FA00109166 /* ASBaseOperation.m */; };
 		4F4C1E441ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E421ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld */; };
 		4F4C1E471ADA18CF00109166 /* ASStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E461ADA18CF00109166 /* ASStore.m */; };
@@ -21,7 +22,6 @@
 		4F4D6EC11AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC01AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m */; };
 		4F4D6EC41AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC31AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m */; };
 		4F4D6EC71AD76C7900D1ABD8 /* ASImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC61AD76C7900D1ABD8 /* ASImageViewController.m */; };
-		4F4D6ECA1AD76FD000D1ABD8 /* BottomNavImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC91AD76FD000D1ABD8 /* BottomNavImageViewController.m */; };
 		4F717E8B1ADE122D004B8722 /* ASBaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E8A1ADE122D004B8722 /* ASBaseObject.m */; };
 		4F717E8E1AE08F2D004B8722 /* ASImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E8D1AE08F2D004B8722 /* ASImageCollectionViewCell.m */; };
 		4F717E951AE2279E004B8722 /* ASModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E941AE2279E004B8722 /* ASModel.m */; };
@@ -30,7 +30,12 @@
 		4F717EA11AE497FB004B8722 /* ASImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EA01AE497FB004B8722 /* ASImageTransformer.m */; };
 		4F717EA51AE4A470004B8722 /* ASImagePagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EA41AE4A470004B8722 /* ASImagePagesViewController.m */; };
 		4F717EA81AE75D33004B8722 /* ASNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EA71AE75D33004B8722 /* ASNavigationViewController.m */; };
-		4F717EB81AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EB71AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m */; };
+		4F717EB81AE98BA9004B8722 /* ASCategoryVCLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EB71AE98BA9004B8722 /* ASCategoryVCLinkedList.m */; };
+		4F9B8FA01AF0558900B36422 /* ASSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8F9F1AF0558900B36422 /* ASSettingsTableViewController.m */; };
+		4F9B8FA51AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FA41AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.m */; };
+		4F9B8FA81AF06F5900B36422 /* ASSettingsNumberTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FA71AF06F5900B36422 /* ASSettingsNumberTableViewCell.m */; };
+		4F9B8FAB1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FAA1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m */; };
+		4F9B8FAE1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FAD1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m */; };
 		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
 		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
 		4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2CC1ADA15FC00B174F4 /* ASPhotosOperation.m */; };
@@ -38,6 +43,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F489A781AEED11B0028F4F7 /* ASImageVCLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImageVCLinkedList.h; sourceTree = "<group>"; };
+		4F489A791AEED11B0028F4F7 /* ASImageVCLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASImageVCLinkedList.m; sourceTree = "<group>"; };
 		4F4C1E3F1ADA17FA00109166 /* ASBaseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASBaseOperation.h; sourceTree = "<group>"; };
 		4F4C1E401ADA17FA00109166 /* ASBaseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASBaseOperation.m; sourceTree = "<group>"; };
 		4F4C1E431ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FiveHundredPixelsDaily.xcdatamodel; sourceTree = "<group>"; };
@@ -63,8 +70,6 @@
 		4F4D6EC31AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategoryCollectionViewController.m; sourceTree = "<group>"; };
 		4F4D6EC51AD76C7900D1ABD8 /* ASImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImageViewController.h; sourceTree = "<group>"; };
 		4F4D6EC61AD76C7900D1ABD8 /* ASImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASImageViewController.m; sourceTree = "<group>"; };
-		4F4D6EC81AD76FD000D1ABD8 /* BottomNavImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BottomNavImageViewController.h; sourceTree = "<group>"; };
-		4F4D6EC91AD76FD000D1ABD8 /* BottomNavImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BottomNavImageViewController.m; sourceTree = "<group>"; };
 		4F717E891ADE122D004B8722 /* ASBaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASBaseObject.h; sourceTree = "<group>"; };
 		4F717E8A1ADE122D004B8722 /* ASBaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASBaseObject.m; sourceTree = "<group>"; };
 		4F717E8C1AE08F2D004B8722 /* ASImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImageCollectionViewCell.h; sourceTree = "<group>"; };
@@ -80,8 +85,18 @@
 		4F717EA41AE4A470004B8722 /* ASImagePagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASImagePagesViewController.m; sourceTree = "<group>"; };
 		4F717EA61AE75D33004B8722 /* ASNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASNavigationViewController.h; sourceTree = "<group>"; };
 		4F717EA71AE75D33004B8722 /* ASNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASNavigationViewController.m; sourceTree = "<group>"; };
-		4F717EB61AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASActiveCategoryVCLinkedList.h; sourceTree = "<group>"; };
-		4F717EB71AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASActiveCategoryVCLinkedList.m; sourceTree = "<group>"; };
+		4F717EB61AE98BA9004B8722 /* ASCategoryVCLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategoryVCLinkedList.h; sourceTree = "<group>"; };
+		4F717EB71AE98BA9004B8722 /* ASCategoryVCLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategoryVCLinkedList.m; sourceTree = "<group>"; };
+		4F9B8F9E1AF0558900B36422 /* ASSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSettingsTableViewController.h; sourceTree = "<group>"; };
+		4F9B8F9F1AF0558900B36422 /* ASSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsTableViewController.m; sourceTree = "<group>"; };
+		4F9B8FA31AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSettingsDescriptionTableViewCell.h; sourceTree = "<group>"; };
+		4F9B8FA41AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsDescriptionTableViewCell.m; sourceTree = "<group>"; };
+		4F9B8FA61AF06F5900B36422 /* ASSettingsNumberTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSettingsNumberTableViewCell.h; sourceTree = "<group>"; };
+		4F9B8FA71AF06F5900B36422 /* ASSettingsNumberTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsNumberTableViewCell.m; sourceTree = "<group>"; };
+		4F9B8FA91AF06F6600B36422 /* ASSettingsPhotosTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSettingsPhotosTableViewCell.h; sourceTree = "<group>"; };
+		4F9B8FAA1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsPhotosTableViewCell.m; sourceTree = "<group>"; };
+		4F9B8FAC1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSettingsCategoryTableViewCell.h; sourceTree = "<group>"; };
+		4F9B8FAD1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsCategoryTableViewCell.m; sourceTree = "<group>"; };
 		4FE3E2B51ADA107800B174F4 /* ASCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategory.h; sourceTree = "<group>"; };
 		4FE3E2B61ADA107800B174F4 /* ASCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategory.m; sourceTree = "<group>"; };
 		4FE3E2B81ADA107800B174F4 /* ASImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImage.h; sourceTree = "<group>"; };
@@ -169,15 +184,43 @@
 		4F717EAC1AE9875E004B8722 /* DataStructures */ = {
 			isa = PBXGroup;
 			children = (
-				4F717EB61AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.h */,
-				4F717EB71AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m */,
+				4F717EB61AE98BA9004B8722 /* ASCategoryVCLinkedList.h */,
+				4F717EB71AE98BA9004B8722 /* ASCategoryVCLinkedList.m */,
+				4F489A781AEED11B0028F4F7 /* ASImageVCLinkedList.h */,
+				4F489A791AEED11B0028F4F7 /* ASImageVCLinkedList.m */,
 			);
 			path = DataStructures;
+			sourceTree = "<group>";
+		};
+		4F9B8FA11AF06F2100B36422 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				4F9B8F9E1AF0558900B36422 /* ASSettingsTableViewController.h */,
+				4F9B8F9F1AF0558900B36422 /* ASSettingsTableViewController.m */,
+				4F9B8FA21AF06F2A00B36422 /* Cells */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		4F9B8FA21AF06F2A00B36422 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4F9B8FA31AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.h */,
+				4F9B8FA41AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.m */,
+				4F9B8FA61AF06F5900B36422 /* ASSettingsNumberTableViewCell.h */,
+				4F9B8FA71AF06F5900B36422 /* ASSettingsNumberTableViewCell.m */,
+				4F9B8FA91AF06F6600B36422 /* ASSettingsPhotosTableViewCell.h */,
+				4F9B8FAA1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m */,
+				4F9B8FAC1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.h */,
+				4F9B8FAD1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m */,
+			);
+			name = Cells;
 			sourceTree = "<group>";
 		};
 		4FE3E2871ADA07E600B174F4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4F9B8FA11AF06F2100B36422 /* Settings */,
 				4F717EA61AE75D33004B8722 /* ASNavigationViewController.h */,
 				4F717EA71AE75D33004B8722 /* ASNavigationViewController.m */,
 				4FE3E28A1ADA0A9800B174F4 /* Categories */,
@@ -246,18 +289,8 @@
 				4F717EA41AE4A470004B8722 /* ASImagePagesViewController.m */,
 				4F4D6EC51AD76C7900D1ABD8 /* ASImageViewController.h */,
 				4F4D6EC61AD76C7900D1ABD8 /* ASImageViewController.m */,
-				4FE3E28D1ADA0AE200B174F4 /* Navigation */,
 			);
 			name = Image;
-			sourceTree = "<group>";
-		};
-		4FE3E28D1ADA0AE200B174F4 /* Navigation */ = {
-			isa = PBXGroup;
-			children = (
-				4F4D6EC81AD76FD000D1ABD8 /* BottomNavImageViewController.h */,
-				4F4D6EC91AD76FD000D1ABD8 /* BottomNavImageViewController.m */,
-			);
-			name = Navigation;
 			sourceTree = "<group>";
 		};
 		4FE3E2BE1ADA119600B174F4 /* Operations */ = {
@@ -346,27 +379,32 @@
 			files = (
 				4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */,
 				4F717E8B1ADE122D004B8722 /* ASBaseObject.m in Sources */,
+				4F9B8FAB1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m in Sources */,
 				4F4C1E471ADA18CF00109166 /* ASStore.m in Sources */,
 				4F717EA81AE75D33004B8722 /* ASNavigationViewController.m in Sources */,
 				4F4C1E441ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld in Sources */,
 				4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */,
 				4F4D6EC11AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m in Sources */,
-				4F717EB81AE98BA9004B8722 /* ASActiveCategoryVCLinkedList.m in Sources */,
+				4F717EB81AE98BA9004B8722 /* ASCategoryVCLinkedList.m in Sources */,
 				4F4D6E961AD75EB800D1ABD8 /* AppDelegate.m in Sources */,
+				4F9B8FA81AF06F5900B36422 /* ASSettingsNumberTableViewCell.m in Sources */,
 				4F4D6E931AD75EB800D1ABD8 /* main.m in Sources */,
 				4F717E951AE2279E004B8722 /* ASModel.m in Sources */,
+				4F9B8FA01AF0558900B36422 /* ASSettingsTableViewController.m in Sources */,
+				4F9B8FAE1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m in Sources */,
 				4F717EA11AE497FB004B8722 /* ASImageTransformer.m in Sources */,
 				4F4D6EC71AD76C7900D1ABD8 /* ASImageViewController.m in Sources */,
 				4F717EA51AE4A470004B8722 /* ASImagePagesViewController.m in Sources */,
 				4F4D6EC41AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m in Sources */,
 				4F4D6EBE1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.m in Sources */,
-				4F4D6ECA1AD76FD000D1ABD8 /* BottomNavImageViewController.m in Sources */,
 				4F717E8E1AE08F2D004B8722 /* ASImageCollectionViewCell.m in Sources */,
 				4F717E9B1AE22B12004B8722 /* ASCategoriesPagesViewController.m in Sources */,
 				4FE3E2D01ADA160800B174F4 /* ASFHPOperation.m in Sources */,
 				4F4C1E4C1ADA198F00109166 /* ASPhotosStore.m in Sources */,
 				4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */,
+				4F489A7A1AEED11B0028F4F7 /* ASImageVCLinkedList.m in Sources */,
 				4F4C1E411ADA17FA00109166 /* ASBaseOperation.m in Sources */,
+				4F9B8FA51AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.m in Sources */,
 				4F4C1E4D1ADA198F00109166 /* ASFHPStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

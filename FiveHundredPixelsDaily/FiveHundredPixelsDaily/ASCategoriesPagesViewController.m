@@ -9,12 +9,13 @@
 #import "ASCategoriesPagesViewController.h"
 #import "ASImagePagesViewController.h"
 #import "ASImage.h"
-#import "ASActiveCategoryVCLinkedList.h"
+#import "ASCategoryVCLinkedList.h"
+#import "ASSettingsTableViewController.h"
 
 @interface ASCategoriesPagesViewController ()
 
 @property UIPageViewController *pageViewController;
-@property ASActiveCategoryVCLinkedList *categoriesLinkedList;
+@property ASCategoryVCLinkedList *categoriesLinkedList;
 
 @end
 
@@ -22,12 +23,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Create category controllers
+    // Background image
+//    UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DarkScratch"]];
+//    bgView.frame = self.view.bounds;
+//    bgView.contentMode = UIViewContentModeTopLeft;
+//    bgView.alpha = 0.7;
+//    [self.view insertSubview:bgView atIndex:0];
 
+    // Create category controllers
     ASCategoryCollectionViewController *categoryVC = (ASCategoryCollectionViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"CategoryCollectionVC"];
     categoryVC.category = self.initialActiveCategory;
     categoryVC.delegate = self;
-    self.categoriesLinkedList = [[ASActiveCategoryVCLinkedList alloc] initWithCategoryVC:categoryVC categories:self.categories];
+    self.categoriesLinkedList = [[ASCategoryVCLinkedList alloc] initWithCategoryVC:categoryVC categories:self.categories];
 
     // Create page view controller
     self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
@@ -44,7 +51,6 @@
 
     // Add Contraints
     [self.pageViewController.view setTranslatesAutoresizingMaskIntoConstraints:false];
-//    self.pageViewController.view.bounds = self.containerView.frame;
     [self.containerView addConstraints:@[
                                                    [NSLayoutConstraint constraintWithItem:self.containerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.pageViewController.view attribute:NSLayoutAttributeTop multiplier:1.0 constant:0],
                                                    [NSLayoutConstraint constraintWithItem:self.containerView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.pageViewController.view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0],
@@ -58,8 +64,6 @@
     // Buttons and title setup
     [self updateUI];
 }
-
-#pragma mark - UIPageViewController DataSource
 
 - (void)updateUI {
     self.navigationItem.title = self.categoriesLinkedList.categoryVC.category.name;
@@ -82,6 +86,9 @@
     }
 }
 
+#pragma mark - UIPageViewController DataSource
+
+
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
 {
     if (completed == YES) {
@@ -95,14 +102,14 @@
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(ASCategoryCollectionViewController *)viewController
 {
-    ASActiveCategoryVCLinkedList *next = self.categoriesLinkedList.next;
+    ASCategoryVCLinkedList *next = self.categoriesLinkedList.next;
 
     return (next != nil) ? next.categoryVC : nil;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(ASCategoryCollectionViewController *)viewController
 {
-    ASActiveCategoryVCLinkedList *prev = self.categoriesLinkedList.prev;
+    ASCategoryVCLinkedList *prev = self.categoriesLinkedList.prev;
 
     return (prev != nil) ? prev.categoryVC : nil;
 }
@@ -137,7 +144,7 @@
 #pragma mark - CategoryCollectionVC Delegate
 
 - (void)categoryImageWasSelected:(ASImage *)image {
-//    [self performSegueWithIdentifier:@"ShowImage" sender:image];
+    [self performSegueWithIdentifier:@"ShowImage" sender:image];
 }
 
 #pragma mark - Navigation
@@ -148,7 +155,11 @@
         ASImagePagesViewController *imagePagesVC = (ASImagePagesViewController *)segue.destinationViewController;
 
         ASImage *image = (ASImage *)sender;
-        imagePagesVC.activeImage = image;
+        imagePagesVC.initialActiveImage = image;
+    } else if ([segue.identifier isEqualToString:@"ShowSettings"]) {
+        UINavigationController *navVC = (UINavigationController *)segue.destinationViewController;
+        ASSettingsTableViewController *settingsVC = (ASSettingsTableViewController *)navVC.topViewController;
+        settingsVC.store = self.initialActiveCategory.store;
     }
 }
 

@@ -9,9 +9,9 @@
 @import UIKit;
 #import "ASImage.h"
 
-@interface ASImagePagesViewController : UIViewController
+@interface ASImagePagesViewController : UIViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
-@property (weak) ASImage *activeImage;
+@property (weak) ASImage *initialActiveImage;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIButton *downloadButton;
 

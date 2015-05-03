@@ -22,7 +22,7 @@
     self.category = category;
 
     self.nameLabel.text = category.name;
-    self.stateLabel.text = [category.isActive isEqualToNumber:@(0)] ? @"INACTIVE" : @"ACTIVE";
+    [self changeState:self.category.isActive.boolValue];
 }
 
 - (void)awakeFromNib {
@@ -32,13 +32,28 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
+    if (selected == true) {
+        self.nameLabel.textColor = [UIColor grayColor];
+        self.backgroundColor = [UIColor blackColor];
+    } else {
+        self.nameLabel.textColor = self.category.isActive.boolValue ? [UIColor whiteColor] : [UIColor colorWithWhite:0.8 alpha:1];
+        self.backgroundColor = self.category.isActive.boolValue ? [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2] : [UIColor clearColor];
+    }
 }
 
 - (IBAction)stateChange:(UIButton *)sender {
-    self.category.isActive = [self.category.isActive isEqualToNumber:@(0)] ? @(1) : @(0);
+    BOOL oppositeIsActive = [self.category.isActive isEqualToNumber:@(false)];
+    [self changeState:oppositeIsActive];
+}
 
-    self.stateLabel.text = [self.category.isActive isEqualToNumber:@(0)] ? @"INACTIVE" : @"ACTIVE";
+- (void)changeState:(BOOL)isActive {
+    self.category.isActive = @(isActive);
+
+    self.stateLabel.text = isActive ? @"ACTIVE": @"INACTIVE";
+    self.stateLabel.textColor = isActive ? [UIColor whiteColor] : [UIColor grayColor];
+    self.nameLabel.textColor = isActive ? [UIColor whiteColor] : [UIColor colorWithWhite:0.8 alpha:1];
+    self.accessoryType = isActive ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+    self.backgroundColor = isActive ? [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2] : [UIColor clearColor];
 }
 
 @end

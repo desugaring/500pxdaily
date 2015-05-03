@@ -36,6 +36,7 @@
 		4F9B8FA81AF06F5900B36422 /* ASSettingsNumberTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FA71AF06F5900B36422 /* ASSettingsNumberTableViewCell.m */; };
 		4F9B8FAB1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FAA1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m */; };
 		4F9B8FAE1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FAD1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m */; };
+		4F9B8FB11AF6AE2300B36422 /* ASButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FB01AF6AE2300B36422 /* ASButtonView.m */; };
 		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
 		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
 		4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2CC1ADA15FC00B174F4 /* ASPhotosOperation.m */; };
@@ -97,6 +98,8 @@
 		4F9B8FAA1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsPhotosTableViewCell.m; sourceTree = "<group>"; };
 		4F9B8FAC1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSettingsCategoryTableViewCell.h; sourceTree = "<group>"; };
 		4F9B8FAD1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsCategoryTableViewCell.m; sourceTree = "<group>"; };
+		4F9B8FAF1AF6AE2300B36422 /* ASButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASButtonView.h; sourceTree = "<group>"; };
+		4F9B8FB01AF6AE2300B36422 /* ASButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASButtonView.m; sourceTree = "<group>"; };
 		4FE3E2B51ADA107800B174F4 /* ASCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategory.h; sourceTree = "<group>"; };
 		4FE3E2B61ADA107800B174F4 /* ASCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategory.m; sourceTree = "<group>"; };
 		4FE3E2B81ADA107800B174F4 /* ASImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImage.h; sourceTree = "<group>"; };
@@ -217,6 +220,15 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
+		4F9B8FB21AF6AE3700B36422 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				4F9B8FAF1AF6AE2300B36422 /* ASButtonView.h */,
+				4F9B8FB01AF6AE2300B36422 /* ASButtonView.m */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		4FE3E2871ADA07E600B174F4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,6 +236,7 @@
 				4F717EA61AE75D33004B8722 /* ASNavigationViewController.h */,
 				4F717EA71AE75D33004B8722 /* ASNavigationViewController.m */,
 				4FE3E28A1ADA0A9800B174F4 /* Categories */,
+				4F9B8FB21AF6AE3700B36422 /* Helpers */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -399,6 +412,7 @@
 				4F4D6EBE1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.m in Sources */,
 				4F717E8E1AE08F2D004B8722 /* ASImageCollectionViewCell.m in Sources */,
 				4F717E9B1AE22B12004B8722 /* ASCategoriesPagesViewController.m in Sources */,
+				4F9B8FB11AF6AE2300B36422 /* ASButtonView.m in Sources */,
 				4FE3E2D01ADA160800B174F4 /* ASFHPOperation.m in Sources */,
 				4F4C1E4C1ADA198F00109166 /* ASPhotosStore.m in Sources */,
 				4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */,

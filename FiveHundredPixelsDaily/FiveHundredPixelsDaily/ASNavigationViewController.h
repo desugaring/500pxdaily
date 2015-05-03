@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface ASNavigationViewController : UINavigationController
+@property (weak, nonatomic) IBOutlet UINavigationBar *aa;
 
 @end

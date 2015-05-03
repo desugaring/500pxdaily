@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "ASCategoryCollectionViewController.h"
 #import "ASCategory.h"
+#import "ASButtonView.h"
 
 @interface ASCategoriesPagesViewController : UIViewController <ASCategoryCollectionViewControllerDelegate, UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
@@ -17,10 +18,10 @@
 @property ASCategory *initialActiveCategory;
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
-@property (weak, nonatomic) IBOutlet UIButton *prevCategoryButton;
-@property (weak, nonatomic) IBOutlet UIButton *nextCategoryButton;
+@property (weak, nonatomic) IBOutlet ASButtonView *nextButtonView;
+@property (weak, nonatomic) IBOutlet ASButtonView *prevButtonView;
 
-- (IBAction)goToPrevCategory:(id)sender;
-- (IBAction)goToNextCategory:(id)sender;
+- (void)goToPrevCategory:(id)sender;
+- (void)goToNextCategory:(id)sender;
 
 @end

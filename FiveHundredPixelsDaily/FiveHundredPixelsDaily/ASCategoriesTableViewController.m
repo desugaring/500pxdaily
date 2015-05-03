@@ -21,18 +21,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-//    UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DarkScratch"]];
-//    bgView.frame = self.view.bounds;
-//    bgView.contentMode = UIViewContentModeTopLeft;
-//    bgView.alpha = 0.7;
-//    self.tableView.backgroundView = bgView;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
-
 }
 
 - (void)didReceiveMemoryWarning {

@@ -16,6 +16,7 @@
 
 @property NSMutableSet *visibleIndexPaths;
 @property NSUInteger numberOfImages;
+@property CGSize cellSize;
 
 @end
 
@@ -25,7 +26,8 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
+    self.cellSize = CGSizeZero;
     self.navigationItem.title = self.category.name;
     self.visibleIndexPaths = [NSMutableSet new];
     self.category.delegate = self;
@@ -103,6 +105,24 @@ static NSString * const reuseIdentifier = @"Thumbnail";
     }
 
     return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (CGSizeEqualToSize(self.cellSize, CGSizeZero) == true) {
+        CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+        NSUInteger numberOfCellsPerRow = screenSize.width > screenSize.height ? 5 : 3;
+        CGFloat width = floor([[UIScreen mainScreen] bounds].size.width/numberOfCellsPerRow);
+        self.cellSize = CGSizeMake(width, width);
+    }
+    return self.cellSize;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    //
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        self.cellSize = CGSizeZero;
+        [self.collectionView reloadData];
+    } completion:nil];
 }
 
 #pragma mark - ScrollView Delegate

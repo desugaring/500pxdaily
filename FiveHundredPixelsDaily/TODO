@@ -3,6 +3,7 @@ Ver 1.0:
 - Get rid of Photos store and just have an album you can pick to download to
 - Settings tab
 - Proper sizing/rotation of images in full mode
+- Thumbnail size based on phone size
 
 - Background fetching of images
 - Color scheme made dark across the board

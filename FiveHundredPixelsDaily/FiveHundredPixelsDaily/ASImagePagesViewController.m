@@ -22,6 +22,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Button gesture recognizers
+    [self.nextButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToNextImage:)]];
+    [self.prevButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToPrevImage:)]];
+    [self.downloadButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(downloadImage:)]];
+
     self.downloadedImages = [NSMutableArray new];
 
     // Create category controllers
@@ -60,12 +65,30 @@
 
 - (void)updateUI {
     self.navigationItem.title = self.imagesLinkedList.imageVC.image.name;
-    self.downloadButton.enabled = ([self.downloadedImages containsObject:self.imagesLinkedList.imageVC.image] == false);
+
+    // Update buttons
+    if (self.imagesLinkedList.prev == nil) {
+        self.prevButtonView.iconImageView.hidden = true;
+        ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
+    } else {
+        ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = true;
+        self.prevButtonView.iconImageView.hidden = false;
+    }
+
+    if (self.imagesLinkedList.next == nil) {
+        self.nextButtonView.iconImageView.hidden = true;
+        ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
+    } else {
+        ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = true;
+        self.nextButtonView.iconImageView.hidden = false;
+    }
+
+    ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = ([self.downloadedImages containsObject:self.imagesLinkedList.imageVC.image] == false);
 }
 
-- (IBAction)downloadImage:(UIButton *)sender {
+- (void)downloadImage:(id)sender {
     [self.downloadedImages addObject:self.imagesLinkedList.imageVC.image];
-    self.downloadButton.enabled = false;
+    ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = false;
 }
 
 #pragma mark - UIPageViewController DataSource
@@ -93,6 +116,28 @@
     ASImageVCLinkedList *prev = self.imagesLinkedList.prev;
 
     return (prev != nil) ? prev.imageVC : nil;
+}
+
+- (void)goToPrevImage:(id)sender {
+    ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
+    self.imagesLinkedList = self.imagesLinkedList.prev;
+
+    [self.pageViewController setViewControllers:@[self.imagesLinkedList.imageVC]
+                                      direction:UIPageViewControllerNavigationDirectionReverse
+                                       animated:YES
+                                     completion:nil];
+    [self updateUI];
+}
+
+- (void)goToNextImage:(id)sender {
+    ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
+    self.imagesLinkedList = self.imagesLinkedList.next;
+
+    [self.pageViewController setViewControllers:@[self.imagesLinkedList.imageVC]
+                                      direction:UIPageViewControllerNavigationDirectionForward
+                                       animated:YES
+                                     completion:nil];
+    [self updateUI];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -17,6 +17,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSLog(@"yes");
+    [self.aa setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    self.aa.backgroundColor = [UIColor clearColor];
     // Do any additional setup after loading the view.
 }
 

@@ -33,10 +33,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
-    effectView.frame = self.tableView.bounds;
 
-    self.tableView.backgroundView = effectView;
+
 }
 
 - (void)closeModal:(UIBarButtonItem *)sender {

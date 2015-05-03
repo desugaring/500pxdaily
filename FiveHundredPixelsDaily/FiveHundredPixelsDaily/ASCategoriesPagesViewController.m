@@ -23,12 +23,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Background image
-//    UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DarkScratch"]];
-//    bgView.frame = self.view.bounds;
-//    bgView.contentMode = UIViewContentModeTopLeft;
-//    bgView.alpha = 0.7;
-//    [self.view insertSubview:bgView atIndex:0];
+    // Button gesture recognizers
+    [self.nextButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToNextCategory:)]];
+    [self.prevButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToPrevCategory:)]];
 
     // Create category controllers
     ASCategoryCollectionViewController *categoryVC = (ASCategoryCollectionViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"CategoryCollectionVC"];
@@ -70,19 +67,23 @@
 
     // Update buttons
     if (self.categoriesLinkedList.prev == nil) {
-        [self.prevCategoryButton setTitle:@"" forState:UIControlStateNormal];
-        self.prevCategoryButton.enabled = false;
+        self.prevButtonView.nameLabel.text = @"";
+        self.prevButtonView.iconImageView.hidden = true;
+        ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
     } else {
-        [self.prevCategoryButton setTitle:(self.categoriesLinkedList.prev).categoryVC.category.name forState:UIControlStateNormal];
-        self.prevCategoryButton.enabled = true;
+        self.prevButtonView.nameLabel.text = self.categoriesLinkedList.prev.categoryVC.category.name;
+        ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = true;
+        self.prevButtonView.iconImageView.hidden = false;
     }
 
     if (self.categoriesLinkedList.next == nil) {
-        [self.nextCategoryButton setTitle:@"" forState:UIControlStateNormal];
-        self.nextCategoryButton.enabled = false;
+        self.nextButtonView.nameLabel.text = @"";
+        self.nextButtonView.iconImageView.hidden = true;
+        ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
     } else {
-        [self.nextCategoryButton setTitle:(self.categoriesLinkedList.next).categoryVC.category.name forState:UIControlStateNormal];
-        self.nextCategoryButton.enabled = true;
+        self.nextButtonView.nameLabel.text = self.categoriesLinkedList.next.categoryVC.category.name;
+        ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = true;
+        self.nextButtonView.iconImageView.hidden = false;
     }
 }
 
@@ -119,8 +120,8 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)goToPrevCategory:(UIButton *)sender {
-    self.prevCategoryButton.enabled = false;
+- (void)goToPrevCategory:(id)sender {
+    ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
     self.categoriesLinkedList = self.categoriesLinkedList.prev;
 
     [self.pageViewController setViewControllers:@[self.categoriesLinkedList.categoryVC]
@@ -130,8 +131,8 @@
     [self updateUI];
 }
 
-- (IBAction)goToNextCategory:(UIButton *)sender {
-    self.nextCategoryButton.enabled = false;
+- (void)goToNextCategory:(id)sender {
+    ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
     self.categoriesLinkedList = self.categoriesLinkedList.next;
 
     [self.pageViewController setViewControllers:@[self.categoriesLinkedList.categoryVC]

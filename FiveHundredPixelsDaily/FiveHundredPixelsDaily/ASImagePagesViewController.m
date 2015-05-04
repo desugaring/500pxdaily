@@ -9,6 +9,7 @@
 #import "ASImagePagesViewController.h"
 #import "ASImageViewController.h"
 #import "ASImageVCLinkedList.h"
+#import "ASSettingsTableViewController.h"
 
 @interface ASImagePagesViewController ()
 
@@ -22,6 +23,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Bar buttons
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Thumbnails"] style:UIBarButtonItemStylePlain target:self action:@selector(goBackToThumbnails:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(goToSettings:)];
+
+
     // Button gesture recognizers
     [self.nextButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToNextImage:)]];
     [self.prevButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToPrevImage:)]];
@@ -63,6 +69,14 @@
     [self updateUI];
 }
 
+- (void)goToSettings:(id)sender {
+    [self performSegueWithIdentifier:@"ShowSettings" sender:self];
+}
+
+- (void)goBackToThumbnails:(id)sender {
+    [self.navigationController popViewControllerAnimated:true];
+}
+
 - (void)updateUI {
     self.navigationItem.title = self.imagesLinkedList.imageVC.image.name;
 
@@ -83,12 +97,15 @@
         self.nextButtonView.iconImageView.hidden = false;
     }
 
-    ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = ([self.downloadedImages containsObject:self.imagesLinkedList.imageVC.image] == false);
+    BOOL imageAlreadyDownloaded = [self.downloadedImages containsObject:self.imagesLinkedList.imageVC.image];
+    ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = !imageAlreadyDownloaded;
+    self.downloadButtonView.alpha = imageAlreadyDownloaded ? 0.5 : 1.0;
 }
 
 - (void)downloadImage:(id)sender {
     [self.downloadedImages addObject:self.imagesLinkedList.imageVC.image];
     ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = false;
+    self.downloadButtonView.alpha = 0.5;
 }
 
 #pragma mark - UIPageViewController DataSource
@@ -145,15 +162,18 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"ShowSettings"]) {
+        UINavigationController *navVC = (UINavigationController *)segue.destinationViewController;
+        ASSettingsTableViewController *settingsVC = (ASSettingsTableViewController *)navVC.topViewController;
+        settingsVC.store = self.initialActiveImage.category.store;
+    }
 }
-*/
+
 
 
 @end

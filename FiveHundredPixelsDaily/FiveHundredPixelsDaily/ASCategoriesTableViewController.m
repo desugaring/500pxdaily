@@ -7,20 +7,21 @@
 //
 
 #import "ASCategoriesTableViewController.h"
-#import "ASPhotosStore.h"
-#import "ASFHPStore.h"
 #import "ASCategory.h"
 #import "ASCategoryTableViewCell.h"
 #import "ASCategoriesPagesViewController.h"
-
-@interface ASCategoriesTableViewController ()
-
-@end
+#import "ASSettingsTableViewController.h"
 
 @implementation ASCategoriesTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(goToSettings:)];
+}
+
+- (void)goToSettings:(id)sender {
+    [self performSegueWithIdentifier:@"ShowSettings" sender:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -32,88 +33,53 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return self.stores.count;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return ((ASStore *)self.stores[section]).categories.count;
+    return self.store.categories.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ASCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Category" forIndexPath:indexPath];
 
-    ASStore *store = self.stores[indexPath.section];
-    [cell configureCellWithCategory:(ASCategory *)store.categories[indexPath.row]];
-
+    [cell configureCellWithCategory:(ASCategory *)self.store.categories[indexPath.row]];
+    cell.delegate = self;
+    
     return cell;
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    ASCategoryTableViewCell *cell = (ASCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    if ([cell.category.isActive isEqualToNumber:@(1)] == true) {
-        return indexPath;
-    }
-    return nil;
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return @"Select the categories you're interested in viewing";
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self performSegueWithIdentifier:@"ShowPages" sender:self];
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
+    headerView.textLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+    headerView.textLabel.textColor = [UIColor whiteColor];
+    headerView.backgroundView.backgroundColor = [UIColor colorWithRed:0.05 green:0.05 blue:0.05 alpha:1.0];
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+#pragma mark - CategoryTableViewCell Delegate
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (void)goToCategory:(ASCategory *)category {
+    [self performSegueWithIdentifier:@"ShowPages" sender:category];
 }
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
     if ([segue.identifier isEqualToString:@"ShowPages"]) {
-        NSMutableArray *activeCategories = [NSMutableArray new];
-        for (ASStore *store in self.stores) {
-            [activeCategories addObjectsFromArray:[store activeCategories]];
-        }
         ASCategoriesPagesViewController *categoriesPagesVC = (ASCategoriesPagesViewController *)segue.destinationViewController;
-        categoriesPagesVC.categories = activeCategories;
+        categoriesPagesVC.categories = [self.store activeCategories];
 
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        ASCategoryTableViewCell *cell = (ASCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-        categoriesPagesVC.initialActiveCategory = cell.category;
+        categoriesPagesVC.initialActiveCategory = (ASCategory *)sender;
+    } else if ([segue.identifier isEqualToString:@"ShowSettings"]) {
+        UINavigationController *navVC = (UINavigationController *)segue.destinationViewController;
+        ASSettingsTableViewController *settingsVC = (ASSettingsTableViewController *)navVC.topViewController;
+        settingsVC.store = self.store;
     }
 }
 

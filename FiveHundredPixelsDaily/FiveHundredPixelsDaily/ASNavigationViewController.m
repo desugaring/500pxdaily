@@ -17,10 +17,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"yes");
-    [self.aa setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-    self.aa.backgroundColor = [UIColor clearColor];
-    // Do any additional setup after loading the view.
+
+//    self.navigationBar.items = @[[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(hidesBarsOnTap)]];
 }
 
 - (void)didReceiveMemoryWarning {

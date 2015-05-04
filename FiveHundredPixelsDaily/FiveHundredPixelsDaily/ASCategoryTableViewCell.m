@@ -8,14 +8,6 @@
 
 #import "ASCategoryTableViewCell.h"
 
-@interface ASCategoryTableViewCell()
-
-
-- (IBAction)stateChange:(UIButton *)sender;
-//- (IBAction)categorySelected:(UIButton *)sender;
-
-@end
-
 @implementation ASCategoryTableViewCell
 
 - (void)configureCellWithCategory:(ASCategory *)category {
@@ -29,31 +21,31 @@
     // Initialization code
 }
 
+- (void)prepareForReuse {
+    self.viewButton.titleLabel.hidden = true;
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
-    if (selected == true) {
-        self.nameLabel.textColor = [UIColor grayColor];
-        self.backgroundColor = [UIColor blackColor];
-    } else {
-        self.nameLabel.textColor = self.category.isActive.boolValue ? [UIColor whiteColor] : [UIColor colorWithWhite:0.8 alpha:1];
-        self.backgroundColor = self.category.isActive.boolValue ? [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2] : [UIColor clearColor];
-    }
-}
-
-- (IBAction)stateChange:(UIButton *)sender {
-    BOOL oppositeIsActive = [self.category.isActive isEqualToNumber:@(false)];
-    [self changeState:oppositeIsActive];
+    self.category.isActive = @(selected);
+    [self changeState:selected];
 }
 
 - (void)changeState:(BOOL)isActive {
     self.category.isActive = @(isActive);
 
-    self.stateLabel.text = isActive ? @"ACTIVE": @"INACTIVE";
-    self.stateLabel.textColor = isActive ? [UIColor whiteColor] : [UIColor grayColor];
-    self.nameLabel.textColor = isActive ? [UIColor whiteColor] : [UIColor colorWithWhite:0.8 alpha:1];
+    self.viewButton.enabled = isActive;
+    self.viewButton.hidden = !isActive;
+//    self.nameLabel.textColor = isActive ? [UIColor whiteColor] : [UIColor colorWithWhite:0.8 alpha:1];
     self.accessoryType = isActive ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-    self.backgroundColor = isActive ? [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2] : [UIColor clearColor];
+    self.backgroundColor = isActive ? [UIColor colorWithRed:0.05 green:0.05 blue:0.05 alpha:1] : [UIColor blackColor];
+}
+
+- (IBAction)viewButtonClicked:(id)sender {
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(goToCategory:)]) {
+        [self.delegate goToCategory:self.category];
+    }
 }
 
 @end

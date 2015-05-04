@@ -17,13 +17,21 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
+    [self changeState:selected];
 }
 
 - (void)configureCellWithCategory:(ASCategory *)category {
     self.category = category;
-
     self.nameLabel.text = category.name;
+
+    [self changeState:self.category.isDaily.boolValue];
+}
+
+- (void)changeState:(BOOL)isDaily {
+    self.category.isDaily = @(isDaily);
+
+    self.accessoryType = isDaily ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    self.backgroundColor = isDaily ? [UIColor grayColor] : [UIColor blackColor];
 }
 
 @end

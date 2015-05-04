@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "ASModel.h"
 #import "ASFHPStore.h"
-#import "ASPhotosStore.h"
 #import "ASCategoriesTableViewController.h"
 
 @interface AppDelegate ()
@@ -30,29 +29,28 @@
     NSError *error;
     NSArray *model = [self.managedObjectContext executeFetchRequest:request error:&error];
 
+    // Get or create model
     if (model.count == 1) {
-        self.model = model[0];
+        self.model = model.firstObject;
     } else {
         ASModel *model = [NSEntityDescription insertNewObjectForEntityForName:@"Model" inManagedObjectContext:[self managedObjectContext]];
         self.model = model;
 
-        ASPhotosStore *photosStore = [NSEntityDescription insertNewObjectForEntityForName:@"PhotosStore" inManagedObjectContext:[self managedObjectContext]];
-        photosStore.name = @"Photos";
-
+        // Create stores for model
         ASFHPStore *fhpStore = [NSEntityDescription insertNewObjectForEntityForName:@"FHPStore" inManagedObjectContext:[self managedObjectContext]];
         fhpStore.name = @"500px";
-
-        [self.model addStoresObject:photosStore];
-        [self.model addStoresObject:fhpStore];
-        
+        fhpStore.model = self.model;
     }
+
+    // Update stores
     for (ASStore *store in self.model.stores) {
         [store updateCategoriesIfNeeded];
     }
 
+    // Give store to UI
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     ASCategoriesTableViewController *categoriesTableVC = (ASCategoriesTableViewController *)navigationController.topViewController;
-    categoriesTableVC.stores = self.model.stores;
+    categoriesTableVC.store = (ASStore *)self.model.stores.firstObject;
 
     return YES;
 }

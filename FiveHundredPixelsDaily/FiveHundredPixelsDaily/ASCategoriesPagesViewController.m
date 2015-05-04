@@ -23,6 +23,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Custom back butotn
+//    self.navigationItem.backBarButtonItem.title = @"Sup";
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Categories"] style:UIBarButtonItemStylePlain target:self action:@selector(goToCategories:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(goToSettings:)];
+//    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Categories"] style:UIBarButtonItemStylePlain target:nil action:nil];
+
     // Button gesture recognizers
     [self.nextButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToNextCategory:)]];
     [self.prevButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToPrevCategory:)]];
@@ -60,6 +66,14 @@
 
     // Buttons and title setup
     [self updateUI];
+}
+
+- (void)goToCategories:(id)sender {
+    [self.navigationController popViewControllerAnimated:true];
+}
+
+- (void)goToSettings:(id)sender {
+    [self performSegueWithIdentifier:@"ShowSettings" sender:self];
 }
 
 - (void)updateUI {

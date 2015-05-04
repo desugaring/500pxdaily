@@ -7,9 +7,11 @@
 //
 
 @import UIKit;
+#import "ASStore.h"
+#import "ASCategoryTableViewCell.h"
 
-@interface ASCategoriesTableViewController : UITableViewController
+@interface ASCategoriesTableViewController : UITableViewController <ASCategoryTableViewCellDelegate>
 
-@property (weak) NSOrderedSet *stores;
+@property (weak) ASStore *store;
 
 @end

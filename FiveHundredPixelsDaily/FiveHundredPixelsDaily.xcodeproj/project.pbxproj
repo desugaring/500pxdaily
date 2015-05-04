@@ -11,7 +11,6 @@
 		4F4C1E411ADA17FA00109166 /* ASBaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E401ADA17FA00109166 /* ASBaseOperation.m */; };
 		4F4C1E441ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E421ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld */; };
 		4F4C1E471ADA18CF00109166 /* ASStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E461ADA18CF00109166 /* ASStore.m */; };
-		4F4C1E4C1ADA198F00109166 /* ASPhotosStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E491ADA198F00109166 /* ASPhotosStore.m */; };
 		4F4C1E4D1ADA198F00109166 /* ASFHPStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E4B1ADA198F00109166 /* ASFHPStore.m */; };
 		4F4D6E931AD75EB800D1ABD8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6E921AD75EB800D1ABD8 /* main.m */; };
 		4F4D6E961AD75EB800D1ABD8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6E951AD75EB800D1ABD8 /* AppDelegate.m */; };
@@ -37,6 +36,7 @@
 		4F9B8FAB1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FAA1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m */; };
 		4F9B8FAE1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FAD1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m */; };
 		4F9B8FB11AF6AE2300B36422 /* ASButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FB01AF6AE2300B36422 /* ASButtonView.m */; };
+		4FC4118A1AF6F51300E4C063 /* ASPhotosAlbumsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC411891AF6F51300E4C063 /* ASPhotosAlbumsTableViewController.m */; };
 		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
 		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
 		4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2CC1ADA15FC00B174F4 /* ASPhotosOperation.m */; };
@@ -51,8 +51,6 @@
 		4F4C1E431ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FiveHundredPixelsDaily.xcdatamodel; sourceTree = "<group>"; };
 		4F4C1E451ADA18CF00109166 /* ASStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASStore.h; sourceTree = "<group>"; };
 		4F4C1E461ADA18CF00109166 /* ASStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASStore.m; sourceTree = "<group>"; };
-		4F4C1E481ADA198F00109166 /* ASPhotosStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPhotosStore.h; sourceTree = "<group>"; };
-		4F4C1E491ADA198F00109166 /* ASPhotosStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASPhotosStore.m; sourceTree = "<group>"; };
 		4F4C1E4A1ADA198F00109166 /* ASFHPStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASFHPStore.h; sourceTree = "<group>"; };
 		4F4C1E4B1ADA198F00109166 /* ASFHPStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASFHPStore.m; sourceTree = "<group>"; };
 		4F4D6E8D1AD75EB800D1ABD8 /* FiveHundredPixelsDaily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FiveHundredPixelsDaily.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +98,8 @@
 		4F9B8FAD1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsCategoryTableViewCell.m; sourceTree = "<group>"; };
 		4F9B8FAF1AF6AE2300B36422 /* ASButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASButtonView.h; sourceTree = "<group>"; };
 		4F9B8FB01AF6AE2300B36422 /* ASButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASButtonView.m; sourceTree = "<group>"; };
+		4FC411881AF6F51300E4C063 /* ASPhotosAlbumsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPhotosAlbumsTableViewController.h; sourceTree = "<group>"; };
+		4FC411891AF6F51300E4C063 /* ASPhotosAlbumsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASPhotosAlbumsTableViewController.m; sourceTree = "<group>"; };
 		4FE3E2B51ADA107800B174F4 /* ASCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategory.h; sourceTree = "<group>"; };
 		4FE3E2B61ADA107800B174F4 /* ASCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategory.m; sourceTree = "<group>"; };
 		4FE3E2B81ADA107800B174F4 /* ASImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImage.h; sourceTree = "<group>"; };
@@ -201,6 +201,7 @@
 				4F9B8F9E1AF0558900B36422 /* ASSettingsTableViewController.h */,
 				4F9B8F9F1AF0558900B36422 /* ASSettingsTableViewController.m */,
 				4F9B8FA21AF06F2A00B36422 /* Cells */,
+				4FC411871AF6F4EA00E4C063 /* PhotosAlbum */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -229,13 +230,22 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
+		4FC411871AF6F4EA00E4C063 /* PhotosAlbum */ = {
+			isa = PBXGroup;
+			children = (
+				4FC411881AF6F51300E4C063 /* ASPhotosAlbumsTableViewController.h */,
+				4FC411891AF6F51300E4C063 /* ASPhotosAlbumsTableViewController.m */,
+			);
+			name = PhotosAlbum;
+			sourceTree = "<group>";
+		};
 		4FE3E2871ADA07E600B174F4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4F9B8FA11AF06F2100B36422 /* Settings */,
 				4F717EA61AE75D33004B8722 /* ASNavigationViewController.h */,
 				4F717EA71AE75D33004B8722 /* ASNavigationViewController.m */,
 				4FE3E28A1ADA0A9800B174F4 /* Categories */,
+				4F9B8FA11AF06F2100B36422 /* Settings */,
 				4F9B8FB21AF6AE3700B36422 /* Helpers */,
 			);
 			name = Views;
@@ -260,8 +270,6 @@
 				4F717E8A1ADE122D004B8722 /* ASBaseObject.m */,
 				4F4C1E451ADA18CF00109166 /* ASStore.h */,
 				4F4C1E461ADA18CF00109166 /* ASStore.m */,
-				4F4C1E481ADA198F00109166 /* ASPhotosStore.h */,
-				4F4C1E491ADA198F00109166 /* ASPhotosStore.m */,
 				4F4C1E4A1ADA198F00109166 /* ASFHPStore.h */,
 				4F4C1E4B1ADA198F00109166 /* ASFHPStore.m */,
 				4FE3E2B51ADA107800B174F4 /* ASCategory.h */,
@@ -402,6 +410,7 @@
 				4F4D6E961AD75EB800D1ABD8 /* AppDelegate.m in Sources */,
 				4F9B8FA81AF06F5900B36422 /* ASSettingsNumberTableViewCell.m in Sources */,
 				4F4D6E931AD75EB800D1ABD8 /* main.m in Sources */,
+				4FC4118A1AF6F51300E4C063 /* ASPhotosAlbumsTableViewController.m in Sources */,
 				4F717E951AE2279E004B8722 /* ASModel.m in Sources */,
 				4F9B8FA01AF0558900B36422 /* ASSettingsTableViewController.m in Sources */,
 				4F9B8FAE1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m in Sources */,
@@ -414,7 +423,6 @@
 				4F717E9B1AE22B12004B8722 /* ASCategoriesPagesViewController.m in Sources */,
 				4F9B8FB11AF6AE2300B36422 /* ASButtonView.m in Sources */,
 				4FE3E2D01ADA160800B174F4 /* ASFHPOperation.m in Sources */,
-				4F4C1E4C1ADA198F00109166 /* ASPhotosStore.m in Sources */,
 				4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */,
 				4F489A7A1AEED11B0028F4F7 /* ASImageVCLinkedList.m in Sources */,
 				4F4C1E411ADA17FA00109166 /* ASBaseOperation.m in Sources */,

@@ -5,7 +5,7 @@
     </entity>
     <entity name="Category" representedClassName="ASCategory" parentEntity="BaseObject" syncable="YES">
         <attribute name="isActive" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
-        <attribute name="isDaily" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isDaily" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="lastUpdated" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Image" inverseName="category" inverseEntity="Image" syncable="YES"/>
         <relationship name="store" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="categories" inverseEntity="Store" syncable="YES"/>
@@ -19,11 +19,11 @@
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="images" inverseEntity="Category" syncable="YES"/>
     </entity>
     <entity name="Model" representedClassName="ASModel" syncable="YES">
-        <relationship name="stores" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Store" syncable="YES"/>
+        <relationship name="stores" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Store" inverseName="model" inverseEntity="Store" syncable="YES"/>
     </entity>
-    <entity name="PhotosStore" representedClassName="ASPhotosStore" parentEntity="Store" syncable="YES"/>
     <entity name="Store" representedClassName="ASStore" isAbstract="YES" parentEntity="BaseObject">
         <relationship name="categories" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Category" inverseName="store" inverseEntity="Category" syncable="YES"/>
+        <relationship name="model" maxCount="1" deletionRule="Nullify" destinationEntity="Model" inverseName="stores" inverseEntity="Model" syncable="YES"/>
         <userInfo/>
     </entity>
     <elements>
@@ -32,7 +32,6 @@
         <element name="FHPStore" positionX="279" positionY="270" width="128" height="45"/>
         <element name="Image" positionX="270" positionY="225" width="128" height="120"/>
         <element name="Model" positionX="297" positionY="279" width="128" height="60"/>
-        <element name="PhotosStore" positionX="270" positionY="261" width="128" height="45"/>
-        <element name="Store" positionX="261" positionY="189" width="128" height="60"/>
+        <element name="Store" positionX="261" positionY="189" width="128" height="75"/>
     </elements>
 </model>

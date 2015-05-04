@@ -18,6 +18,7 @@
 
 @property NSArray *sections;
 @property (weak) ASStore *fhpStore;
+@property NSString *activePhotosAlbumName;
 
 @end
 
@@ -25,16 +26,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleDone target:self action:@selector(closeModal:)];
-    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Close"] style:UIBarButtonItemStylePlain target:self action:@selector(closeModal:)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleDone target:self action:@selector(closeModal:)];
+
     self.sections = @[@"Description", @"Photos", @"Number", @"Categories"];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-
-
+    self.activePhotosAlbumName = [[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbum"];
+    [self.tableView reloadData];
 }
 
 - (void)closeModal:(UIBarButtonItem *)sender {
@@ -74,7 +75,7 @@
 
     } else if ([self.sections[indexPath.section] isEqualToString:@"Photos"]) {
         ASSettingsPhotosTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Photos" forIndexPath:indexPath];
-
+        cell.photosAlbumLabel.text = self.activePhotosAlbumName;
         return cell;
 
     } else if ([self.sections[indexPath.section] isEqualToString:@"Number"]) {
@@ -164,14 +165,14 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"ShowPhotosAlbums"]) {
+        //
+    }
 }
-*/
+
 
 @end

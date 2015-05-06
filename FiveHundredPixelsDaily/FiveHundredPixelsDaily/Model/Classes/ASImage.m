@@ -11,10 +11,6 @@
 #import "ASCategory.h"
 #import "ASStore.h"
 
-@interface ASImage()
-
-@end
-
 @implementation ASImage
 
 @dynamic thumbnailURL;

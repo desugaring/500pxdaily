@@ -8,7 +8,6 @@
 
 #import "ASBackgroundImageFetcher.h"
 #import "ASBaseOperation.h"
-@import Photos;
 
 @interface ASBackgroundImageFetcher()
 
@@ -33,7 +32,7 @@
         operation.userInfo = @{@"page": @"1", @"perPage": @"1", @"backgroundMode": @"1"};
         operation.completion = ^(NSArray *result, NSError *error) {
             if (result.firstObject != nil && [result.firstObject isKindOfClass:UIImage.class]) {
-                [self saveImageToPhotos:(UIImage *)result.firstObject];
+                [self.photosManager saveImage:(UIImage *)result.firstObject];
                 if (i == categories.count-1) completion(UIBackgroundFetchResultNewData);
             } else {
                 completion(UIBackgroundFetchResultFailed);
@@ -42,26 +41,6 @@
 
         [self.queue addOperation:operation];
     }
-}
-
-- (void)saveImageToPhotos:(UIImage *)image {
-    NSString *albumIdentifier = [[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbumIdentifier"];
-
-    PHFetchResult *result = [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[albumIdentifier] options:nil];
-    PHAssetCollection *collection = (PHAssetCollection *)result.firstObject;
-
-    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-        PHAssetChangeRequest *assetChangeRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
-
-        if (collection != nil) {
-            PHAssetCollectionChangeRequest *assetCollectionChangeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:collection];
-            [assetCollectionChangeRequest addAssets:@[[assetChangeRequest placeholderForCreatedAsset]]];
-        }
-    } completionHandler:^(BOOL success, NSError *error) {
-        if (!success) {
-            NSLog(@"Error creating asset: %@", error);
-        }
-    }];
 }
 
 @end

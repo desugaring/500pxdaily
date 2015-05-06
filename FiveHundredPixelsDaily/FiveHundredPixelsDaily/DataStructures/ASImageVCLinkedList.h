@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import "ASImageViewController.h"
 #import "ASCategory.h"
 

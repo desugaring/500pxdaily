@@ -8,10 +8,6 @@
 
 #import "ASImageViewController.h"
 
-@interface ASImageViewController ()
-
-@end
-
 @implementation ASImageViewController
 
 - (void)viewDidLoad {
@@ -34,11 +30,6 @@
     if (self.image.full == nil && self.image.activeRequest != nil) [self.image.activeRequest cancel];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)updateImage {
     UIImageView *imageView = [[UIImageView alloc] initWithImage:self.image.full];
     //    [self.imageView sizeToFit];
@@ -55,13 +46,6 @@
 
     [self centerAndScaleImage];
 }
-
-//- (void)viewWillLayoutSubviews
-//{
-//    [super viewWillLayoutSubviews];
-//
-//    [self centerAndScaleImage];
-//}
 
 - (void)centerAndScaleImage {
     // Zoom level
@@ -100,20 +84,9 @@
     return self.scrollView.subviews.lastObject;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 #pragma mark - ASImage Delegate
 
 - (void)imageFullUpdated:(ASImage *)image {
-    NSLog(@"got image, need to show");
     [self updateImage];
 }
 

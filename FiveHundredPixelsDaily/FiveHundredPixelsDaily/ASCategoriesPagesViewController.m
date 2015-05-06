@@ -24,10 +24,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Custom back butotn
-//    self.navigationItem.backBarButtonItem.title = @"Sup";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Categories"] style:UIBarButtonItemStylePlain target:self action:@selector(goToCategories:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(goToSettings:)];
-//    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Categories"] style:UIBarButtonItemStylePlain target:nil action:nil];
 
     // Button gesture recognizers
     [self.nextButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToNextCategory:)]];
@@ -133,10 +131,7 @@
     return (prev != nil) ? prev.categoryVC : nil;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
 
 - (void)goToPrevCategory:(id)sender {
     ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
@@ -168,7 +163,6 @@
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ShowImage"]) {
         ASImagePagesViewController *imagePagesVC = (ASImagePagesViewController *)segue.destinationViewController;

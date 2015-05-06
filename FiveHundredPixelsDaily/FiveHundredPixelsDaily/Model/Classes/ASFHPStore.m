@@ -10,10 +10,6 @@
 #import "ASCategory.h"
 #import "ASFHPOperation.h"
 
-@interface ASFHPStore()
-
-@end
-
 @implementation ASFHPStore
 
 -(ASBaseOperation *)operation {

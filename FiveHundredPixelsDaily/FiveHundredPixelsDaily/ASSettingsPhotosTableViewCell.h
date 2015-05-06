@@ -12,6 +12,4 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *photosAlbumLabel;
 
-- (IBAction)editAlbum:(UIButton *)sender;
-
 @end

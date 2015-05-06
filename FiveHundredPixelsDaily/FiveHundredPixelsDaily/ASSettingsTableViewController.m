@@ -9,7 +9,6 @@
 #import "ASSettingsTableViewController.h"
 #import "ASStore.h"
 #import "ASCategory.h"
-#import "ASSettingsDescriptionTableViewCell.h"
 #import "ASSettingsPhotosTableViewCell.h"
 #import "ASSettingsCategoryTableViewCell.h"
 
@@ -46,11 +45,6 @@
     [self dismissViewControllerAnimated:true completion:nil];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -68,16 +62,16 @@
     return 0;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.sections[indexPath.section] isEqualToString:@"Description"]) {
-        ASSettingsDescriptionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Description" forIndexPath:indexPath];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Description" forIndexPath:indexPath];
 
         return cell;
 
     } else if ([self.sections[indexPath.section] isEqualToString:@"Photos"]) {
         ASSettingsPhotosTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Photos" forIndexPath:indexPath];
         cell.photosAlbumLabel.text = self.activePhotosAlbumName;
+        
         return cell;
 
     } else if ([self.sections[indexPath.section] isEqualToString:@"Categories"]) {

@@ -386,7 +386,7 @@
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="sectionIndexTrackingBackgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="Description" rowHeight="88" id="kZM-sq-I9X" customClass="ASSettingsDescriptionTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="Description" rowHeight="88" id="kZM-sq-I9X">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kZM-sq-I9X" id="Kiz-Fs-jYH">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -429,7 +429,6 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <action selector="editAlbum:" destination="mKQ-T2-ruG" eventType="touchUpInside" id="ohI-Qk-iRT"/>
                                                 <segue destination="gNZ-qc-zVa" kind="presentation" identifier="ShowPhotosAlbums" id="TZF-Y0-ewR"/>
                                             </connections>
                                         </button>

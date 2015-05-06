@@ -14,19 +14,5 @@
 @interface ASModel : NSManagedObject
 
 @property (nonatomic, retain) NSOrderedSet *stores;
-@end
-
-@interface ASModel (CoreDataGeneratedAccessors)
-
-- (void)insertObject:(ASStore *)value inStoresAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromStoresAtIndex:(NSUInteger)idx;
-- (void)insertStores:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeStoresAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInStoresAtIndex:(NSUInteger)idx withObject:(ASStore *)value;
-- (void)replaceStoresAtIndexes:(NSIndexSet *)indexes withStores:(NSArray *)values;
-- (void)addStoresObject:(ASStore *)value;
-- (void)removeStoresObject:(ASStore *)value;
-- (void)addStores:(NSSet *)values;
-- (void)removeStores:(NSSet *)values;
 
 @end

@@ -15,29 +15,8 @@
 
 @implementation ASNavigationViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-//    self.navigationBar.items = @[[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(hidesBarsOnTap)]];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (BOOL)hidesBarsOnTap {
     return [self.topViewController isKindOfClass:[ASImagePagesViewController class]] == false;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -22,17 +22,3 @@
 - (NSArray *)activeCategories;
 
 @end
-
-@interface ASStore (CoreDataGeneratedAccessors)
-
-- (void)insertObject:(ASCategory *)value inCategoriesAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromCategoriesAtIndex:(NSUInteger)idx;
-- (void)insertCategories:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeCategoriesAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInCategoriesAtIndex:(NSUInteger)idx withObject:(ASCategory *)value;
-- (void)replaceCategoriesAtIndexes:(NSIndexSet *)indexes withCategories:(NSArray *)values;
-- (void)addCategoriesObject:(ASCategory *)value;
-- (void)removeCategoriesObject:(ASCategory *)value;
-- (void)addCategories:(NSOrderedSet *)values;
-- (void)removeCategories:(NSOrderedSet *)values;
-@end

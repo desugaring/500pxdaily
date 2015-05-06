@@ -17,10 +17,6 @@
     [self changeState:self.category.isActive.boolValue];
 }
 
-- (void)awakeFromNib {
-    // Initialization code
-}
-
 - (void)prepareForReuse {
     self.viewButton.titleLabel.hidden = true;
 }
@@ -37,15 +33,12 @@
 
     self.viewButton.enabled = isActive;
     self.viewButton.hidden = !isActive;
-//    self.nameLabel.textColor = isActive ? [UIColor whiteColor] : [UIColor colorWithWhite:0.8 alpha:1];
     self.accessoryType = isActive ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
     self.backgroundColor = isActive ? [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1] : [UIColor blackColor];
 }
 
 - (IBAction)viewButtonClicked:(id)sender {
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(goToCategory:)]) {
-        [self.delegate goToCategory:self.category];
-    }
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(goToCategory:)]) [self.delegate goToCategory:self.category];
 }
 
 @end

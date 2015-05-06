@@ -31,13 +31,13 @@
 		4F717EA81AE75D33004B8722 /* ASNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EA71AE75D33004B8722 /* ASNavigationViewController.m */; };
 		4F717EB81AE98BA9004B8722 /* ASCategoryVCLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717EB71AE98BA9004B8722 /* ASCategoryVCLinkedList.m */; };
 		4F9B8FA01AF0558900B36422 /* ASSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8F9F1AF0558900B36422 /* ASSettingsTableViewController.m */; };
-		4F9B8FA51AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FA41AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.m */; };
 		4F9B8FAB1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FAA1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m */; };
 		4F9B8FAE1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FAD1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.m */; };
 		4F9B8FB11AF6AE2300B36422 /* ASButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B8FB01AF6AE2300B36422 /* ASButtonView.m */; };
 		4FC4118A1AF6F51300E4C063 /* ASPhotosAlbumsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC411891AF6F51300E4C063 /* ASPhotosAlbumsTableViewController.m */; };
 		4FC4118E1AF96AEA00E4C063 /* ASPhotosAlbumTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4118D1AF96AEA00E4C063 /* ASPhotosAlbumTableViewCell.m */; };
 		4FC411941AF9B1D000E4C063 /* ASBackgroundImageFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC411931AF9B1D000E4C063 /* ASBackgroundImageFetcher.m */; };
+		4FC411971AF9C69A00E4C063 /* ASPhotosManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC411961AF9C69A00E4C063 /* ASPhotosManager.m */; };
 		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
 		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
 		4FE3E2CD1ADA15FC00B174F4 /* ASPhotosOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2CC1ADA15FC00B174F4 /* ASPhotosOperation.m */; };
@@ -89,8 +89,6 @@
 		4F717EB71AE98BA9004B8722 /* ASCategoryVCLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategoryVCLinkedList.m; sourceTree = "<group>"; };
 		4F9B8F9E1AF0558900B36422 /* ASSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSettingsTableViewController.h; sourceTree = "<group>"; };
 		4F9B8F9F1AF0558900B36422 /* ASSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsTableViewController.m; sourceTree = "<group>"; };
-		4F9B8FA31AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSettingsDescriptionTableViewCell.h; sourceTree = "<group>"; };
-		4F9B8FA41AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsDescriptionTableViewCell.m; sourceTree = "<group>"; };
 		4F9B8FA91AF06F6600B36422 /* ASSettingsPhotosTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSettingsPhotosTableViewCell.h; sourceTree = "<group>"; };
 		4F9B8FAA1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASSettingsPhotosTableViewCell.m; sourceTree = "<group>"; };
 		4F9B8FAC1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASSettingsCategoryTableViewCell.h; sourceTree = "<group>"; };
@@ -103,6 +101,8 @@
 		4FC4118D1AF96AEA00E4C063 /* ASPhotosAlbumTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASPhotosAlbumTableViewCell.m; sourceTree = "<group>"; };
 		4FC411921AF9B1D000E4C063 /* ASBackgroundImageFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASBackgroundImageFetcher.h; sourceTree = "<group>"; };
 		4FC411931AF9B1D000E4C063 /* ASBackgroundImageFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASBackgroundImageFetcher.m; sourceTree = "<group>"; };
+		4FC411951AF9C69A00E4C063 /* ASPhotosManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASPhotosManager.h; sourceTree = "<group>"; };
+		4FC411961AF9C69A00E4C063 /* ASPhotosManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASPhotosManager.m; sourceTree = "<group>"; };
 		4FE3E2B51ADA107800B174F4 /* ASCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategory.h; sourceTree = "<group>"; };
 		4FE3E2B61ADA107800B174F4 /* ASCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategory.m; sourceTree = "<group>"; };
 		4FE3E2B81ADA107800B174F4 /* ASImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImage.h; sourceTree = "<group>"; };
@@ -159,6 +159,8 @@
 				4F4D6E951AD75EB800D1ABD8 /* AppDelegate.m */,
 				4FC411921AF9B1D000E4C063 /* ASBackgroundImageFetcher.h */,
 				4FC411931AF9B1D000E4C063 /* ASBackgroundImageFetcher.m */,
+				4FC411951AF9C69A00E4C063 /* ASPhotosManager.h */,
+				4FC411961AF9C69A00E4C063 /* ASPhotosManager.m */,
 				4F4D6EA01AD75EB800D1ABD8 /* Main.storyboard */,
 				4F4D6E911AD75EB800D1ABD8 /* Info.plist */,
 				4F4D6E921AD75EB800D1ABD8 /* main.m */,
@@ -214,8 +216,6 @@
 		4F9B8FA21AF06F2A00B36422 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				4F9B8FA31AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.h */,
-				4F9B8FA41AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.m */,
 				4F9B8FA91AF06F6600B36422 /* ASSettingsPhotosTableViewCell.h */,
 				4F9B8FAA1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m */,
 				4F9B8FAC1AF06F7900B36422 /* ASSettingsCategoryTableViewCell.h */,
@@ -371,6 +371,12 @@
 				TargetAttributes = {
 					4F4D6E8C1AD75EB800D1ABD8 = {
 						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = Z7TKNK6E42;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -435,12 +441,12 @@
 				4F4D6EBE1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.m in Sources */,
 				4F717E8E1AE08F2D004B8722 /* ASImageCollectionViewCell.m in Sources */,
 				4F717E9B1AE22B12004B8722 /* ASCategoriesPagesViewController.m in Sources */,
+				4FC411971AF9C69A00E4C063 /* ASPhotosManager.m in Sources */,
 				4F9B8FB11AF6AE2300B36422 /* ASButtonView.m in Sources */,
 				4FE3E2D01ADA160800B174F4 /* ASFHPOperation.m in Sources */,
 				4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */,
 				4F489A7A1AEED11B0028F4F7 /* ASImageVCLinkedList.m in Sources */,
 				4F4C1E411ADA17FA00109166 /* ASBaseOperation.m in Sources */,
-				4F9B8FA51AF06F4E00B36422 /* ASSettingsDescriptionTableViewCell.m in Sources */,
 				4F4C1E4D1ADA198F00109166 /* ASFHPStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -551,6 +557,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = FiveHundredPixelsDaily/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -561,6 +568,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = FiveHundredPixelsDaily/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

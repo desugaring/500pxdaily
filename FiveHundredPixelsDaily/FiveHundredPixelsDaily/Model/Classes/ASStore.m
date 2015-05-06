@@ -12,6 +12,7 @@
 @implementation ASStore
 
 @dynamic categories;
+@synthesize model;
 
 - (void)updateCategoriesIfNeeded {
     // Stub

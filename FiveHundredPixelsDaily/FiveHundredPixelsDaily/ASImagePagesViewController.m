@@ -103,13 +103,14 @@
 }
 
 - (void)downloadImage:(id)sender {
-    [self.downloadedImages addObject:self.imagesLinkedList.imageVC.image];
+    ASImage *image = self.imagesLinkedList.imageVC.image;
+    [self.downloadedImages addObject:image];
     ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = false;
     self.downloadButtonView.alpha = 0.5;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SaveImageToPhotos" object:nil userInfo:@{@"image": image.full }];
 }
 
 #pragma mark - UIPageViewController DataSource
-
 
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
 {
@@ -157,12 +158,6 @@
     [self updateUI];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -173,7 +168,5 @@
         settingsVC.store = self.initialActiveImage.category.store;
     }
 }
-
-
 
 @end

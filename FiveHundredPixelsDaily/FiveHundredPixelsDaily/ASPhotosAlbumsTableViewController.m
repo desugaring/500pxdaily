@@ -7,12 +7,13 @@
 //
 
 #import "ASPhotosAlbumsTableViewController.h"
+#import "ASPhotosAlbumTableViewCell.h"
 
 @interface ASPhotosAlbumsTableViewController() <PHPhotoLibraryChangeObserver>
 
 @property PHFetchResult *photosAlbums;
-@property NSArray *sections;
 @property NSString *activeAlbumName;
+@property NSString *activeAlbumIdentifier;
 
 @end
 
@@ -22,10 +23,12 @@
     [super viewDidLoad];
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Close"] style:UIBarButtonItemStylePlain target:self action:@selector(closeModal:)];
-    self.sections = @[@"Existing albums", @"New Album"];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"New"] style:UIBarButtonItemStylePlain target:self action:@selector(handleAddButtonItem:)];
 
     // Get Active Album
     self.activeAlbumName = [[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbum"];
+    self.activeAlbumIdentifier = [[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbumIdentifier"];
+
     // Get Albums
     PHFetchResult *albums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
     self.photosAlbums = albums;
@@ -53,6 +56,8 @@
 
 - (void)closeModal:(UIBarButtonItem *)sender {
     [[NSUserDefaults standardUserDefaults] setObject:self.activeAlbumName forKey:@"ActiveAlbum"];
+    [[NSUserDefaults standardUserDefaults] setObject:self.activeAlbumIdentifier forKey:@"ActiveAlbumIdentifier"];
+    
     [self dismissViewControllerAnimated:true completion:nil];
 }
 
@@ -64,48 +69,29 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return self.photosAlbums.count;
-    } else {
-        return 1;
-    }
+    return self.photosAlbums.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Album" forIndexPath:indexPath];
-    if (indexPath.section == 0) {
-        NSString *name = ((PHCollection *)[self.photosAlbums objectAtIndex:indexPath.row]).localizedTitle;
-        cell.textLabel.text = name;
-        if ([name isEqualToString:self.activeAlbumName]) {
-            [self.tableView selectRowAtIndexPath:indexPath animated:false scrollPosition:UITableViewScrollPositionNone];
-        }
-    } else {
-        cell.textLabel.text = @"Create new album";
+    ASPhotosAlbumTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Album" forIndexPath:indexPath];
+    PHCollection *collection = (PHCollection *)[self.photosAlbums objectAtIndex:indexPath.row];
+
+    [cell configureCellWithCollection:collection];
+    if ([collection.localizedTitle isEqualToString:self.activeAlbumName]) {
+        [self.tableView selectRowAtIndexPath:indexPath animated:false scrollPosition:UITableViewScrollPositionNone];
     }
 
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
-    UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
-    headerView.textLabel.font = [UIFont boldSystemFontOfSize:12.0f];
-    headerView.textLabel.textColor = [UIColor whiteColor];
-    headerView.backgroundView.backgroundColor = [UIColor colorWithRed:0.05 green:0.05 blue:0.05 alpha:1.0];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return self.sections[section];
-}
-
 - (void)handleAddButtonItem:(id)sender
 {
     // Prompt user from new album title.
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"New Album", @"") message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Create New Album", @"") message:nil preferredStyle:UIAlertControllerStyleAlert];
     [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:NULL]];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         textField.placeholder = NSLocalizedString(@"Album Name", @"");
@@ -123,61 +109,17 @@
             }
         }];
     }]];
+    alertController.view.tintColor = [UIColor blackColor];
 
     [self.tableView deselectRowAtIndexPath:(NSIndexPath *)sender animated:false];
     [self presentViewController:alertController animated:YES completion:NULL];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 1) {
-        [self handleAddButtonItem:indexPath];
-    } else {
-        self.activeAlbumName = [self.tableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    }
-}
+    ASPhotosAlbumTableViewCell *cell = (ASPhotosAlbumTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    self.activeAlbumName = cell.collection.localizedTitle;
+    self.activeAlbumIdentifier = cell.collection.localIdentifier;
 }
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

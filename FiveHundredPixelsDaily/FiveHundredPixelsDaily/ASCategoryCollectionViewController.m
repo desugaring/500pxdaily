@@ -12,11 +12,12 @@
 #import "ASCategory.h"
 #import "ASImage.h"
 
-@interface ASCategoryCollectionViewController()
+@interface ASCategoryCollectionViewController() <UICollectionViewDelegateFlowLayout>
 
 @property NSMutableSet *visibleIndexPaths;
 @property NSUInteger numberOfImages;
 @property CGSize cellSize;
+@property BOOL needsRefresh;
 
 @end
 
@@ -27,6 +28,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.needsRefresh = false;
     self.cellSize = CGSizeZero;
     self.navigationItem.title = self.category.name;
     self.visibleIndexPaths = [NSMutableSet new];
@@ -39,54 +41,44 @@ static NSString * const reuseIdentifier = @"Thumbnail";
     [super viewWillAppear:animated];
 
     if (self.category.lastUpdated == nil) {
-        self.numberOfImages = 0;
-        [self.category resetImages];
+        [self refreshImages:self];
         return;
-    }
-    NSInteger hours = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.category.lastUpdated toDate:[NSDate date] options:0] hour];
-    if(hours >= 1) {
-        self.numberOfImages = 0;
-        [self.category resetImages];
     } else {
-        [self.collectionView reloadData];
+        NSInteger hours = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.category.lastUpdated toDate:[NSDate date] options:0] hour];
+        if(hours >= 6) {
+            self.needsRefresh = true;
+        }
     }
+    [self.collectionView reloadData];
 }
-
-//- (void)resetIfNeeded {
-//    if (self.category.lastUpdated == nil) {
-//        [self.category resetImages];
-//        return;
-//    }
-//    NSInteger hours = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.category.lastUpdated toDate:[NSDate date] options:0] hour];
-//    if(hours >= 1) [self.category resetImages];
-//}
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.category cancelImageRequests];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)refreshImages:(id)sender {
+    self.numberOfImages = 0;
+    [self.category resetImages];
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark - UICollectionView DataSource
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return self.needsRefresh ? CGSizeMake(collectionView.bounds.size.width, 40) : CGSizeZero;
 }
-*/
 
-#pragma mark <UICollectionViewDataSource>
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    if (kind == UICollectionElementKindSectionHeader) {
+        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"RefreshHeader" forIndexPath:indexPath];
+        return headerView;
+    }
+    return nil;
+}
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
-
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.numberOfImages;

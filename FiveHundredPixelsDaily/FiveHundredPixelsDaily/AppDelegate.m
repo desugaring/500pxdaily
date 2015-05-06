@@ -10,12 +10,14 @@
 #import "ASModel.h"
 #import "ASFHPStore.h"
 #import "ASCategoriesTableViewController.h"
+#import "ASBackgroundImageFetcher.h"
 
 @interface AppDelegate ()
 
 @property NSManagedObjectModel *mom;
 @property NSPersistentStoreCoordinator *psc;
 @property NSManagedObjectContext *moc;
+@property ASBackgroundImageFetcher *backgroundImageFetcher;
 
 @property ASModel *model;
 
@@ -25,6 +27,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    self.backgroundImageFetcher = [ASBackgroundImageFetcher new];
+
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Model"];
     NSError *error;
     NSArray *model = [self.managedObjectContext executeFetchRequest:request error:&error];
@@ -53,6 +57,14 @@
     categoriesTableVC.store = (ASStore *)self.model.stores.firstObject;
 
     return YES;
+}
+
+- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSMutableArray *dailyCategories = [NSMutableArray new];
+    for (ASCategory *category in ((ASStore *)self.model.stores.firstObject).categories) {
+        if (category.isDaily.boolValue == true) [dailyCategories addObject:category];
+    }
+    [self.backgroundImageFetcher fetchImagesWithCategories:dailyCategories completion:completionHandler];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

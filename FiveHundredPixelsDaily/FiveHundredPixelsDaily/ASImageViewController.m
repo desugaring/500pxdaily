@@ -29,6 +29,11 @@
     //[self centerAndScaleImage];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.image.full == nil && self.image.activeRequest != nil) [self.image.activeRequest cancel];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

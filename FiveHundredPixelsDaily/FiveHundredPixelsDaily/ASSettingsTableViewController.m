@@ -11,7 +11,6 @@
 #import "ASCategory.h"
 #import "ASSettingsDescriptionTableViewCell.h"
 #import "ASSettingsPhotosTableViewCell.h"
-#import "ASSettingsNumberTableViewCell.h"
 #import "ASSettingsCategoryTableViewCell.h"
 
 @interface ASSettingsTableViewController ()
@@ -19,6 +18,7 @@
 @property NSArray *sections;
 @property (weak) ASStore *fhpStore;
 @property NSString *activePhotosAlbumName;
+@property NSInteger numberOfActiveCategories;
 
 @end
 
@@ -27,9 +27,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Close"] style:UIBarButtonItemStylePlain target:self action:@selector(closeModal:)];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleDone target:self action:@selector(closeModal:)];
 
     self.sections = @[@"Description", @"Photos", @"Number", @"Categories"];
+
+    self.numberOfActiveCategories = 0;
+    for (ASCategory *category in self.fhpStore.categories) {
+        if (category.isDaily.boolValue == true) self.numberOfActiveCategories++;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -58,8 +62,6 @@
         return 1;
     } else if ([self.sections[section] isEqualToString:@"Photos"]) {
         return 1;
-    } else if ([self.sections[section] isEqualToString:@"Number"]) {
-        return 1;
     } else if ([self.sections[section] isEqualToString:@"Categories"]) {
         return self.store.categories.count;
     }
@@ -78,18 +80,10 @@
         cell.photosAlbumLabel.text = self.activePhotosAlbumName;
         return cell;
 
-    } else if ([self.sections[indexPath.section] isEqualToString:@"Number"]) {
-        ASSettingsNumberTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Number" forIndexPath:indexPath];
-
-        NSInteger number = [[NSUserDefaults standardUserDefaults] integerForKey:@"NumberOfImagesPerCategory"];
-        cell.stepper.value = (double)number;
-        [cell stepperValueChanged:cell.stepper];
-
-        return cell;
-
     } else if ([self.sections[indexPath.section] isEqualToString:@"Categories"]) {
         ASSettingsCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Category" forIndexPath:indexPath];
         [cell configureCellWithCategory:self.store.categories[indexPath.row]];
+        if (cell.category.isDaily.boolValue == true) [self.tableView selectRowAtIndexPath:indexPath animated:false scrollPosition:UITableViewScrollPositionNone];
 
         return cell;
     }
@@ -102,8 +96,6 @@
         return @"What is 500px Daily?";
     } else if ([self.sections[section] isEqualToString:@"Photos"]) {
         return @"Downloaded Photos Album";
-    } else if ([self.sections[section] isEqualToString:@"Number"]) {
-        return @"Number of photos per category, per day";
     } else if ([self.sections[section] isEqualToString:@"Categories"]) {
         return @"Categories";
     }
@@ -114,64 +106,31 @@
     UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
     headerView.textLabel.font = [UIFont boldSystemFontOfSize:12.0f];
     headerView.textLabel.textColor = [UIColor whiteColor];
-    headerView.backgroundView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
+    headerView.backgroundView.backgroundColor = [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:0.8];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.sections[indexPath.section] isEqualToString:@"Description"]) {
         return 60;
     } else if ([self.sections[indexPath.section] isEqualToString:@"Photos"]) {
-        return 40;
-    } else if ([self.sections[indexPath.section] isEqualToString:@"Number"]) {
-        return 40;
+        return 44;
     } else if ([self.sections[indexPath.section] isEqualToString:@"Categories"]) {
-        return 40;
+        return 44;
     }
     
     return 0;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.numberOfActiveCategories--;
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    return self.numberOfActiveCategories >= 3 ? nil : indexPath;
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-
-#pragma mark - Navigation
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"ShowPhotosAlbums"]) {
-        //
-    }
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.numberOfActiveCategories++;
 }
 
 

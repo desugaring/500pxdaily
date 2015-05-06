@@ -31,7 +31,7 @@
     self.category.isDaily = @(isDaily);
 
     self.accessoryType = isDaily ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-    self.backgroundColor = isDaily ? [UIColor grayColor] : [UIColor blackColor];
+    self.backgroundColor = isDaily ? [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1] : [UIColor blackColor];
 }
 
 @end

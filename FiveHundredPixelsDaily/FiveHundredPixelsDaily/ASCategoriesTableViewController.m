@@ -59,7 +59,7 @@
     UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
     headerView.textLabel.font = [UIFont boldSystemFontOfSize:12.0f];
     headerView.textLabel.textColor = [UIColor whiteColor];
-    headerView.backgroundView.backgroundColor = [UIColor colorWithRed:0.05 green:0.05 blue:0.05 alpha:1.0];
+    headerView.backgroundView.backgroundColor = [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1.0];
 }
 
 #pragma mark - CategoryTableViewCell Delegate

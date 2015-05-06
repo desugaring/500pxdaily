@@ -1,13 +1,7 @@
 Ver 1.0:
 
-ok - Get rid of Photos store and just have an album you can pick to download to
-almost - Settings tab
+- Background fetching of images - use 500px daily for reference
 - Proper sizing/rotation of images in full mode
-ok - Thumbnail size based on phone size
-
-needs rewrite - Background fetching of images
-almost - Color scheme made dark across the board
-- icon for settings
 
 For Release:
 

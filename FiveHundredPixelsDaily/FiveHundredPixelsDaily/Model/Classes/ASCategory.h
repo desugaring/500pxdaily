@@ -48,18 +48,3 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 - (void)requestImageData;
 
 @end
-
-@interface ASCategory (CoreDataGeneratedAccessors)
-
-- (void)insertObject:(ASImage *)value inImagesAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromImagesAtIndex:(NSUInteger)idx;
-- (void)insertImages:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeImagesAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInImagesAtIndex:(NSUInteger)idx withObject:(ASImage *)value;
-- (void)replaceImagesAtIndexes:(NSIndexSet *)indexes withImages:(NSArray *)values;
-- (void)addImagesObject:(ASImage *)value;
-- (void)removeImagesObject:(ASImage *)value;
-- (void)addImages:(NSOrderedSet *)values;
-- (void)removeImages:(NSOrderedSet *)values;
-
-@end

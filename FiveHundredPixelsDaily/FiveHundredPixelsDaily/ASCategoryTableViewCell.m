@@ -39,7 +39,7 @@
     self.viewButton.hidden = !isActive;
 //    self.nameLabel.textColor = isActive ? [UIColor whiteColor] : [UIColor colorWithWhite:0.8 alpha:1];
     self.accessoryType = isActive ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-    self.backgroundColor = isActive ? [UIColor colorWithRed:0.05 green:0.05 blue:0.05 alpha:1] : [UIColor blackColor];
+    self.backgroundColor = isActive ? [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1] : [UIColor blackColor];
 }
 
 - (IBAction)viewButtonClicked:(id)sender {

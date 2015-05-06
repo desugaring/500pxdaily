@@ -99,6 +99,10 @@
         ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = true;
         self.nextButtonView.iconImageView.hidden = false;
     }
+
+    BOOL hideButtons = (self.categoriesLinkedList.prev == nil && self.categoriesLinkedList.next == nil);
+    self.nextButtonView.hidden = hideButtons;
+    self.prevButtonView.hidden = hideButtons;
 }
 
 #pragma mark - UIPageViewController DataSource

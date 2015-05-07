@@ -36,6 +36,8 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 @property (nonatomic, retain) NSNumber *isDaily;
 
 @property NSOperationQueue *imageQueue;
+@property NSOperationQueue *imagesDataQueue;
+
 @property (weak) id<ASCategoryImageDelegate> delegate;
 @property NSInteger maxNumberOfImages;
 

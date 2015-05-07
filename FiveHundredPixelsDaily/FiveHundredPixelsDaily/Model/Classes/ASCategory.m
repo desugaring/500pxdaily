@@ -15,8 +15,6 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
 
 @interface ASCategory()
 
-@property NSOperationQueue *imagesDataQueue;
-
 @end
 
 @implementation ASCategory
@@ -58,7 +56,7 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
     }
     self.maxNumberOfImages = -1;
     [self numberOfImagesUpdatedTo:0];
-    [self requestImageDataForPage:0];
+    [self requestImageDataForPage:1];
 }
 
 - (void)requestImageData {
@@ -93,18 +91,26 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
 }
 
 - (void)parseImageData:(NSDictionary *)imageData {
+    NSManagedObjectContext *bgContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    bgContext.parentContext = self.managedObjectContext;
+    [bgContext performBlockAndWait:^{
         self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
         NSLog(@"max number for category %@ is %lu", self.name, self.maxNumberOfImages);
         NSArray *photos = imageData[@"photos"];
 
         for (NSDictionary *photoData in photos) {
-            ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
+            ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:bgContext];
             image.name = photoData[@"name"];
             image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
             image.fullURL = (NSString *)photoData[@"image_url"][1];
-            image.category = self;
+            image.category = (ASCategory *)[bgContext objectWithID:self.objectID];;
         }
-        NSLog(@"image count after parse: %lu", self.images.count);
+        NSError *error;
+        [bgContext save:&error];
+        if (error != nil) NSLog(@"bg context save error: %@", error);
+        [bgContext reset];
+    }];
+    NSLog(@"image count after parse: %lu", self.images.count);
     dispatch_async(dispatch_get_main_queue(), ^{
         [self numberOfImagesUpdatedTo:self.images.count];
     });

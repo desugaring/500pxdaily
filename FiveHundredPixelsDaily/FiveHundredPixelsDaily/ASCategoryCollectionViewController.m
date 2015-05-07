@@ -58,6 +58,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 }
 
 - (IBAction)refreshImages:(id)sender {
+    self.needsRefresh = false;
     self.numberOfImages = 0;
     [self.category resetImages];
 }

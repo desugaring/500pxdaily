@@ -149,7 +149,7 @@
     if (!coordinator) {
         return nil;
     }
-    self.moc = [[NSManagedObjectContext alloc] init];
+    self.moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [self.moc setPersistentStoreCoordinator:coordinator];
     return self.moc;
 }

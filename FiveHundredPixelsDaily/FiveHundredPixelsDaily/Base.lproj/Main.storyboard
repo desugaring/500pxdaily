@@ -519,10 +519,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                             </containerView>
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2JG-g8-dcE" userLabel="PrevView" customClass="ASButtonView">
-                                <rect key="frame" x="-1" y="553" width="95" height="50"/>
+                                <rect key="frame" x="0.0" y="553" width="94" height="50"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="LeftArrow" translatesAutoresizingMaskIntoConstraints="NO" id="vN5-7W-hVz">
-                                        <rect key="frame" x="6" y="10" width="30" height="30"/>
+                                        <rect key="frame" x="5" y="10" width="30" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="Hh4-nc-Aww"/>
                                             <constraint firstAttribute="height" constant="30" id="yYJ-v8-hd2"/>
@@ -579,10 +579,10 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PmQ-Ze-cmD" userLabel="NextView" customClass="ASButtonView">
-                                <rect key="frame" x="281" y="553" width="95" height="50"/>
+                                <rect key="frame" x="281" y="553" width="94" height="50"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="RightArrow" translatesAutoresizingMaskIntoConstraints="NO" id="Oei-k7-yF6">
-                                        <rect key="frame" x="60" y="10" width="30" height="30"/>
+                                        <rect key="frame" x="59" y="10" width="30" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="DR0-AB-HWs"/>
                                             <constraint firstAttribute="width" constant="30" id="mOS-wj-Cab"/>
@@ -614,7 +614,6 @@
                             <constraint firstItem="mow-Co-mR0" firstAttribute="top" secondItem="IfM-G7-5m5" secondAttribute="bottom" id="PuJ-x8-bZK"/>
                             <constraint firstAttribute="width" secondItem="0FI-Ox-VgB" secondAttribute="width" multiplier="2:1" id="SjU-6j-HW5"/>
                             <constraint firstItem="2JG-g8-dcE" firstAttribute="height" secondItem="0FI-Ox-VgB" secondAttribute="height" id="TLn-Wv-rsi"/>
-                            <constraint firstAttribute="width" secondItem="0FI-Ox-VgB" secondAttribute="width" id="VJN-FS-wuN"/>
                             <constraint firstItem="2JG-g8-dcE" firstAttribute="centerY" secondItem="0FI-Ox-VgB" secondAttribute="centerY" id="Zlj-ma-OkL"/>
                             <constraint firstItem="PmQ-Ze-cmD" firstAttribute="height" secondItem="0FI-Ox-VgB" secondAttribute="height" id="b2i-4s-LSR"/>
                             <constraint firstItem="PmQ-Ze-cmD" firstAttribute="centerY" secondItem="0FI-Ox-VgB" secondAttribute="centerY" id="cTa-OK-zxC"/>
@@ -624,15 +623,8 @@
                             <constraint firstAttribute="centerX" secondItem="0FI-Ox-VgB" secondAttribute="centerX" id="mpM-fr-U5p"/>
                             <constraint firstItem="mow-Co-mR0" firstAttribute="top" secondItem="0FI-Ox-VgB" secondAttribute="bottom" id="mxb-aD-3dG"/>
                             <constraint firstItem="IfM-G7-5m5" firstAttribute="leading" secondItem="475-bo-3MC" secondAttribute="leading" id="qS1-me-Lys"/>
-                            <constraint firstItem="PmQ-Ze-cmD" firstAttribute="width" secondItem="0FI-Ox-VgB" secondAttribute="width" id="uBB-9J-92g"/>
                             <constraint firstAttribute="trailing" secondItem="IfM-G7-5m5" secondAttribute="trailing" id="vWO-Rd-duJ"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="VJN-FS-wuN"/>
-                                <exclude reference="uBB-9J-92g"/>
-                            </mask>
-                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
@@ -675,6 +667,6 @@
         <image name="RightArrow" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="10h-rm-sMO"/>
+        <segue reference="UY0-Uc-YYq"/>
     </inferredMetricsTieBreakers>
 </document>

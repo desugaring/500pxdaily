@@ -20,6 +20,7 @@
 @property NSManagedObjectContext *moc;
 @property ASBackgroundImageFetcher *backgroundImageFetcher;
 @property ASPhotosManager *photosManager;
+@property UIBackgroundTaskIdentifier backgroundTask;
 
 @property ASModel *model;
 
@@ -29,8 +30,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    self.backgroundTask = UIBackgroundTaskInvalid;
     self.backgroundImageFetcher = [ASBackgroundImageFetcher new];
     self.photosManager = [[ASPhotosManager alloc] init];
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Model"];
     NSError *error;
@@ -70,16 +73,16 @@
     [self.backgroundImageFetcher fetchImagesWithCategories:dailyCategories completion:completionHandler];
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-}
-
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    [self saveContext];
-    NSLog(@"yup");
+     self.backgroundTask = [application beginBackgroundTaskWithExpirationHandler:^{
+         [application endBackgroundTask:self.backgroundTask];
+         self.backgroundTask = UIBackgroundTaskInvalid;
+     }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self saveContext];
+        [application endBackgroundTask:self.backgroundTask];
+        self.backgroundTask = UIBackgroundTaskInvalid;
+    });
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -93,8 +96,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
-
-    [self saveContext];
+//    [self saveContext];
 }
 
 #pragma mark - Core Data stack

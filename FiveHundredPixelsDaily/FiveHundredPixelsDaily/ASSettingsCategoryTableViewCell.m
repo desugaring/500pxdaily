@@ -10,24 +10,14 @@
 
 @implementation ASSettingsCategoryTableViewCell
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    [self changeState:selected];
+- (void)prepareForReuse {
+    self.backgroundColor = [UIColor blackColor];
+    self.accessoryType = UITableViewCellAccessoryNone;
 }
 
 - (void)configureCellWithCategory:(ASCategory *)category {
     self.category = category;
     self.nameLabel.text = category.name;
-
-    [self changeState:self.category.isDaily.boolValue];
-}
-
-- (void)changeState:(BOOL)isDaily {
-    self.category.isDaily = @(isDaily);
-
-    self.accessoryType = isDaily ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-    self.backgroundColor = isDaily ? [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1] : [UIColor blackColor];
 }
 
 @end

@@ -27,9 +27,12 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(goToSettings:)];
     self.categoriesCount = self.store.categories.count;
     self.selectedCategories = [NSMutableArray arrayWithCapacity:self.categoriesCount];
-    for (ASCategory *category in self.store.categories) {
-        if (category.isActive.boolValue == true) [self.selectedCategories addObject:category];
-    }
+    [self.store.categories enumerateObjectsUsingBlock:^(ASCategory *category, NSUInteger idx, BOOL *stop) {
+        if (category.isActive.boolValue == true) {
+            NSLog(@"cat is :%@", category.name);
+            [self.selectedCategories addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
+        }
+    }];
 }
 
 - (void)goToSettings:(id)sender {
@@ -52,20 +55,26 @@
 
     ASCategory *category = (ASCategory *)self.store.categories[indexPath.row];
     [cell configureCellWithCategory:category];
-    cell.delegate = self;
-    if ([self.selectedCategories containsObject:category] == true) [self.tableView selectRowAtIndexPath:indexPath animated:false scrollPosition:UITableViewScrollPositionNone];
-    
+    if ([self.selectedCategories containsObject:indexPath]) {
+        cell.backgroundColor = [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1];
+        cell.viewButton.hidden = false;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.delegate = self;
+    }
+
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    ASCategory *category = ((ASCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath]).category;
-    [self.selectedCategories addObject:category];
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    ASCategory *category = ((ASCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath]).category;
-    [self.selectedCategories removeObject:category];
+    ASCategoryTableViewCell *cell = (ASCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    if ([self.selectedCategories containsObject:indexPath] == true) {
+        [self.selectedCategories removeObject:indexPath];
+        cell.category.isActive = @(false);
+    } else {
+        [self.selectedCategories addObject:indexPath];
+        cell.category.isActive = @(true);
+    }
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {

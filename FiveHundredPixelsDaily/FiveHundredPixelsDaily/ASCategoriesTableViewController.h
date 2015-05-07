@@ -10,7 +10,7 @@
 #import "ASStore.h"
 #import "ASCategoryTableViewCell.h"
 
-@interface ASCategoriesTableViewController : UITableViewController <ASCategoryTableViewCellDelegate>
+@interface ASCategoriesTableViewController : UITableViewController <ASCategoryTableViewCellDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak) ASStore *store;
 

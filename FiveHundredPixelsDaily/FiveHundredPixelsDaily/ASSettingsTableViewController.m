@@ -12,11 +12,15 @@
 #import "ASSettingsPhotosTableViewCell.h"
 #import "ASSettingsCategoryTableViewCell.h"
 
+int const MAX_NUMBER_OF_DAILY_CATEGORIES = 3;
+
 @interface ASSettingsTableViewController ()
 
 @property NSArray *sections;
 @property NSString *activePhotosAlbumName;
 @property NSMutableArray *selectedCategories;
+@property NSUInteger categoriesCount;
+@property NSUInteger categoriesSection;
 
 @end
 
@@ -24,17 +28,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.clearsSelectionOnViewWillAppear = false;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Close"] style:UIBarButtonItemStylePlain target:self action:@selector(closeModal:)];
 
     self.sections = @[@"Description", @"Photos", @"Number", @"Categories"];
+    self.categoriesCount = self.store.categories.count;
 
-    self.selectedCategories = [NSMutableArray arrayWithCapacity:3];
-    for (ASCategory *category in self.store.categories) {
-        if (category.isDaily.boolValue == true) {
-            [self.selectedCategories addObject:category];
-            NSLog(@"cat is daily: %@", category.name);
-        }
-    }
+    self.categoriesSection = [self.sections indexOfObject:@"Categories"];
+    self.selectedCategories = [NSMutableArray arrayWithCapacity:self.categoriesCount];
+    [self.store.categories enumerateObjectsUsingBlock:^(ASCategory *category, NSUInteger idx, BOOL *stop) {
+        if (category.isDaily.boolValue == true) [self.selectedCategories addObject:[NSIndexPath indexPathForRow:idx inSection:self.categoriesSection]];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -59,7 +63,7 @@
     } else if ([self.sections[section] isEqualToString:@"Photos"]) {
         return 1;
     } else if ([self.sections[section] isEqualToString:@"Categories"]) {
-        return self.store.categories.count;
+        return self.categoriesCount;
     }
     return 0;
 }
@@ -80,9 +84,10 @@
         ASSettingsCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Category" forIndexPath:indexPath];
         ASCategory *category = self.store.categories[indexPath.row];
         [cell configureCellWithCategory:category];
-        if ([self.selectedCategories containsObject:category]) {
-            NSLog(@"selected cat is %@", cell.category.name);
-            [self.tableView selectRowAtIndexPath:indexPath animated:false scrollPosition:UITableViewScrollPositionNone];
+        
+        if ([self.selectedCategories containsObject:indexPath] == true) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.backgroundColor = [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1];
         }
 
         return cell;
@@ -121,21 +126,19 @@
     return 0;
 }
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    ASSettingsCategoryTableViewCell *cell = (ASSettingsCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    [self.selectedCategories removeObject:cell.category];
-    cell.category.isDaily = @(true);
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    return self.selectedCategories.count == 3 ? nil : indexPath;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section != self.categoriesSection) return;
+    
     ASSettingsCategoryTableViewCell *cell = (ASSettingsCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    [self.selectedCategories addObject:cell.category];
-    cell.category.isDaily = @(false);
+    if ([self.selectedCategories containsObject:indexPath] == true) {
+        [self.selectedCategories removeObject:indexPath];
+        cell.category.isDaily = @(false);
+    } else {
+        if (self.selectedCategories.count == MAX_NUMBER_OF_DAILY_CATEGORIES) return;
+        [self.selectedCategories addObject:indexPath];
+        cell.category.isDaily = @(true);
+    }
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
-
 
 @end

@@ -49,12 +49,9 @@
         // Create stores for model
         ASFHPStore *fhpStore = [NSEntityDescription insertNewObjectForEntityForName:@"FHPStore" inManagedObjectContext:[self managedObjectContext]];
         fhpStore.name = @"500px";
-        fhpStore.model = self.model;
-    }
+        [fhpStore updateCategoriesIfNeeded];
 
-    // Update stores
-    for (ASStore *store in self.model.stores) {
-        [store updateCategoriesIfNeeded];
+        self.model.stores = [[NSOrderedSet alloc] initWithObject:fhpStore];
     }
 
     // Give store to UI
@@ -157,6 +154,7 @@
     }
     self.moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [self.moc setPersistentStoreCoordinator:coordinator];
+    self.moc.undoManager = nil;
     return self.moc;
 }
 

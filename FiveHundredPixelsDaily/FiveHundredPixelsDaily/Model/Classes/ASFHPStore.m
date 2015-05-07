@@ -23,6 +23,8 @@
 - (void)updateCategoriesIfNeeded {
     // Create categories if they don't already exist
     if (self.categories.count != self.categoryNames.count) {
+        NSMutableOrderedSet *newCategories = [NSMutableOrderedSet new];
+        [newCategories addObjectsFromArray:self.categories.array];
         for (NSString *categoryName in self.categoryNames) {
             BOOL containsName = false;
             for (ASCategory *category in self.categories) {
@@ -31,11 +33,18 @@
                 }
             }
             if (containsName == false) {
+                NSLog(@"adding cat named: %@", categoryName);
                 ASCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"Category" inManagedObjectContext:self.managedObjectContext];
                 category.name = categoryName;
-                category.store = self;
+                [newCategories addObject:category];
             }
         }
+        [newCategories sortUsingComparator:^NSComparisonResult(ASCategory *obj1, ASCategory *obj2) {
+            if ([obj1.name integerValue] > [obj2.name integerValue])  return (NSComparisonResult)NSOrderedDescending;
+            if ([obj1.name integerValue] < [obj2.name integerValue]) return (NSComparisonResult)NSOrderedAscending;
+            return (NSComparisonResult)NSOrderedSame;
+        }];
+        self.categories = (NSOrderedSet *)newCategories.copy;
     }
 }
 

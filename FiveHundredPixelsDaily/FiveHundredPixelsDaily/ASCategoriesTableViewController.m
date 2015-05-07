@@ -26,10 +26,10 @@
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(goToSettings:)];
     self.categoriesCount = self.store.categories.count;
+    NSLog(@"count is %@", @(self.categoriesCount));
     self.selectedCategories = [NSMutableArray arrayWithCapacity:self.categoriesCount];
     [self.store.categories enumerateObjectsUsingBlock:^(ASCategory *category, NSUInteger idx, BOOL *stop) {
         if (category.isActive.boolValue == true) {
-            NSLog(@"cat is :%@", category.name);
             [self.selectedCategories addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
         }
     }];

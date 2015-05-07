@@ -1,10 +1,12 @@
 Ver 1.0:
 
+- Clear core data somehow?
 - Fix request/cancel and more images in full mode
 - Background fetching of images - use 500px daily for reference
 - Proper sizing/rotation of images in full mode
 - Add success message when saving photo
 - Fix up download button to look better
+- Footer loading animation
 
 For Release:
 

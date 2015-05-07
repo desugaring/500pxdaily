@@ -51,9 +51,10 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
 }
 
 - (void)resetImages {
-    for (ASImage *image in [NSSet setWithSet:self.images.set]) {
-        [self.managedObjectContext deleteObject:image];
-    }
+    [self willChangeValueForKey:@"images"];
+    self.images = [NSOrderedSet new];
+    [self didChangeValueForKey:@"images"];
+
     self.maxNumberOfImages = -1;
     [self numberOfImagesUpdatedTo:0];
     [self requestImageDataForPage:1];
@@ -93,18 +94,25 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
 - (void)parseImageData:(NSDictionary *)imageData {
     NSManagedObjectContext *bgContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     bgContext.parentContext = self.managedObjectContext;
+    bgContext.undoManager = nil;
     [bgContext performBlockAndWait:^{
         self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
         NSLog(@"max number for category %@ is %lu", self.name, self.maxNumberOfImages);
         NSArray *photos = imageData[@"photos"];
 
+        NSMutableOrderedSet *newImages = [NSMutableOrderedSet new];
         for (NSDictionary *photoData in photos) {
             ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:bgContext];
             image.name = photoData[@"name"];
             image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
             image.fullURL = (NSString *)photoData[@"image_url"][1];
-            image.category = (ASCategory *)[bgContext objectWithID:self.objectID];;
+            [newImages addObject:image];
         }
+        ASCategory *category = (ASCategory *)[bgContext objectWithID:self.objectID];
+        NSMutableOrderedSet *currentImages = (NSMutableOrderedSet *)category.images.mutableCopy;
+        [currentImages addObjectsFromArray:newImages.array];
+        category.images = (NSOrderedSet *)currentImages.copy;
+
         NSError *error;
         [bgContext save:&error];
         if (error != nil) NSLog(@"bg context save error: %@", error);

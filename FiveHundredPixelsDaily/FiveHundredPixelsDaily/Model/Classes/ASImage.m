@@ -44,6 +44,7 @@
 
                 NSManagedObjectContext *bgContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
                 bgContext.parentContext = self.managedObjectContext;
+                bgContext.undoManager = nil;
                 [bgContext performBlockAndWait:^{
                     ASImage *image = (ASImage *)[bgContext objectWithID:self.objectID];
                     image.thumbnail = [UIImage imageWithData:data];
@@ -77,6 +78,7 @@
 
                 NSManagedObjectContext *bgContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
                 bgContext.parentContext = self.managedObjectContext;
+                bgContext.undoManager = nil;
                 [bgContext performBlockAndWait:^{
                     ASImage *image = (ASImage *)[bgContext objectWithID:self.objectID];
                     image.full = [UIImage imageWithData:data];

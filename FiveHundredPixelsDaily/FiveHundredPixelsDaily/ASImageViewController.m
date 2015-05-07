@@ -14,6 +14,7 @@
     [super viewDidLoad];
     if (self.image.full != nil) {
         [self updateImage];
+        [self.spinner stopAnimating];
     } else {
         self.image.delegate = self;
         [self.image requestFullImageIfNeeded];
@@ -28,6 +29,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     if (self.image.full == nil && self.image.activeRequest != nil) [self.image.activeRequest cancel];
+    NSError *error;
+    if ([self.image.managedObjectContext hasChanges]) [self.image.managedObjectContext save:&error];
+    [self.image.managedObjectContext refreshObject:self.image mergeChanges:false];
 }
 
 - (void)updateImage {
@@ -88,6 +92,7 @@
 
 - (void)imageFullUpdated:(ASImage *)image {
     [self updateImage];
+    [self.spinner stopAnimating];
 }
 
 @end

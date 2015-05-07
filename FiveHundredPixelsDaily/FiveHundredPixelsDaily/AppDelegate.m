@@ -11,6 +11,7 @@
 #import "ASFHPStore.h"
 #import "ASCategoriesTableViewController.h"
 #import "ASBackgroundImageFetcher.h"
+#import "ASPhotosManager.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +19,7 @@
 @property NSPersistentStoreCoordinator *psc;
 @property NSManagedObjectContext *moc;
 @property ASBackgroundImageFetcher *backgroundImageFetcher;
+@property ASPhotosManager *photosManager;
 
 @property ASModel *model;
 
@@ -28,6 +30,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.backgroundImageFetcher = [ASBackgroundImageFetcher new];
+    self.photosManager = [[ASPhotosManager alloc] init];
 
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Model"];
     NSError *error;
@@ -76,6 +79,7 @@
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     [self saveContext];
+    NSLog(@"yup");
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

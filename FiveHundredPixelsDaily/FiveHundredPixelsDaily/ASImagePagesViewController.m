@@ -107,7 +107,7 @@
     [self.downloadedImages addObject:image];
     ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = false;
     self.downloadButtonView.alpha = 0.5;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SaveImageToPhotos" object:nil userInfo:@{@"image": image.full }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SaveImageToPhotos" object:nil userInfo:@{ @"image": image.full }];
 }
 
 #pragma mark - UIPageViewController DataSource

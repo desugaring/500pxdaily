@@ -12,29 +12,23 @@
 
 - (void)configureCellWithCategory:(ASCategory *)category {
     self.category = category;
-
     self.nameLabel.text = category.name;
-    [self changeState:self.category.isActive.boolValue];
 }
 
 - (void)prepareForReuse {
-    self.viewButton.titleLabel.hidden = true;
+    self.viewButton.hidden = true;
+    self.backgroundColor = [UIColor blackColor];
+    self.accessoryType = UITableViewCellAccessoryNone;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
     self.category.isActive = @(selected);
-    [self changeState:selected];
-}
-
-- (void)changeState:(BOOL)isActive {
-    self.category.isActive = @(isActive);
-
-    self.viewButton.enabled = isActive;
-    self.viewButton.hidden = !isActive;
-    self.accessoryType = isActive ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-    self.backgroundColor = isActive ? [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1] : [UIColor blackColor];
+//    self.viewButton.enabled = selected;
+    self.viewButton.hidden = !selected;
+    self.accessoryType = selected ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+    self.backgroundColor = selected ? [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1] : [UIColor blackColor];
 }
 
 - (IBAction)viewButtonClicked:(id)sender {

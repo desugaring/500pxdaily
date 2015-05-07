@@ -15,9 +15,8 @@
 @interface ASSettingsTableViewController ()
 
 @property NSArray *sections;
-@property (weak) ASStore *fhpStore;
 @property NSString *activePhotosAlbumName;
-@property NSInteger numberOfActiveCategories;
+@property NSMutableArray *selectedCategories;
 
 @end
 
@@ -29,9 +28,12 @@
 
     self.sections = @[@"Description", @"Photos", @"Number", @"Categories"];
 
-    self.numberOfActiveCategories = 0;
-    for (ASCategory *category in self.fhpStore.categories) {
-        if (category.isDaily.boolValue == true) self.numberOfActiveCategories++;
+    self.selectedCategories = [NSMutableArray arrayWithCapacity:3];
+    for (ASCategory *category in self.store.categories) {
+        if (category.isDaily.boolValue == true) {
+            [self.selectedCategories addObject:category];
+            NSLog(@"cat is daily: %@", category.name);
+        }
     }
 }
 
@@ -76,8 +78,12 @@
 
     } else if ([self.sections[indexPath.section] isEqualToString:@"Categories"]) {
         ASSettingsCategoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Category" forIndexPath:indexPath];
-        [cell configureCellWithCategory:self.store.categories[indexPath.row]];
-        if (cell.category.isDaily.boolValue == true) [self.tableView selectRowAtIndexPath:indexPath animated:false scrollPosition:UITableViewScrollPositionNone];
+        ASCategory *category = self.store.categories[indexPath.row];
+        [cell configureCellWithCategory:category];
+        if ([self.selectedCategories containsObject:category]) {
+            NSLog(@"selected cat is %@", cell.category.name);
+            [self.tableView selectRowAtIndexPath:indexPath animated:false scrollPosition:UITableViewScrollPositionNone];
+        }
 
         return cell;
     }
@@ -116,15 +122,19 @@
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.numberOfActiveCategories--;
+    ASSettingsCategoryTableViewCell *cell = (ASSettingsCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [self.selectedCategories removeObject:cell.category];
+    cell.category.isDaily = @(true);
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    return self.numberOfActiveCategories >= 3 ? nil : indexPath;
+    return self.selectedCategories.count == 3 ? nil : indexPath;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.numberOfActiveCategories++;
+    ASSettingsCategoryTableViewCell *cell = (ASSettingsCategoryTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [self.selectedCategories addObject:cell.category];
+    cell.category.isDaily = @(false);
 }
 
 

@@ -1,7 +1,10 @@
 Ver 1.0:
 
+- Fix request/cancel and more images in full mode
 - Background fetching of images - use 500px daily for reference
 - Proper sizing/rotation of images in full mode
+- Add success message when saving photo
+- Fix up download button to look better
 
 For Release:
 

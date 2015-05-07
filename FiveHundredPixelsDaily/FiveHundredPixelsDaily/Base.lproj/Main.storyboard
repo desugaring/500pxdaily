@@ -189,13 +189,13 @@
         <scene sceneID="Aqb-C8-FqA">
             <objects>
                 <collectionViewController storyboardIdentifier="CategoryCollectionVC" id="cJZ-AX-HRa" customClass="ASCategoryCollectionViewController" sceneMemberID="viewController">
-                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" id="HlL-y4-YMO">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" id="HlL-y4-YMO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="lrU-YD-q5P">
                             <size key="itemSize" width="120" height="120"/>
                             <size key="headerReferenceSize" width="50" height="40"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="50" height="50"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -254,6 +254,10 @@
                                 <constraint firstAttribute="bottom" secondItem="eKj-9d-5s3" secondAttribute="bottom" id="mH1-hd-crI"/>
                                 <constraint firstItem="eKj-9d-5s3" firstAttribute="top" secondItem="kog-ox-4R3" secondAttribute="top" id="uKW-bf-kMS"/>
                             </constraints>
+                        </collectionReusableView>
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Footer" id="Jt6-TE-IrE">
+                            <rect key="frame" x="0.0" y="160" width="375" height="50"/>
+                            <autoresizingMask key="autoresizingMask"/>
                         </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="cJZ-AX-HRa" id="n72-GN-Xrx"/>

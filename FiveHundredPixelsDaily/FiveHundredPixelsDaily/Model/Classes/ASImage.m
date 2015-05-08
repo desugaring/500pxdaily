@@ -59,7 +59,7 @@
             }
         };
         if (self.category.imagesDataQueue.operationCount != 0) [operation addDependency:self.category.imagesDataQueue.operations.firstObject];
-        [self.category.imageQueue addOperation:operation];
+        [self.category.thumbnailQueue addOperation:operation];
         self.activeRequest = operation;
     }
 }
@@ -95,7 +95,7 @@
             }
         };
         if (self.category.imagesDataQueue.operationCount != 0) [operation addDependency:self.category.imagesDataQueue.operations.firstObject];
-        [self.category.imageQueue addOperation:operation];
+        [self.category.fullQueue addOperation:operation];
         self.activeRequest = operation;
     }
 }

@@ -26,7 +26,6 @@
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(goToSettings:)];
     self.categoriesCount = self.store.categories.count;
-    NSLog(@"count is %@", @(self.categoriesCount));
     self.selectedCategories = [NSMutableArray arrayWithCapacity:self.categoriesCount];
     [self.store.categories enumerateObjectsUsingBlock:^(ASCategory *category, NSUInteger idx, BOOL *stop) {
         if (category.isActive.boolValue == true) {
@@ -74,7 +73,7 @@
         [self.selectedCategories addObject:indexPath];
         cell.category.isActive = @(true);
     }
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {

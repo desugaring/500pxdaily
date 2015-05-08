@@ -27,7 +27,8 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
 
 @synthesize maxNumberOfImages;
 @synthesize imagesDataQueue;
-@synthesize imageQueue;
+@synthesize thumbnailQueue;
+@synthesize fullQueue;
 @synthesize delegate;
 
 - (ASBaseOperation *)operation {
@@ -42,12 +43,11 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
     self.imagesDataQueue = [[NSOperationQueue alloc] init];
     self.imagesDataQueue.maxConcurrentOperationCount = 1;
 
-    self.imageQueue = [[NSOperationQueue alloc] init];
-    self.imageQueue.maxConcurrentOperationCount = 5;
-}
+    self.thumbnailQueue = [[NSOperationQueue alloc] init];
+    self.thumbnailQueue.maxConcurrentOperationCount = 5;
 
-- (void)cancelImageRequests {
-    [self.imageQueue cancelAllOperations];
+    self.fullQueue = [[NSOperationQueue alloc] init];
+    self.fullQueue.maxConcurrentOperationCount = 3;
 }
 
 - (void)resetImages {

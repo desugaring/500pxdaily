@@ -12,26 +12,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (self.image.full != nil) {
-        [self updateImage];
-        [self.spinner stopAnimating];
-    } else {
-        self.image.delegate = self;
-        [self.image requestFullImageIfNeeded];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    //[self centerAndScaleImage];
+    if(self.image.full == nil) {
+        self.image.delegate = self;
+        [self.image requestFullImageIfNeeded];
+    } else {
+        [self.spinner stopAnimating];
+        [self updateImage];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     if (self.image.full == nil && self.image.activeRequest != nil) [self.image.activeRequest cancel];
-    NSError *error;
-    if ([self.image.managedObjectContext hasChanges]) [self.image.managedObjectContext save:&error];
-    [self.image.managedObjectContext refreshObject:self.image mergeChanges:false];
 }
 
 - (void)updateImage {
@@ -41,12 +37,10 @@
     [self.scrollView addSubview:imageView];
 
     imageView.alpha = 0;
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.2 animations:^{
         imageView.alpha = 1;
         self.spinner.alpha = 0;
-    } completion:^(BOOL finished) {
-        if (finished == true) [self.spinner stopAnimating];
-    }];
+    } completion: nil];
 
     [self centerAndScaleImage];
 }

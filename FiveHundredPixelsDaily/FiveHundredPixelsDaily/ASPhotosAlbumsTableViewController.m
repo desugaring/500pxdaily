@@ -79,7 +79,8 @@
 
     [cell configureCellWithCollection:collection];
     if ([collection.localizedTitle isEqualToString:self.activeAlbumName]) {
-        [self.tableView selectRowAtIndexPath:indexPath animated:false scrollPosition:UITableViewScrollPositionNone];
+        cell.backgroundColor = [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
 
     return cell;
@@ -115,8 +116,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     ASPhotosAlbumTableViewCell *cell = (ASPhotosAlbumTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
+    if (self.activeAlbumName == nil) [[NSNotificationCenter defaultCenter] postNotificationName:@"ActiveAlbumSpecified" object:nil];
     self.activeAlbumName = cell.collection.localizedTitle;
     self.activeAlbumIdentifier = cell.collection.localIdentifier;
+
+    [self.tableView reloadData];
 }
 
 @end

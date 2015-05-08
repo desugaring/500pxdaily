@@ -35,7 +35,8 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 @property (nonatomic, retain) NSNumber *isActive;
 @property (nonatomic, retain) NSNumber *isDaily;
 
-@property NSOperationQueue *imageQueue;
+@property NSOperationQueue *thumbnailQueue;
+@property NSOperationQueue *fullQueue;
 @property NSOperationQueue *imagesDataQueue;
 
 @property (weak) id<ASCategoryImageDelegate> delegate;
@@ -46,7 +47,6 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 - (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages;
 
 - (void)resetImages;
-- (void)cancelImageRequests;
 - (void)requestImageData;
 
 @end

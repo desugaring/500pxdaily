@@ -26,7 +26,7 @@
 
 - (void)saveImage:(UIImage *)image {
     NSString *albumIdentifier = [[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbumIdentifier"];
-
+    
     PHFetchResult *result = [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[albumIdentifier] options:nil];
     PHAssetCollection *collection = (PHAssetCollection *)result.firstObject;
 

@@ -11,7 +11,7 @@
 #import "ASImageVCLinkedList.h"
 #import "ASSettingsTableViewController.h"
 
-@interface ASImagePagesViewController ()
+@interface ASImagePagesViewController () <UIAlertViewDelegate>
 
 @property UIPageViewController *pageViewController;
 @property ASImageVCLinkedList *imagesLinkedList;
@@ -65,8 +65,17 @@
     // For easier swiping
     self.view.gestureRecognizers = self.pageViewController.gestureRecognizers;
 
+    // Initial images
+    [self.initialActiveImage requestFullImageIfNeeded];
+    [self requestImagesForAdjacentVCs];
+    
     // Button and title setup
     [self updateUI];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.initialActiveImage.category.fullQueue cancelAllOperations];
 }
 
 - (void)goToSettings:(id)sender {
@@ -100,14 +109,32 @@
     BOOL imageAlreadyDownloaded = [self.downloadedImages containsObject:self.imagesLinkedList.imageVC.image];
     ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = !imageAlreadyDownloaded;
     self.downloadButtonView.alpha = imageAlreadyDownloaded ? 0.5 : 1.0;
+
+    BOOL hideButtons = (self.imagesLinkedList.prev == nil && self.imagesLinkedList.next == nil);
+    self.nextButtonView.hidden = hideButtons;
+    self.prevButtonView.hidden = hideButtons;
 }
 
 - (void)downloadImage:(id)sender {
-    ASImage *image = self.imagesLinkedList.imageVC.image;
-    [self.downloadedImages addObject:image];
-    ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = false;
-    self.downloadButtonView.alpha = 0.5;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SaveImageToPhotos" object:nil userInfo:@{ @"image": image.full }];
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbumIdentifier"] == nil) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Download album not selected" message:@"Please choose a Photos album to save photos to" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Go to Settings", nil];
+        alertView.tintColor = [UIColor blackColor];
+        [alertView show];
+    } else {
+        ASImage *image = self.imagesLinkedList.imageVC.image;
+        [self.downloadedImages addObject:image];
+        ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = false;
+        self.downloadButtonView.alpha = 0.5;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SaveImageToPhotos" object:nil userInfo:@{ @"image": image.full }];
+    }
+}
+
+#pragma mark - UIAlertView Delegate
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex != 0) {
+        [self performSegueWithIdentifier:@"ShowSettings" sender:self];
+    }
 }
 
 #pragma mark - UIPageViewController DataSource
@@ -116,10 +143,24 @@
 {
     if (completed == YES) {
         ASImageViewController *newImageVC = (ASImageViewController *)self.pageViewController.viewControllers.firstObject;
+        BOOL isNext = [self.imagesLinkedList.next.imageVC isEqual:newImageVC];
+        // Cancel next/prev image fetch since we're going in the opposite direction
+        if (isNext) {
+            if (self.imagesLinkedList.prev != nil && self.imagesLinkedList.prev.imageVC.image.activeRequest != nil) [self.imagesLinkedList.prev.imageVC.image.activeRequest cancel];
+        } else {
+            if (self.imagesLinkedList.next != nil && self.imagesLinkedList.next.imageVC.image.activeRequest != nil) [self.imagesLinkedList.next.imageVC.image.activeRequest cancel];
+        }
+
         // Set pointer to current linked list item, either we went to previous or next item in the linked list, we check which way here
-        self.imagesLinkedList = [self.imagesLinkedList.next.imageVC isEqual:newImageVC] ? self.imagesLinkedList.next : self.imagesLinkedList.prev;
+        self.imagesLinkedList = isNext ? self.imagesLinkedList.next : self.imagesLinkedList.prev;
+        [self requestImagesForAdjacentVCs];
         [self updateUI];
     }
+}
+
+- (void)requestImagesForAdjacentVCs {
+    if (self.imagesLinkedList.prev != nil) [self.imagesLinkedList.prev.imageVC.image requestFullImageIfNeeded];
+    if (self.imagesLinkedList.next != nil) [self.imagesLinkedList.next.imageVC.image requestFullImageIfNeeded];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(ASImageViewController *)viewController
@@ -138,7 +179,14 @@
 
 - (void)goToPrevImage:(id)sender {
     ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
+    // Cancel next image fetch since we're going in the opposite direction
+    if (self.imagesLinkedList.next != nil && self.imagesLinkedList.next.imageVC.image.activeRequest != nil) {
+        [self.imagesLinkedList.next.imageVC.image.activeRequest cancel];
+        NSLog(@"cancelling %@", self.imagesLinkedList.next.imageVC.image.name);
+    }
+    // Set new image
     self.imagesLinkedList = self.imagesLinkedList.prev;
+    [self requestImagesForAdjacentVCs];
 
     [self.pageViewController setViewControllers:@[self.imagesLinkedList.imageVC]
                                       direction:UIPageViewControllerNavigationDirectionReverse
@@ -149,7 +197,14 @@
 
 - (void)goToNextImage:(id)sender {
     ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
+    // Cancel prev image fetch since we're going in the opposite direction
+    if (self.imagesLinkedList.prev != nil && self.imagesLinkedList.prev.imageVC.image.activeRequest != nil) {
+        [self.imagesLinkedList.prev.imageVC.image.activeRequest cancel];
+        NSLog(@"cancelling %@", self.imagesLinkedList.prev.imageVC.image.name);
+    }
+    // Set new image
     self.imagesLinkedList = self.imagesLinkedList.next;
+    [self requestImagesForAdjacentVCs];
 
     [self.pageViewController setViewControllers:@[self.imagesLinkedList.imageVC]
                                       direction:UIPageViewControllerNavigationDirectionForward

@@ -28,12 +28,21 @@
 
 @implementation AppDelegate
 
+- (void)activateBackgroundFetching {
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.backgroundTask = UIBackgroundTaskInvalid;
     self.backgroundImageFetcher = [ASBackgroundImageFetcher new];
     self.photosManager = [[ASPhotosManager alloc] init];
-    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbumIdentifier"] != nil) {
+        [self activateBackgroundFetching];
+    } else {
+        [[NSNotificationCenter defaultCenter] addObserverForName:@"ActiveAlbumSpecified" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+            [self activateBackgroundFetching];
+        }];
+    }
 
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Model"];
     NSError *error;

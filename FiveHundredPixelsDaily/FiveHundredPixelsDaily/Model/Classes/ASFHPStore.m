@@ -33,7 +33,6 @@
                 }
             }
             if (containsName == false) {
-                NSLog(@"adding cat named: %@", categoryName);
                 ASCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"Category" inManagedObjectContext:self.managedObjectContext];
                 category.name = categoryName;
                 [newCategories addObject:category];

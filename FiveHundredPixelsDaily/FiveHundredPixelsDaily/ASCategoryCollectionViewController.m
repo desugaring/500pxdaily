@@ -54,10 +54,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.category cancelImageRequests];
-    NSError *error;
-    if ([self.category.managedObjectContext hasChanges]) [self.category.managedObjectContext save:&error];
-    [self.category.managedObjectContext refreshObject:self.category mergeChanges:false];
+    [self.category.thumbnailQueue cancelAllOperations];
 }
 
 - (IBAction)refreshImages:(id)sender {

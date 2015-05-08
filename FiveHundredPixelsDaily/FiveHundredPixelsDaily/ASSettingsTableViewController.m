@@ -138,7 +138,7 @@ int const MAX_NUMBER_OF_DAILY_CATEGORIES = 3;
         [self.selectedCategories addObject:indexPath];
         cell.category.isDaily = @(true);
     }
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

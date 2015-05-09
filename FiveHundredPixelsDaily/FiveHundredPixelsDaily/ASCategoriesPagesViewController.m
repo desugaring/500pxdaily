@@ -83,7 +83,7 @@
         self.prevButtonView.iconImageView.hidden = true;
         ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
     } else {
-        self.prevButtonView.nameLabel.text = self.categoriesLinkedList.prev.categoryVC.category.name;
+        self.prevButtonView.nameLabel.text = self.categoriesLinkedList.prev.categoryVC.category.name.uppercaseString;
         ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = true;
         self.prevButtonView.iconImageView.hidden = false;
     }
@@ -93,7 +93,7 @@
         self.nextButtonView.iconImageView.hidden = true;
         ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
     } else {
-        self.nextButtonView.nameLabel.text = self.categoriesLinkedList.next.categoryVC.category.name;
+        self.nextButtonView.nameLabel.text = self.categoriesLinkedList.next.categoryVC.category.name.uppercaseString;
         ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = true;
         self.nextButtonView.iconImageView.hidden = false;
     }

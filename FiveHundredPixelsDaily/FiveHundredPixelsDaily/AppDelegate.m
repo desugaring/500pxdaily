@@ -32,6 +32,15 @@
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 }
 
+- (void)removeOldFullImages:(NSTimer *)timer {
+//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Image"];
+//    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:[NSDate date]];
+//    [components setMinute:30];
+//    NSDate *endDate = [[NSCalendar currentCalendar] dateByAddingComponents:components toDate:[NSDate date] options:0];
+//    
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"fullDate < %@" argumentArray:@[twentyMinutesAgo]];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.backgroundTask = UIBackgroundTaskInvalid;
     self.backgroundImageFetcher = [ASBackgroundImageFetcher new];
@@ -129,7 +138,6 @@
     }
 
     // Create the coordinator and store
-
     self.psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"FiveHundredPixelsDaily.sqlite"];
     NSError *error = nil;
@@ -164,6 +172,11 @@
     self.moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [self.moc setPersistentStoreCoordinator:coordinator];
     self.moc.undoManager = nil;
+    // Import for batch updates and refreshObject to work correctly
+    // Staleness forces refreshObject:MergeChanges: to get the value updated by batch update, rather than cache
+    // Merge policy makes it that cache disagreeing with updated objects doesn't cause the app to explode
+    self.moc.stalenessInterval = 0.0;
+    self.moc.mergePolicy = [[NSMergePolicy alloc] initWithMergeType:NSMergeByPropertyObjectTrumpMergePolicyType];
     return self.moc;
 }
 

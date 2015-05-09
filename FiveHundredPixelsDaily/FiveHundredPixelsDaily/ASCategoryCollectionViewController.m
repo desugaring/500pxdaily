@@ -11,13 +11,15 @@
 #import "ASFHPStore.h"
 #import "ASCategory.h"
 #import "ASImage.h"
+#import "ASLoadingFooterCollectionReusableView.h"
 
 @interface ASCategoryCollectionViewController() <UICollectionViewDelegateFlowLayout>
 
 @property NSMutableSet *visibleIndexPaths;
 @property NSUInteger numberOfImages;
 @property CGSize cellSize;
-@property BOOL needsRefresh;
+@property BOOL showRefreshBanner;
+@property BOOL loadingMore;
 
 @end
 
@@ -27,46 +29,79 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.needsRefresh = false;
+    self.showRefreshBanner = false;
     self.cellSize = CGSizeZero;
     self.navigationItem.title = self.category.name;
     self.visibleIndexPaths = [NSMutableSet new];
     self.category.delegate = self;
     self.numberOfImages = self.category.images.count;
+    self.loadingMore = self.category.maxNumberOfImages != self.numberOfImages;
     if (self.numberOfImages == 0) [self.category requestImageData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    if (self.category.lastUpdated == nil) {
-        [self refreshImages:self];
+    if (self.category.lastUpdated == nil || [self.category.lastUpdated isEqualToDate:[NSDate distantPast]]) {
+        NSLog(@"!!!refreshing category because it is old or nil %@", self.category.name);
+        [self refreshCategory:self];
         return;
     } else {
         NSInteger hours = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.category.lastUpdated toDate:[NSDate date] options:0] hour];
-        if(hours >= 6) {
-            self.needsRefresh = true;
+        if(hours >= 1) {
+            self.showRefreshBanner = true;
         }
     }
+//    self.showRefreshBanner = true;
     [self.collectionView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.category.thumbnailQueue cancelAllOperations];
+    [self.category.managedObjectContext performBlock:^{
+        if ([self.category.managedObjectContext hasChanges] == true) {
+            NSError *error;
+            [self.category.managedObjectContext save:&error];
+            if (error != nil) {
+                NSLog(@"error saving context in view will disappear %@", error);
+            } else {
+                NSLog(@"saved %@ successfully", self.category.name);
+            }
+            [self.category.managedObjectContext refreshObject:self.category mergeChanges:false];
+        }
+    }];
 }
 
-- (IBAction)refreshImages:(id)sender {
-    self.needsRefresh = false;
+- (IBAction)refreshCategory:(id)sender {
+    self.showRefreshBanner = false;
     self.numberOfImages = 0;
     [self.category resetImages];
+}
+
+- (IBAction)refreshAllCategories:(id)sender {
+    [self refreshCategory:self];
+    NSManagedObjectContext *context = self.category.managedObjectContext;
+    [context performBlock:^{
+        NSBatchUpdateRequest *request = [[NSBatchUpdateRequest alloc] initWithEntity:self.category.entity];
+        request.propertiesToUpdate = @{ @"lastUpdated" : [NSDate distantPast] };
+        request.resultType = NSUpdatedObjectIDsResultType;
+        NSError *error;
+        NSBatchUpdateResult *objectIDs = (NSBatchUpdateResult *)[context executeRequest:request error:&error];
+        [objectIDs.result enumerateObjectsUsingBlock:^(NSManagedObjectID *objID, NSUInteger idx, BOOL *stop) {
+            ASCategory *category = (ASCategory *)[context objectWithID:objID];
+            if ([category isFault] == false) {
+                [context refreshObject:category mergeChanges:YES];
+            }
+        }];
+        if (error != nil) NSLog(@"error is %@", error);
+    }];
+
 }
 
 #pragma mark - UICollectionView DataSource
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return self.needsRefresh ? CGSizeMake(collectionView.bounds.size.width, 40) : CGSizeZero;
+    return self.showRefreshBanner ? CGSizeMake(collectionView.bounds.size.width, 40) : CGSizeZero;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
@@ -74,7 +109,8 @@ static NSString * const reuseIdentifier = @"Thumbnail";
         UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"RefreshHeader" forIndexPath:indexPath];
         return headerView;
     } else if (kind == UICollectionElementKindSectionFooter) {
-        UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"Footer" forIndexPath:indexPath];
+        ASLoadingFooterCollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"Footer" forIndexPath:indexPath];
+        footerView.loadingLabel.hidden = !self.loadingMore;
         return footerView;
     }
     return nil;
@@ -154,6 +190,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages {
     self.numberOfImages = numberOfImages;
+    self.loadingMore = numberOfImages != self.category.maxNumberOfImages;
     [self.collectionView reloadData];
 }
 

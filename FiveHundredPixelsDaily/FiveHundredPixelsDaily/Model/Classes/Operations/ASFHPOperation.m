@@ -59,7 +59,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 }
 
 - (void)sendBackgroundCategoryRequestWithURL:(NSURL *)url {
-    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:(NSTimeInterval)20];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:(NSTimeInterval)5];
     NSURLResponse *response;
     NSError *error;
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
@@ -97,6 +97,11 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
         UIImage *image = [UIImage imageWithData:responseData];
         self.completion(@[image], error);
     }
+}
+
+- (void)cancel {
+    [super cancel];
+    NSLog(@"tried to cancel request for object %@", self.object);
 }
 
 @end

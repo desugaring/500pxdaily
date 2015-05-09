@@ -41,17 +41,8 @@
                 NSLog(@"url response error: %@", error);
             } else if (results.count > 0 && [results[0] isKindOfClass:NSData.class]){
                 NSData *data = (NSData *)results[0];
-
-                NSManagedObjectContext *bgContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-                bgContext.parentContext = self.managedObjectContext;
-                bgContext.undoManager = nil;
-                [bgContext performBlockAndWait:^{
-                    ASImage *image = (ASImage *)[bgContext objectWithID:self.objectID];
-                    image.thumbnail = [UIImage imageWithData:data];
-                    NSError *error;
-                    [bgContext save:&error];
-                    if (error != nil) NSLog(@"bg context save error: %@", error);
-                    [bgContext reset];
+                [self.managedObjectContext performBlockAndWait:^{
+                    self.thumbnail = [UIImage imageWithData:data];
                 }];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.category imageThumbnailUpdated:self];
@@ -75,19 +66,9 @@
                 NSLog(@"url response error: %@", error);
             } else if (results.count > 0 && [results[0] isKindOfClass:NSData.class]){
                 NSData *data = (NSData *)results[0];
-
-                NSManagedObjectContext *bgContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-                bgContext.parentContext = self.managedObjectContext;
-                bgContext.undoManager = nil;
-                [bgContext performBlockAndWait:^{
-                    ASImage *image = (ASImage *)[bgContext objectWithID:self.objectID];
-                    image.full = [UIImage imageWithData:data];
-                    NSError *error;
-                    [bgContext save:&error];
-                    if (error != nil) NSLog(@"bg context save error: %@", error);
-                    [bgContext reset];
+                [self.managedObjectContext performBlockAndWait:^{
+                    self.full = [UIImage imageWithData:data];
                 }];
-
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.category imageFullUpdated:self];
                     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) [self.delegate imageFullUpdated:self];

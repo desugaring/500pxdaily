@@ -9,11 +9,12 @@
 @import UIKit;
 #import "ASImage.h"
 #import "ASCategory.h"
+#import "ASCenteredScrollView.h"
 
 @interface ASImageViewController : UIViewController <ASImageDelegate, UIScrollViewDelegate>
 
 @property (weak) ASImage *image;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet ASCenteredScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
 - (void)imageFullUpdated:(ASImage *)image;

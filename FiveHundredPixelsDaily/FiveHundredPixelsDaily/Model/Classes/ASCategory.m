@@ -51,12 +51,11 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
 }
 
 - (void)resetImages {
-    [self willChangeValueForKey:@"images"];
-    self.images = [NSOrderedSet new];
-    [self didChangeValueForKey:@"images"];
-
     self.maxNumberOfImages = -1;
     [self numberOfImagesUpdatedTo:0];
+    [self.managedObjectContext performBlockAndWait:^{
+        self.images = [NSOrderedSet new];
+    }];
     [self requestImageDataForPage:1];
 }
 
@@ -74,7 +73,7 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
     operation.object = self;
     operation.userInfo = @{@"page": @(page).stringValue, @"perPage": PHOTOS_PER_REQUEST};
     operation.completion = ^(NSArray *results, NSError *error) {
-        if (error != nil) {
+        if (error != nil || results == nil) {
             NSLog(@"url response error: %@", error);
         } else if ([results[0] isKindOfClass:NSData.class]){
             NSData *data = (NSData *)results[0];
@@ -92,31 +91,22 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
 }
 
 - (void)parseImageData:(NSDictionary *)imageData {
-    NSManagedObjectContext *bgContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    bgContext.parentContext = self.managedObjectContext;
-    bgContext.undoManager = nil;
-    [bgContext performBlockAndWait:^{
-        self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
-        NSLog(@"max number for category %@ is %lu", self.name, self.maxNumberOfImages);
-        NSArray *photos = imageData[@"photos"];
-
+    if (self.maxNumberOfImages == -1) self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
+    NSLog(@"max number for category %@ is %lu", self.name, self.maxNumberOfImages);
+    NSArray *photos = imageData[@"photos"];
+    
+    [self.managedObjectContext performBlockAndWait:^{
         NSMutableOrderedSet *newImages = [NSMutableOrderedSet new];
         for (NSDictionary *photoData in photos) {
-            ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:bgContext];
+            ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
             image.name = photoData[@"name"];
             image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
             image.fullURL = (NSString *)photoData[@"image_url"][1];
             [newImages addObject:image];
         }
-        ASCategory *category = (ASCategory *)[bgContext objectWithID:self.objectID];
-        NSMutableOrderedSet *currentImages = (NSMutableOrderedSet *)category.images.mutableCopy;
+        NSMutableOrderedSet *currentImages = self.images.mutableCopy;
         [currentImages addObjectsFromArray:newImages.array];
-        category.images = (NSOrderedSet *)currentImages.copy;
-
-        NSError *error;
-        [bgContext save:&error];
-        if (error != nil) NSLog(@"bg context save error: %@", error);
-        [bgContext reset];
+        self.images = (NSOrderedSet *)currentImages.copy;
     }];
     NSLog(@"image count after parse: %lu", self.images.count);
     dispatch_async(dispatch_get_main_queue(), ^{

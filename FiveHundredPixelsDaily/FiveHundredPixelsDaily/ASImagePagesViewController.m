@@ -66,6 +66,7 @@
     self.view.gestureRecognizers = self.pageViewController.gestureRecognizers;
 
     // Initial images
+//    self.imagesLinkedList.imageVC.scrollViewBounds = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - self.navigationController.navigationBar.bounds.size.height);
     [self.initialActiveImage requestFullImageIfNeeded];
     [self requestImagesForAdjacentVCs];
     
@@ -116,11 +117,22 @@
 }
 
 - (void)downloadImage:(id)sender {
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbumIdentifier"] == nil) {
+    NSString *albumName = [[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbum"];
+    if (albumName == nil) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Download album not selected" message:@"Please choose a Photos album to save photos to" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Go to Settings", nil];
         alertView.tintColor = [UIColor blackColor];
         [alertView show];
     } else {
+        // Flash image saved text
+        self.photoSavedLabel.alpha = 0;
+        self.photoSavedLabel.hidden = false;
+        self.photoSavedLabel.text = [NSString stringWithFormat:@"PHOTO SAVED TO %@ ALBUM", albumName];
+        [UIView animateWithDuration:1.0 delay:0 options:UIViewAnimationOptionAutoreverse animations:^{
+            self.photoSavedLabel.alpha = 1;
+        } completion:^(BOOL finished) {
+            self.photoSavedLabel.hidden = true;
+        }];
+        // Save image
         ASImage *image = self.imagesLinkedList.imageVC.image;
         [self.downloadedImages addObject:image];
         ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = false;

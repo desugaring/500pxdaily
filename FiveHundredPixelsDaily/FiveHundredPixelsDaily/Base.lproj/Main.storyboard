@@ -646,17 +646,9 @@
                                     <outlet property="iconImageView" destination="Oei-k7-yF6" id="ilR-h4-C6P"/>
                                 </connections>
                             </view>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PHOTO SUCCESSFULLY SAVED TO ..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3vQ-Iu-zE0">
-                                <rect key="frame" x="93" y="287" width="188" height="29"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="3vQ-Iu-zE0" secondAttribute="width" multiplier="2:1" id="0sT-NY-Nd0"/>
-                            <constraint firstAttribute="centerX" secondItem="3vQ-Iu-zE0" secondAttribute="centerX" id="4GI-uE-0R8"/>
                             <constraint firstItem="IfM-G7-5m5" firstAttribute="top" secondItem="eqr-iV-utl" secondAttribute="bottom" id="8OQ-T7-88b"/>
                             <constraint firstAttribute="height" secondItem="0FI-Ox-VgB" secondAttribute="height" multiplier="12:1" priority="750" id="AHg-f2-fIp"/>
                             <constraint firstItem="2JG-g8-dcE" firstAttribute="width" secondItem="0FI-Ox-VgB" secondAttribute="width" multiplier="1:2" id="FEZ-zH-edy"/>
@@ -669,7 +661,6 @@
                             <constraint firstItem="0FI-Ox-VgB" firstAttribute="leading" secondItem="2JG-g8-dcE" secondAttribute="trailing" id="dGZ-lW-UY5"/>
                             <constraint firstItem="PmQ-Ze-cmD" firstAttribute="width" secondItem="0FI-Ox-VgB" secondAttribute="width" multiplier="1:2" id="eZR-Cu-U8h"/>
                             <constraint firstItem="0FI-Ox-VgB" firstAttribute="trailing" secondItem="PmQ-Ze-cmD" secondAttribute="leading" id="fy4-vd-wdw"/>
-                            <constraint firstAttribute="centerY" secondItem="3vQ-Iu-zE0" secondAttribute="centerY" id="k54-P2-aMb"/>
                             <constraint firstAttribute="centerX" secondItem="0FI-Ox-VgB" secondAttribute="centerX" id="mpM-fr-U5p"/>
                             <constraint firstItem="mow-Co-mR0" firstAttribute="top" secondItem="0FI-Ox-VgB" secondAttribute="bottom" id="mxb-aD-3dG"/>
                             <constraint firstItem="IfM-G7-5m5" firstAttribute="leading" secondItem="475-bo-3MC" secondAttribute="leading" id="qS1-me-Lys"/>
@@ -681,7 +672,6 @@
                         <outlet property="containerView" destination="IfM-G7-5m5" id="yRC-U0-6TH"/>
                         <outlet property="downloadButtonView" destination="0FI-Ox-VgB" id="dO0-se-zls"/>
                         <outlet property="nextButtonView" destination="PmQ-Ze-cmD" id="eG3-4h-vRb"/>
-                        <outlet property="photoSavedLabel" destination="3vQ-Iu-zE0" id="pc8-32-tOK"/>
                         <outlet property="prevButtonView" destination="2JG-g8-dcE" id="d0j-xj-PLI"/>
                         <segue destination="NHS-rg-LqO" kind="presentation" identifier="ShowSettings" id="T63-zZ-yyg"/>
                     </connections>

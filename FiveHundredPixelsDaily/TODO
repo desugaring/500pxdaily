@@ -1,12 +1,8 @@
 Ver 1.0:
 
-- Fix up nsoperation url requests to be cancellable
 - Rewrite nsoperation class, use one queue for all objects
 - Singleton for queue, put in appdelegate
-
-- Add button to reset category or all categories in category collectionview header
-- Proper sizing/rotation of images in full mode
-ok - Add success message when saving photo
+- Test background image fetch
 
 For Release:
 

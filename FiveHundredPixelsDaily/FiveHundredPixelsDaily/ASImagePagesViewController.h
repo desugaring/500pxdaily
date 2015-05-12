@@ -17,7 +17,6 @@
 @property (weak, nonatomic) IBOutlet ASButtonView *downloadButtonView;
 @property (weak, nonatomic) IBOutlet ASButtonView *prevButtonView;
 @property (weak, nonatomic) IBOutlet ASButtonView *nextButtonView;
-@property (weak, nonatomic) IBOutlet UILabel *photoSavedLabel;
 
 - (void)downloadImage:(id)sender;
 - (void)goToPrevImage:(id)sender;

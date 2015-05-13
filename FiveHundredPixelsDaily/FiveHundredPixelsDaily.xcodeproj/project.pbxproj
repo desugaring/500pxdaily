@@ -40,6 +40,7 @@
 		4FC411971AF9C69A00E4C063 /* ASPhotosManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC411961AF9C69A00E4C063 /* ASPhotosManager.m */; };
 		4FC4119A1AFC4B4600E4C063 /* ASLoadingFooterCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC411991AFC4B4600E4C063 /* ASLoadingFooterCollectionReusableView.m */; };
 		4FC4119E1AFDDC8300E4C063 /* ASCenteredScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4119D1AFDDC8300E4C063 /* ASCenteredScrollView.m */; };
+		4FC411DF1B02CE2600E4C063 /* ASDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC411DE1B02CE2600E4C063 /* ASDownloadManager.m */; };
 		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
 		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
 		4FE3E2D01ADA160800B174F4 /* ASFHPOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2CF1ADA160800B174F4 /* ASFHPOperation.m */; };
@@ -108,6 +109,8 @@
 		4FC411991AFC4B4600E4C063 /* ASLoadingFooterCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASLoadingFooterCollectionReusableView.m; sourceTree = "<group>"; };
 		4FC4119C1AFDDC8300E4C063 /* ASCenteredScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCenteredScrollView.h; sourceTree = "<group>"; };
 		4FC4119D1AFDDC8300E4C063 /* ASCenteredScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCenteredScrollView.m; sourceTree = "<group>"; };
+		4FC411DD1B02CE2600E4C063 /* ASDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASDownloadManager.h; sourceTree = "<group>"; };
+		4FC411DE1B02CE2600E4C063 /* ASDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDownloadManager.m; sourceTree = "<group>"; };
 		4FE3E2B51ADA107800B174F4 /* ASCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategory.h; sourceTree = "<group>"; };
 		4FE3E2B61ADA107800B174F4 /* ASCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategory.m; sourceTree = "<group>"; };
 		4FE3E2B81ADA107800B174F4 /* ASImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImage.h; sourceTree = "<group>"; };
@@ -231,6 +234,8 @@
 			children = (
 				4F9B8FAF1AF6AE2300B36422 /* ASButtonView.h */,
 				4F9B8FB01AF6AE2300B36422 /* ASButtonView.m */,
+				4FC411DD1B02CE2600E4C063 /* ASDownloadManager.h */,
+				4FC411DE1B02CE2600E4C063 /* ASDownloadManager.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -431,6 +436,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */,
+				4FC411DF1B02CE2600E4C063 /* ASDownloadManager.m in Sources */,
 				4F717E8B1ADE122D004B8722 /* ASBaseObject.m in Sources */,
 				4F9B8FAB1AF06F6600B36422 /* ASSettingsPhotosTableViewCell.m in Sources */,
 				4F4C1E471ADA18CF00109166 /* ASStore.m in Sources */,

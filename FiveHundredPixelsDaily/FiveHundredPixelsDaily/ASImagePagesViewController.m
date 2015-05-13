@@ -76,7 +76,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.initialActiveImage.category.fullQueue cancelAllOperations];
+    #warning cancel operations in page vc instead
+//    [self.initialActiveImage.category.fullQueue cancelAllOperations];
 }
 
 - (void)goToSettings:(id)sender {
@@ -145,14 +146,15 @@
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
 {
     if (completed == YES) {
+#warning fix so that page controller uses same method for when going between pages
         ASImageViewController *newImageVC = (ASImageViewController *)self.pageViewController.viewControllers.firstObject;
         BOOL isNext = [self.imagesLinkedList.next.imageVC isEqual:newImageVC];
         // Cancel next/prev image fetch since we're going in the opposite direction
-        if (isNext) {
-            if (self.imagesLinkedList.prev != nil && self.imagesLinkedList.prev.imageVC.image.activeRequest != nil) [self.imagesLinkedList.prev.imageVC.image.activeRequest cancel];
-        } else {
-            if (self.imagesLinkedList.next != nil && self.imagesLinkedList.next.imageVC.image.activeRequest != nil) [self.imagesLinkedList.next.imageVC.image.activeRequest cancel];
-        }
+//        if (isNext) {
+//            if (self.imagesLinkedList.prev != nil && self.imagesLinkedList.prev.imageVC.image.activeRequest != nil) [self.imagesLinkedList.prev.imageVC.image.activeRequest cancel];
+//        } else {
+//            if (self.imagesLinkedList.next != nil && self.imagesLinkedList.next.imageVC.image.activeRequest != nil) [self.imagesLinkedList.next.imageVC.image.activeRequest cancel];
+//        }
 
         // Set pointer to current linked list item, either we went to previous or next item in the linked list, we check which way here
         self.imagesLinkedList = isNext ? self.imagesLinkedList.next : self.imagesLinkedList.prev;
@@ -183,10 +185,10 @@
 - (void)goToPrevImage:(id)sender {
     ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
     // Cancel next image fetch since we're going in the opposite direction
-    if (self.imagesLinkedList.next != nil && self.imagesLinkedList.next.imageVC.image.activeRequest != nil) {
-        [self.imagesLinkedList.next.imageVC.image.activeRequest cancel];
-        NSLog(@"cancelling %@", self.imagesLinkedList.next.imageVC.image.name);
-    }
+//    if (self.imagesLinkedList.next != nil && self.imagesLinkedList.next.imageVC.image.activeRequest != nil) {
+//        [self.imagesLinkedList.next.imageVC.image.activeRequest cancel];
+//        NSLog(@"cancelling %@", self.imagesLinkedList.next.imageVC.image.name);
+//    }
     // Set new image
     self.imagesLinkedList = self.imagesLinkedList.prev;
     [self requestImagesForAdjacentVCs];
@@ -201,10 +203,10 @@
 - (void)goToNextImage:(id)sender {
     ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
     // Cancel prev image fetch since we're going in the opposite direction
-    if (self.imagesLinkedList.prev != nil && self.imagesLinkedList.prev.imageVC.image.activeRequest != nil) {
-        [self.imagesLinkedList.prev.imageVC.image.activeRequest cancel];
-        NSLog(@"cancelling %@", self.imagesLinkedList.prev.imageVC.image.name);
-    }
+//    if (self.imagesLinkedList.prev != nil && self.imagesLinkedList.prev.imageVC.image.activeRequest != nil) {
+//        [self.imagesLinkedList.prev.imageVC.image.activeRequest cancel];
+//        NSLog(@"cancelling %@", self.imagesLinkedList.prev.imageVC.image.name);
+//    }
     // Set new image
     self.imagesLinkedList = self.imagesLinkedList.next;
     [self requestImagesForAdjacentVCs];

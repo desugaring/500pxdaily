@@ -1,7 +1,6 @@
 Ver 1.0:
 
-- Rewrite nsoperation class, use one queue for all objects
-- Singleton for queue, put in appdelegate
+- Rework image cancellations by keeping track of thumbnail download tasks in category
 - Test background image fetch
 
 For Release:

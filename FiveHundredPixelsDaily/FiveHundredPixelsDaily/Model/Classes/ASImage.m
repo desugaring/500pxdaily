@@ -7,9 +7,16 @@
 //
 
 #import "ASImage.h"
-#import "ASBaseOperation.h"
 #import "ASCategory.h"
 #import "ASStore.h"
+#import "ASDownloadManager.h"
+
+@interface ASImage()
+
+@property BOOL gettingImage;
+@property NSLock *gettingImageLock;
+
+@end
 
 @implementation ASImage
 
@@ -20,64 +27,66 @@
 @dynamic category;
 
 @synthesize delegate;
-@synthesize activeRequest;
-
-- (ASBaseOperation *)operation {
-    return self.category.operation;
-}
+@synthesize gettingImageLock;
+@synthesize gettingImage;
 
 - (void)awakeCommon {
-    self.activeRequest = nil;
+    self.gettingImageLock = [[NSLock alloc] init];
+    self.gettingImage = false;
 }
 
 - (void)requestThumbnailImageIfNeeded {
-    if (self.thumbnail == nil && self.activeRequest == nil) {
-//        NSLog(@"requesting thumbnail for image named %@", self.name);
-        ASBaseOperation *operation = [self operation];
-        operation.object = self;
-        operation.userInfo = @{ @"size": @"thumbnail" };
-        operation.completion = ^(NSArray *results, NSError *error) {
-            if (error != nil) {
-                NSLog(@"url response error: %@", error);
-            } else if (results.count > 0 && [results[0] isKindOfClass:NSData.class]){
-                NSData *data = (NSData *)results[0];
+    [self.gettingImageLock lock];
+    BOOL getImage = (self.gettingImage == false && self.thumbnail == nil);
+    if (getImage == true) self.gettingImage = true;
+    [self.gettingImageLock unlock];
+    if (getImage) {
+        NSLog(@"requesting thumbnail for image named %@", self.name);
+        [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.thumbnailURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
+            [ASDownloadManager decrementTasks];
+            if (location != nil) {
                 [self.managedObjectContext performBlockAndWait:^{
-                    self.thumbnail = [UIImage imageWithData:data];
+                    self.thumbnail = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.category imageThumbnailUpdated:self];
+                        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:)]) [self.delegate imageThumbnailUpdated:self];
+                    });
                 }];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.category imageThumbnailUpdated:self];
-                });
+            } else {
+                NSLog(@"response for thumbnail request is %@, error is %@", response, error);
             }
-        };
-        if (self.category.imagesDataQueue.operationCount != 0) [operation addDependency:self.category.imagesDataQueue.operations.firstObject];
-        [self.category.thumbnailQueue addOperation:operation];
-        self.activeRequest = operation;
+            [self.gettingImageLock lock];
+            self.gettingImage = false;
+            NSLog(@"setting getting image to false for %@", self.name);
+            [self.gettingImageLock unlock];
+        }];
     }
 }
 
 - (void)requestFullImageIfNeeded {
-    if (self.full == nil && self.activeRequest == nil) {
-        NSLog(@"requesting full for image named %@", self.name);
-        ASBaseOperation *operation = [self operation];
-        operation.object = self;
-        operation.userInfo = @{ @"size": @"full" };
-        operation.completion = ^(NSArray *results, NSError *error) {
-            if (error != nil) {
-                NSLog(@"url response error: %@", error);
-            } else if (results.count > 0 && [results[0] isKindOfClass:NSData.class]){
-                NSData *data = (NSData *)results[0];
+    [self.gettingImageLock lock];
+    BOOL getImage = (self.gettingImage == false && self.thumbnail == nil);
+    if (getImage == true) self.gettingImage = true;
+    [self.gettingImageLock unlock];
+    if (getImage) {
+        //        NSLog(@"requesting thumbnail for image named %@", self.name);
+        [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.thumbnailURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
+            [ASDownloadManager decrementTasks];
+            if (location != nil) {
                 [self.managedObjectContext performBlockAndWait:^{
-                    self.full = [UIImage imageWithData:data];
+                    self.full = [UIImage imageWithContentsOfFile:location.absoluteString];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.category imageFullUpdated:self];
+                        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) [self.delegate imageFullUpdated:self];
+                    });
                 }];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.category imageFullUpdated:self];
-                    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) [self.delegate imageFullUpdated:self];
-                });
+            } else {
+                NSLog(@"response for full image request is %@, error is %@", response, error);
             }
-        };
-        if (self.category.imagesDataQueue.operationCount != 0) [operation addDependency:self.category.imagesDataQueue.operations.firstObject];
-        [self.category.fullQueue addOperation:operation];
-        self.activeRequest = operation;
+            [self.gettingImageLock lock];
+            self.gettingImage = false;
+            [self.gettingImageLock unlock];
+        }];
     }
 }
 

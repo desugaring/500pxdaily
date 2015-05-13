@@ -9,11 +9,16 @@
 #import "ASCategory.h"
 #import "ASImage.h"
 #import "ASStore.h"
-#import "ASBaseOperation.h"
+#import "ASDownloadManager.h"
 
 NSString * const PHOTOS_PER_REQUEST = @"30";
+NSString * const FIVE_HUNDRED_PX_URL = @"https://api.500px.com/v1/photos";
+NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 @interface ASCategory()
+
+@property BOOL gettingImages;
+@property NSLock *gettingImagesLock;
 
 @end
 
@@ -26,76 +31,88 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
 @dynamic isDaily;
 
 @synthesize maxNumberOfImages;
-@synthesize imagesDataQueue;
-@synthesize thumbnailQueue;
-@synthesize fullQueue;
 @synthesize delegate;
 
-- (ASBaseOperation *)operation {
-    return self.store.operation;
+@synthesize gettingImages;
+@synthesize gettingImagesLock;
+
++ (NSURL *)urlForCategoryName:(NSString *)name forPage:(NSUInteger)page {
+    NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
+    urlComponents.queryItems = @[[NSURLQueryItem queryItemWithName:@"consumer_key" value:CONSUMER_KEY],
+                                 [NSURLQueryItem queryItemWithName:@"only" value:name],
+                                 [NSURLQueryItem queryItemWithName:@"rpp" value:PHOTOS_PER_REQUEST],
+                                 [NSURLQueryItem queryItemWithName:@"feature" value:@"upcoming"],
+                                 [NSURLQueryItem queryItemWithName:@"sort" value:@"times_viewed"],
+                                 [NSURLQueryItem queryItemWithName:@"image_size[0]" value:@"2"],
+                                 [NSURLQueryItem queryItemWithName:@"image_size[1]" value:@"4"],
+                                 [NSURLQueryItem queryItemWithName:@"page" value:@(page).stringValue]];
+    return urlComponents.URL;
 }
 
 - (void)awakeCommon {
     [super awakeCommon];
 
     self.maxNumberOfImages = -1;
-
-    self.imagesDataQueue = [[NSOperationQueue alloc] init];
-    self.imagesDataQueue.maxConcurrentOperationCount = 1;
-
-    self.thumbnailQueue = [[NSOperationQueue alloc] init];
-    self.thumbnailQueue.maxConcurrentOperationCount = 5;
-
-    self.fullQueue = [[NSOperationQueue alloc] init];
-    self.fullQueue.maxConcurrentOperationCount = 3;
+    self.gettingImages = false;
+    self.gettingImagesLock = [[NSLock alloc] init];
+    if (self.lastUpdated == nil) self.lastUpdated = [NSDate distantPast];
 }
 
 - (void)resetImages {
     self.maxNumberOfImages = -1;
     [self numberOfImagesUpdatedTo:0];
-    [self.managedObjectContext performBlockAndWait:^{
+    [self.managedObjectContext performBlock:^{
         self.images = [NSOrderedSet new];
     }];
     [self requestImageDataForPage:1];
 }
 
 - (void)requestImageData {
-    NSUInteger page = self.images.count == 0 ? 1 : (self.images.count / PHOTOS_PER_REQUEST.integerValue)+1;
-
-    [self requestImageDataForPage:page];
+    [self.gettingImagesLock lock];
+    BOOL getImages = (self.gettingImages == false && self.images.count != self.maxNumberOfImages);
+    if (getImages == true) self.gettingImages = true;
+    [self.gettingImagesLock unlock];
+    if (getImages) {
+        NSUInteger page = self.images.count == 0 ? 1 : (self.images.count / PHOTOS_PER_REQUEST.integerValue)+1;
+        [self requestImageDataForPage:page];
+    }
 }
 
 - (void)requestImageDataForPage:(NSUInteger)page {
-    if (self.imagesDataQueue.operationCount != 0 || self.images.count == self.maxNumberOfImages) return;
-
-    NSLog(@"requesting image data for category %@", self.name);
-    ASBaseOperation *operation = [self operation];
-    operation.object = self;
-    operation.userInfo = @{@"page": @(page).stringValue, @"perPage": PHOTOS_PER_REQUEST};
-    operation.completion = ^(NSArray *results, NSError *error) {
-        if (error != nil || results == nil) {
-            NSLog(@"url response error: %@", error);
-        } else if ([results[0] isKindOfClass:NSData.class]){
-            NSData *data = (NSData *)results[0];
-            NSError *error;
-            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-            if (error != nil) {
-                NSLog(@"json parsing error: %@", error);
+    [self.gettingImagesLock lock];
+    self.gettingImages = true;
+    [self.gettingImagesLock unlock];
+    NSLog(@"requesting image data for category %@, page %@", self.name, @(page));
+    NSURL *url = [ASCategory urlForCategoryName:self.name forPage:page];
+    [[ASDownloadManager sharedManager] downloadDataWithURL:url withCompletionBlock:^(NSData *data, NSURLResponse *response, NSError *error) {
+        [ASDownloadManager decrementTasks];
+        if (data != nil) {
+            NSError *jsonParsingError;
+            NSDictionary *imageDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonParsingError];
+            if (jsonParsingError == nil) {
+                [self parseImageData:imageDictionary];
+                return;
             } else {
-                [self parseImageData:jsonDict];
+                NSLog(@"json parsing error: %@", jsonParsingError);
             }
+        } else {
+            NSLog(@"image data request response: %@, error: %@", response, error);
         }
-    };
-
-    [self.imagesDataQueue addOperation:operation];
+        // Lock unlocks because of error OR in parseImageData if all goes well
+        [self.gettingImagesLock lock];
+        self.gettingImages = false;
+        [self.gettingImagesLock unlock];
+    }];
 }
 
 - (void)parseImageData:(NSDictionary *)imageData {
-    if (self.maxNumberOfImages == -1) self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
-    NSLog(@"max number for category %@ is %lu", self.name, self.maxNumberOfImages);
+    if (self.maxNumberOfImages == -1) {
+        self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
+        NSLog(@"max number for category %@ is %lu", self.name, (long)self.maxNumberOfImages);
+    }
     NSArray *photos = imageData[@"photos"];
-    
-    [self.managedObjectContext performBlockAndWait:^{
+
+    [self.managedObjectContext performBlock:^{
         NSMutableOrderedSet *newImages = [NSMutableOrderedSet new];
         for (NSDictionary *photoData in photos) {
             ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
@@ -107,11 +124,13 @@ NSString * const PHOTOS_PER_REQUEST = @"30";
         NSMutableOrderedSet *currentImages = self.images.mutableCopy;
         [currentImages addObjectsFromArray:newImages.array];
         self.images = (NSOrderedSet *)currentImages.copy;
+        [self.gettingImagesLock lock];
+        self.gettingImages = false;
+        [self.gettingImagesLock unlock];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self numberOfImagesUpdatedTo:self.images.count];
+        });
     }];
-    NSLog(@"image count after parse: %lu", self.images.count);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self numberOfImagesUpdatedTo:self.images.count];
-    });
 }
 
 #pragma mark - Image Delegate

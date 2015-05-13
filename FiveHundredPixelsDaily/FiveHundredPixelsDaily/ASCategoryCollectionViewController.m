@@ -57,19 +57,20 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.category.thumbnailQueue cancelAllOperations];
-    [self.category.managedObjectContext performBlock:^{
-        if ([self.category.managedObjectContext hasChanges] == true) {
-            NSError *error;
-            [self.category.managedObjectContext save:&error];
-            if (error != nil) {
-                NSLog(@"error saving context in view will disappear %@", error);
-            } else {
-                NSLog(@"saved %@ successfully", self.category.name);
-            }
-            [self.category.managedObjectContext refreshObject:self.category mergeChanges:false];
-        }
-    }];
+//    [self.category.thumbnailQueue cancelAllOperations];
+#warning do this in pages vc
+//    [self.category.managedObjectContext performBlock:^{
+//        if ([self.category.managedObjectContext hasChanges] == true) {
+//            NSError *error;
+//            [self.category.managedObjectContext save:&error];
+//            if (error != nil) {
+//                NSLog(@"error saving context in view will disappear %@", error);
+//            } else {
+//                NSLog(@"saved %@ successfully", self.category.name);
+//            }
+//            [self.category.managedObjectContext refreshObject:self.category mergeChanges:false];
+//        }
+//    }];
 }
 
 - (IBAction)refreshCategory:(id)sender {
@@ -171,10 +172,11 @@ static NSString * const reuseIdentifier = @"Thumbnail";
         [self.visibleIndexPaths minusSet:newIndexPaths];
         for (NSIndexPath *indexPath in self.visibleIndexPaths) {
             ASImage *image = (ASImage *)self.category.images[indexPath.item];
-            if (image.activeRequest != nil && image.thumbnail == nil) {
-                [image.activeRequest cancel];
-                NSLog(@"cancelling %@", image.name);
-            }
+#warning implement this using tasks instead
+//            if (image.activeRequest != nil && image.thumbnail == nil) {
+//                [image.activeRequest cancel];
+//                NSLog(@"cancelling %@", image.name);
+//            }
         }
         self.visibleIndexPaths = newIndexPaths;
         if (((NSIndexPath *)self.visibleIndexPaths.allObjects.lastObject).item + 50 >= self.category.images.count) [self.category requestImageData];

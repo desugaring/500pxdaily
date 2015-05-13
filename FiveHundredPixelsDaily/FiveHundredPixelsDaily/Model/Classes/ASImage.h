@@ -9,7 +9,6 @@
 @import UIKit;
 @import CoreData;
 #import "ASBaseObject.h"
-#import "ASBaseOperation.h"
 
 @class ASCategory;
 @protocol ASImageDelegate;
@@ -22,7 +21,6 @@
 @property (nonatomic, retain) UIImage *full;
 @property (nonatomic, retain) ASCategory *category;
 
-@property (weak) ASBaseOperation *activeRequest;
 @property (weak) id<ASImageDelegate> delegate;
 
 - (void)requestThumbnailImageIfNeeded;
@@ -32,6 +30,8 @@
 
 @protocol ASImageDelegate <NSObject>
 
+@optional
+- (void)imageThumbnailUpdated:(ASImage *)image;
 - (void)imageFullUpdated:(ASImage *)image;
 
 @end

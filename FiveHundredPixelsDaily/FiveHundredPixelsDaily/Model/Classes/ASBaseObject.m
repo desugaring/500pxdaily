@@ -28,9 +28,4 @@
     // Stub
 }
 
-- (ASBaseOperation *)operation {
-    // Stub
-    return nil;
-}
-
 @end

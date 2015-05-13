@@ -13,27 +13,27 @@
 
 @implementation ASFHPOperation
 
-NSString * const FIVE_HUNDRED_PX_URL = @"https://api.500px.com/v1/photos";
-NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
+//NSString * const FIVE_HUNDRED_PX_URL = @"https://api.500px.com/v1/photos";
+//NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 - (void)main {
     if ([self.object isKindOfClass: ASCategory.class]) {
-        NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
-        urlComponents.queryItems = @[[NSURLQueryItem queryItemWithName:@"consumer_key" value:CONSUMER_KEY],
-                                     [NSURLQueryItem queryItemWithName:@"only" value:((ASCategory *)self.object).name],
-                                     [NSURLQueryItem queryItemWithName:@"rpp" value:self.userInfo[@"perPage"]],
-                                     [NSURLQueryItem queryItemWithName:@"feature" value:@"upcoming"],
-                                     [NSURLQueryItem queryItemWithName:@"sort" value:@"times_viewed"],
-                                     [NSURLQueryItem queryItemWithName:@"image_size[0]" value:@"2"],
-                                     [NSURLQueryItem queryItemWithName:@"image_size[1]" value:@"4"],
-                                     [NSURLQueryItem queryItemWithName:@"page" value:self.userInfo[@"page"]]];
-
-        if (self.userInfo[@"backgroundMode"]) {
-            [self sendBackgroundCategoryRequestWithURL:urlComponents.URL];
-        } else {
-            [self sendRequestWithURL:urlComponents.URL];
-        }
-        NSLog(@"request url: %@", urlComponents.string);
+//        NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
+//        urlComponents.queryItems = @[[NSURLQueryItem queryItemWithName:@"consumer_key" value:CONSUMER_KEY],
+//                                     [NSURLQueryItem queryItemWithName:@"only" value:((ASCategory *)self.object).name],
+//                                     [NSURLQueryItem queryItemWithName:@"rpp" value:self.userInfo[@"perPage"]],
+//                                     [NSURLQueryItem queryItemWithName:@"feature" value:@"upcoming"],
+//                                     [NSURLQueryItem queryItemWithName:@"sort" value:@"times_viewed"],
+//                                     [NSURLQueryItem queryItemWithName:@"image_size[0]" value:@"2"],
+//                                     [NSURLQueryItem queryItemWithName:@"image_size[1]" value:@"4"],
+//                                     [NSURLQueryItem queryItemWithName:@"page" value:self.userInfo[@"page"]]];
+//
+//        if (self.userInfo[@"backgroundMode"]) {
+//            [self sendBackgroundCategoryRequestWithURL:urlComponents.URL];
+//        } else {
+//            [self sendRequestWithURL:urlComponents.URL];
+//        }
+//        NSLog(@"request url: %@", urlComponents.string);
 
     } else if ([self.object isKindOfClass: ASImage.class]) {
         ASImage *image = (ASImage *)self.object;

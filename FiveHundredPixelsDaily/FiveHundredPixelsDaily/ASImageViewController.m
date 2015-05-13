@@ -33,10 +33,6 @@
     } else if (self.imageView == nil) {
         [self updateImage];
     }
-    NSLog(@"scroll frame w: %f, h: %f", self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
-    NSLog(@"scroll bounds w: %f, h: %f", self.scrollView.frame.size.width, self.scrollView.frame.size.height);
-    NSLog(@"view frame w: %f, h: %f", self.view.frame.size.width, self.view.frame.size.height);
-    NSLog(@"view bounds w: %f, h: %f", self.view.bounds.size.width, self.view.bounds.size.height);
 }
 
 - (void)updateImage {

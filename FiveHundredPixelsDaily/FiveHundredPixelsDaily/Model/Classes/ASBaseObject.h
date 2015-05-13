@@ -15,6 +15,5 @@
 @property (nonatomic, retain) NSString *name;
 
 - (void)awakeCommon;
-- (ASBaseOperation *)operation;
 
 @end

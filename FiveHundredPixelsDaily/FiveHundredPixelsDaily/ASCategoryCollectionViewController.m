@@ -41,7 +41,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.category.lastUpdated == nil || [self.category.lastUpdated isEqualToDate:[NSDate distantPast]]) {
+    if ([self.category.lastUpdated isEqualToDate:[NSDate distantPast]]) {
         NSLog(@"!!!refreshing category because it is old or nil %@", self.category.name);
         [self refreshCategory:self];
         return;
@@ -51,26 +51,14 @@ static NSString * const reuseIdentifier = @"Thumbnail";
             self.showRefreshBanner = true;
         }
     }
+//#warning for debugging only
 //    self.showRefreshBanner = true;
     [self.collectionView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-//    [self.category.thumbnailQueue cancelAllOperations];
-#warning do this in pages vc
-//    [self.category.managedObjectContext performBlock:^{
-//        if ([self.category.managedObjectContext hasChanges] == true) {
-//            NSError *error;
-//            [self.category.managedObjectContext save:&error];
-//            if (error != nil) {
-//                NSLog(@"error saving context in view will disappear %@", error);
-//            } else {
-//                NSLog(@"saved %@ successfully", self.category.name);
-//            }
-//            [self.category.managedObjectContext refreshObject:self.category mergeChanges:false];
-//        }
-//    }];
+    [self.category cancelThumbnailDownloads];
 }
 
 - (IBAction)refreshCategory:(id)sender {
@@ -80,7 +68,6 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 }
 
 - (IBAction)refreshAllCategories:(id)sender {
-    [self refreshCategory:self];
     NSManagedObjectContext *context = self.category.managedObjectContext;
     [context performBlock:^{
         NSBatchUpdateRequest *request = [[NSBatchUpdateRequest alloc] initWithEntity:self.category.entity];
@@ -95,8 +82,8 @@ static NSString * const reuseIdentifier = @"Thumbnail";
             }
         }];
         if (error != nil) NSLog(@"error is %@", error);
+        [self refreshCategory:self];
     }];
-
 }
 
 #pragma mark - UICollectionView DataSource
@@ -191,6 +178,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 }
 
 - (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages {
+    NSLog(@"num of images updated to in VC: %@", @(numberOfImages));
     self.numberOfImages = numberOfImages;
     self.loadingMore = numberOfImages != self.category.maxNumberOfImages;
     [self.collectionView reloadData];

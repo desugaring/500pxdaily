@@ -10,6 +10,7 @@
 #import "ASImageViewController.h"
 #import "ASImageVCLinkedList.h"
 #import "ASSettingsTableViewController.h"
+#import "ASDownloadManager.h"
 
 @interface ASImagePagesViewController () <UIAlertViewDelegate>
 
@@ -27,7 +28,6 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Thumbnails"] style:UIBarButtonItemStylePlain target:self action:@selector(goBackToThumbnails:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(goToSettings:)];
 
-
     // Button gesture recognizers
     [self.nextButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToNextImage:)]];
     [self.prevButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToPrevImage:)]];
@@ -41,10 +41,11 @@
     self.imagesLinkedList = [[ASImageVCLinkedList alloc] initWithImageVC:imageVC];
 
     // Create page view controller
-    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:@{ UIPageViewControllerOptionInterPageSpacingKey: @(20.0) }];
     self.pageViewController.dataSource = self;
     self.pageViewController.delegate = self;
     [self.pageViewController setViewControllers:@[self.imagesLinkedList.imageVC] direction:UIPageViewControllerNavigationDirectionForward animated:false completion:nil];
+    imageVC.view.gestureRecognizers = self.pageViewController.gestureRecognizers;
 
     // Add it as child
     [self.pageViewController willMoveToParentViewController:self];
@@ -65,19 +66,8 @@
     // For easier swiping
     self.view.gestureRecognizers = self.pageViewController.gestureRecognizers;
 
-    // Initial images
-//    self.imagesLinkedList.imageVC.scrollViewBounds = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - self.navigationController.navigationBar.bounds.size.height);
-    [self.initialActiveImage requestFullImageIfNeeded];
-    [self requestImagesForAdjacentVCs];
-    
-    // Button and title setup
-    [self updateUI];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    #warning cancel operations in page vc instead
-//    [self.initialActiveImage.category.fullQueue cancelAllOperations];
+    // UI and Full image fetches
+    [self updateState];
 }
 
 - (void)goToSettings:(id)sender {
@@ -86,33 +76,50 @@
 
 - (void)goBackToThumbnails:(id)sender {
     [self.navigationController popViewControllerAnimated:true];
+    [[ASDownloadManager sharedManager] cancelAllDownloadTasks];
+}
+
+- (void)updateState {
+    // Change linked list to current VC
+    ASImageViewController *activeVC = (ASImageViewController *)self.pageViewController.viewControllers.firstObject;
+    if (self.imagesLinkedList.next != nil && [self.imagesLinkedList.next.imageVC isEqual:activeVC]) {
+        // Cancel previous
+        if (self.imagesLinkedList.prev != nil) [self.imagesLinkedList.prev.imageVC.image cancelRequestIfNeeded];
+        // Set new imageVC
+        self.imagesLinkedList = self.imagesLinkedList.next;
+        // Request next
+        if (self.imagesLinkedList.next != nil) [self.imagesLinkedList.next.imageVC.image requestFullImageIfNeeded];
+
+    } else if (self.imagesLinkedList.prev != nil && [self.imagesLinkedList.prev.imageVC isEqual:activeVC]) {
+        // Cancel next
+        if (self.imagesLinkedList.next != nil) [self.imagesLinkedList.next.imageVC.image cancelRequestIfNeeded];
+        // Set new imageVC
+        self.imagesLinkedList = self.imagesLinkedList.prev;
+        // Request prev
+        if (self.imagesLinkedList.prev != nil) [self.imagesLinkedList.prev.imageVC.image requestFullImageIfNeeded];
+    }
+    // Request current
+    [self.imagesLinkedList.imageVC.image requestFullImageIfNeeded];
+
+    // Update UI
+    [self updateUI];
 }
 
 - (void)updateUI {
     self.navigationItem.title = self.imagesLinkedList.imageVC.image.name;
 
-    // Update buttons
-    if (self.imagesLinkedList.prev == nil) {
-        self.prevButtonView.iconImageView.hidden = true;
-        ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
-    } else {
-        ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = true;
-        self.prevButtonView.iconImageView.hidden = false;
-    }
-
-    if (self.imagesLinkedList.next == nil) {
-        self.nextButtonView.iconImageView.hidden = true;
-        ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
-    } else {
-        ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = true;
-        self.nextButtonView.iconImageView.hidden = false;
-    }
-
     BOOL imageAlreadyDownloaded = [self.downloadedImages containsObject:self.imagesLinkedList.imageVC.image];
-    ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = !imageAlreadyDownloaded;
-    self.downloadButtonView.alpha = imageAlreadyDownloaded ? 0.5 : 1.0;
+    [self.downloadButtonView setEnabled:(imageAlreadyDownloaded == false)];
 
-    BOOL hideButtons = (self.imagesLinkedList.prev == nil && self.imagesLinkedList.next == nil);
+    BOOL prevExists = (self.imagesLinkedList.prev != nil);
+    [self.prevButtonView setEnabled:prevExists];
+    self.prevButtonView.nameLabel.text = prevExists ? self.imagesLinkedList.prev.imageVC.image.name.uppercaseString : @"";
+
+    BOOL nextExists = (self.imagesLinkedList.next != nil);
+    [self.nextButtonView setEnabled:nextExists];
+    self.nextButtonView.nameLabel.text = nextExists ? self.imagesLinkedList.next.imageVC.image.name.uppercaseString : @"";
+
+    BOOL hideButtons = (prevExists == false && nextExists == false);
     self.nextButtonView.hidden = hideButtons;
     self.prevButtonView.hidden = hideButtons;
 }
@@ -127,8 +134,8 @@
         // Save image
         ASImage *image = self.imagesLinkedList.imageVC.image;
         [self.downloadedImages addObject:image];
-        ((UIGestureRecognizer *)self.downloadButtonView.gestureRecognizers.firstObject).enabled = false;
-        self.downloadButtonView.alpha = 0.5;
+        NSLog(@"downloaded");
+        [self.downloadButtonView setEnabled:false];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SaveImageToPhotos" object:nil userInfo:@{ @"image": image.full }];
     }
 }
@@ -143,79 +150,38 @@
 
 #pragma mark - UIPageViewController DataSource
 
-- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
-{
-    if (completed == YES) {
-#warning fix so that page controller uses same method for when going between pages
-        ASImageViewController *newImageVC = (ASImageViewController *)self.pageViewController.viewControllers.firstObject;
-        BOOL isNext = [self.imagesLinkedList.next.imageVC isEqual:newImageVC];
-        // Cancel next/prev image fetch since we're going in the opposite direction
-//        if (isNext) {
-//            if (self.imagesLinkedList.prev != nil && self.imagesLinkedList.prev.imageVC.image.activeRequest != nil) [self.imagesLinkedList.prev.imageVC.image.activeRequest cancel];
-//        } else {
-//            if (self.imagesLinkedList.next != nil && self.imagesLinkedList.next.imageVC.image.activeRequest != nil) [self.imagesLinkedList.next.imageVC.image.activeRequest cancel];
-//        }
-
-        // Set pointer to current linked list item, either we went to previous or next item in the linked list, we check which way here
-        self.imagesLinkedList = isNext ? self.imagesLinkedList.next : self.imagesLinkedList.prev;
-        [self requestImagesForAdjacentVCs];
-        [self updateUI];
-    }
-}
-
-- (void)requestImagesForAdjacentVCs {
-    if (self.imagesLinkedList.prev != nil) [self.imagesLinkedList.prev.imageVC.image requestFullImageIfNeeded];
-    if (self.imagesLinkedList.next != nil) [self.imagesLinkedList.next.imageVC.image requestFullImageIfNeeded];
-}
-
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(ASImageViewController *)viewController
-{
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(ASImageViewController *)viewController {
     ASImageVCLinkedList *next = self.imagesLinkedList.next;
-
     return (next != nil) ? next.imageVC : nil;
 }
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(ASImageViewController *)viewController
-{
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(ASImageViewController *)viewController {
     ASImageVCLinkedList *prev = self.imagesLinkedList.prev;
-
     return (prev != nil) ? prev.imageVC : nil;
 }
 
-- (void)goToPrevImage:(id)sender {
-    ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
-    // Cancel next image fetch since we're going in the opposite direction
-//    if (self.imagesLinkedList.next != nil && self.imagesLinkedList.next.imageVC.image.activeRequest != nil) {
-//        [self.imagesLinkedList.next.imageVC.image.activeRequest cancel];
-//        NSLog(@"cancelling %@", self.imagesLinkedList.next.imageVC.image.name);
-//    }
-    // Set new image
-    self.imagesLinkedList = self.imagesLinkedList.prev;
-    [self requestImagesForAdjacentVCs];
+#pragma mark - PageVC Navigation
 
-    [self.pageViewController setViewControllers:@[self.imagesLinkedList.imageVC]
-                                      direction:UIPageViewControllerNavigationDirectionReverse
-                                       animated:YES
-                                     completion:nil];
-    [self updateUI];
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
+    if (completed == true) [self updateState];
+}
+
+- (void)goToPrevImage:(id)sender {
+    [self goToImageVC:self.imagesLinkedList.prev.imageVC inDirection:UIPageViewControllerNavigationDirectionReverse];
 }
 
 - (void)goToNextImage:(id)sender {
-    ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
-    // Cancel prev image fetch since we're going in the opposite direction
-//    if (self.imagesLinkedList.prev != nil && self.imagesLinkedList.prev.imageVC.image.activeRequest != nil) {
-//        [self.imagesLinkedList.prev.imageVC.image.activeRequest cancel];
-//        NSLog(@"cancelling %@", self.imagesLinkedList.prev.imageVC.image.name);
-//    }
-    // Set new image
-    self.imagesLinkedList = self.imagesLinkedList.next;
-    [self requestImagesForAdjacentVCs];
+    [self goToImageVC:self.imagesLinkedList.next.imageVC inDirection:UIPageViewControllerNavigationDirectionForward];
+}
 
-    [self.pageViewController setViewControllers:@[self.imagesLinkedList.imageVC]
-                                      direction:UIPageViewControllerNavigationDirectionForward
+- (void)goToImageVC:(ASImageViewController *)imageVC inDirection:(UIPageViewControllerNavigationDirection)direction {
+    __block ASImagePagesViewController *blockSafeSelf = self;
+    [self.pageViewController setViewControllers:@[imageVC]
+                                      direction:direction
                                        animated:YES
-                                     completion:nil];
-    [self updateUI];
+                                     completion:^(BOOL finished) {
+                                         if (finished == true) [blockSafeSelf updateState];
+                                     }];
 }
 
 #pragma mark - Navigation

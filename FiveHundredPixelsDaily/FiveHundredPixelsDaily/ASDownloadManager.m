@@ -44,6 +44,7 @@ static volatile int32_t runningTasks = 0;
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
         config.HTTPShouldUsePipelining = true;
         config.HTTPMaximumConnectionsPerHost = 4;
+        config.timeoutIntervalForRequest = 15;
         _session = [NSURLSession sessionWithConfiguration:config];
         _resumeData = [NSMutableDictionary new];
     }
@@ -74,20 +75,24 @@ static volatile int32_t runningTasks = 0;
     return task;
 }
 
-- (void)cancelAllDownloads {
+- (void)cancelAllDownloadTasks {
     [self.session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         for (NSURLSessionDownloadTask *task in downloadTasks) {
-            NSLog(@"cancelling task %@", task.currentRequest.URL.absoluteString);
-            if (task.state == NSURLSessionTaskStateRunning) {
-                [task cancelByProducingResumeData:^(NSData *resumeData) {
-                    if (resumeData != nil) {
-                        NSLog(@"saving resume data for %@", task.currentRequest.URL.absoluteString);
-                        self.resumeData[task.originalRequest.URL] = resumeData;
-                    }
-                }];
-            }
+            [self cancelDownloadTask:task];
         }
     }];
+}
+
+- (void)cancelDownloadTask:(NSURLSessionDownloadTask *)task {
+    NSLog(@"cancelling task %@", task.currentRequest.URL.absoluteString);
+    if (task.state == NSURLSessionTaskStateRunning) {
+        [task cancelByProducingResumeData:^(NSData *resumeData) {
+            if (resumeData != nil) {
+                NSLog(@"saving resume data for %@", task.currentRequest.URL.absoluteString);
+                self.resumeData[task.originalRequest.URL] = resumeData;
+            }
+        }];
+    }
 }
 
 @end

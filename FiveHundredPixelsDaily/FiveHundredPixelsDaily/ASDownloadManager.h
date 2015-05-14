@@ -20,6 +20,7 @@ typedef void(^URLFileDownloadCompletionBlock)(NSURL *location, NSURLResponse *re
 
 - (NSURLSessionDataTask *)downloadDataWithURL:(NSURL *)url withCompletionBlock:(URLDataDownloadCompletionBlock)completionBlock;
 - (NSURLSessionDownloadTask *)downloadFileWithURL:(NSURL *)url withCompletionBlock:(URLFileDownloadCompletionBlock)completionBlock ;
-- (void)cancelAllDownloads;
+- (void)cancelAllDownloadTasks;
+- (void)cancelDownloadTask:(NSURLSessionDownloadTask *)task;
 
 @end

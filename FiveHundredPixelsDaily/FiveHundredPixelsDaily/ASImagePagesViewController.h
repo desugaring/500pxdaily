@@ -9,12 +9,13 @@
 @import UIKit;
 #import "ASImage.h"
 #import "ASButtonView.h"
+#import "ASDownloadButtonView.h"
 
 @interface ASImagePagesViewController : UIViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
 @property (weak) ASImage *initialActiveImage;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
-@property (weak, nonatomic) IBOutlet ASButtonView *downloadButtonView;
+@property (weak, nonatomic) IBOutlet ASDownloadButtonView *downloadButtonView;
 @property (weak, nonatomic) IBOutlet ASButtonView *prevButtonView;
 @property (weak, nonatomic) IBOutlet ASButtonView *nextButtonView;
 

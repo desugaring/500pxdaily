@@ -11,7 +11,6 @@
 @interface ASImageViewController()
 
 @property UIImageView *imageView;
-@property CGSize scrollViewSize;
 
 @end
 
@@ -24,8 +23,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.scrollViewSize = CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height - self.navigationController.navigationBar.bounds.size.height);
-
     if(self.image.full == nil) {
         self.image.delegate = self;
         [self.image requestFullImageIfNeeded];
@@ -33,17 +30,21 @@
     } else if (self.imageView == nil) {
         [self updateImage];
     }
+    NSLog(@"wil lappear %@", self.image.name);
+}
+
+-(void)viewWillLayoutSubviews {
+    [self.view layoutIfNeeded];
 }
 
 - (void)updateImage {
     [self.spinner stopAnimating];
 
     self.imageView = [[UIImageView alloc] initWithImage:self.image.full];
-    //    [self.imageView sizeToFit];
     self.scrollView.contentSize = self.image.full.size;
     [self.scrollView addSubview:self.imageView];
 
-    [self centerAndScaleImageWithSize:self.scrollViewSize];
+    [self centerAndScaleImageWithSize:self.view.bounds.size];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -53,20 +54,18 @@
     } completion:nil];
 }
 
+// Make sure you use Editor->Pin->Top Space and Bottom Space in Storyboard for the scrollview
+// or else you'll have screwed up view bounds on viewWillAppear and viewDidLoad
 - (void)centerAndScaleImageWithSize:(CGSize)size {
-    // Zoom level
     self.scrollView.zoomScale = 1.0;
     float minWidth = size.width / self.scrollView.contentSize.width;
     float minHeight = size.height / self.scrollView.contentSize.height;
 
     float minScale = MIN(minWidth, minHeight);
     self.scrollView.minimumZoomScale = minScale;
-    self.scrollView.maximumZoomScale = 1.5;
+    self.scrollView.maximumZoomScale = 1.0;
     self.scrollView.zoomScale = minScale;
     self.scrollView.tileContainerView = self.imageView;
-    // Center
-//    self.imageView.center = CGPointMake(size.width/2, size.height/2);
-//    NSLog(@"center w: %f, h: %f", self.imageView.center.x, self.imageView.center.y);
 }
 
 #pragma mark - UIScrollView Delegate

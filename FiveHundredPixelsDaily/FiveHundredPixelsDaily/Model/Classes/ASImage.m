@@ -15,6 +15,7 @@
 
 @property BOOL gettingImage;
 @property NSLock *gettingImageLock;
+@property (weak) NSURLSessionDownloadTask *downloadTask;
 
 @end
 
@@ -29,10 +30,12 @@
 @synthesize delegate;
 @synthesize gettingImageLock;
 @synthesize gettingImage;
+@synthesize downloadTask;
 
 - (void)awakeCommon {
-    self.gettingImageLock = [[NSLock alloc] init];
+    self.gettingImageLock = [NSLock new];
     self.gettingImage = false;
+    self.downloadTask = nil;
 }
 
 - (void)requestThumbnailImageIfNeeded {
@@ -42,7 +45,7 @@
     [self.gettingImageLock unlock];
     if (getImage) {
         NSLog(@"requesting thumbnail for image named %@", self.name);
-        [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.thumbnailURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        self.downloadTask = [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.thumbnailURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
             [ASDownloadManager decrementTasks];
             if (location != nil) {
                 [self.managedObjectContext performBlockAndWait:^{
@@ -57,24 +60,26 @@
             }
             [self.gettingImageLock lock];
             self.gettingImage = false;
+            [self.category.thumbnailDownloadTasks removeObject:self.downloadTask];
             NSLog(@"setting getting image to false for %@", self.name);
             [self.gettingImageLock unlock];
         }];
+        [self.category.thumbnailDownloadTasks addObject:self.downloadTask];
     }
 }
 
 - (void)requestFullImageIfNeeded {
     [self.gettingImageLock lock];
-    BOOL getImage = (self.gettingImage == false && self.thumbnail == nil);
+    BOOL getImage = (self.gettingImage == false && self.full == nil);
     if (getImage == true) self.gettingImage = true;
     [self.gettingImageLock unlock];
     if (getImage) {
         //        NSLog(@"requesting thumbnail for image named %@", self.name);
-        [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.thumbnailURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        self.downloadTask = [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.fullURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
             [ASDownloadManager decrementTasks];
             if (location != nil) {
                 [self.managedObjectContext performBlockAndWait:^{
-                    self.full = [UIImage imageWithContentsOfFile:location.absoluteString];
+                    self.full = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self.category imageFullUpdated:self];
                         if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) [self.delegate imageFullUpdated:self];
@@ -88,6 +93,10 @@
             [self.gettingImageLock unlock];
         }];
     }
+}
+
+- (void)cancelRequestIfNeeded {
+    if (self.downloadTask != nil) [[ASDownloadManager sharedManager] cancelDownloadTask:self.downloadTask];
 }
 
 @end

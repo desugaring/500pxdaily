@@ -13,4 +13,7 @@
 @property (weak) IBOutlet UILabel *nameLabel;
 @property (weak) IBOutlet UIImageView *iconImageView;
 
+- (void)setEnabled:(BOOL)enabled;
+@property BOOL buttonIsEnabled;
+
 @end

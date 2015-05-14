@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 
 @property (weak) id<ASCategoryImageDelegate> delegate;
 @property NSInteger maxNumberOfImages;
+@property NSMutableArray *thumbnailDownloadTasks;
 
 - (void)imageThumbnailUpdated:(ASImage *)image;
 - (void)imageFullUpdated:(ASImage *)image;
@@ -44,5 +45,6 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 
 - (void)resetImages;
 - (void)requestImageData;
+- (void)cancelThumbnailDownloads;
 
 @end

@@ -11,6 +11,7 @@
 #import "ASImage.h"
 #import "ASCategoryVCLinkedList.h"
 #import "ASSettingsTableViewController.h"
+#import "ASDownloadManager.h"
 
 @interface ASCategoriesPagesViewController ()
 
@@ -68,91 +69,97 @@
 
 - (void)goToCategories:(id)sender {
     [self.navigationController popViewControllerAnimated:true];
+    [[ASDownloadManager sharedManager] cancelAllDownloadTasks];
+    [self saveChangesForCategory:self.categoriesLinkedList.categoryVC.category];
 }
 
 - (void)goToSettings:(id)sender {
     [self performSegueWithIdentifier:@"ShowSettings" sender:self];
 }
 
+- (void)updateState {
+    ASCategory *oldCategory = self.categoriesLinkedList.categoryVC.category;
+
+    // Change linked list to current VC
+    ASCategoryCollectionViewController *activeVC = (ASCategoryCollectionViewController *)self.pageViewController.viewControllers.firstObject;
+    if (self.categoriesLinkedList.next != nil && [self.categoriesLinkedList.next.categoryVC isEqual:activeVC]) {
+        self.categoriesLinkedList = self.categoriesLinkedList.next;
+    } else if (self.categoriesLinkedList.prev != nil && [self.categoriesLinkedList.prev.categoryVC isEqual:activeVC]) {
+        self.categoriesLinkedList = self.categoriesLinkedList.prev;
+    }
+
+    // Update UI
+    [self updateUI];
+
+    // Save changes of previous category
+    [self saveChangesForCategory:oldCategory];
+}
+
+- (void)saveChangesForCategory:(ASCategory *)category {
+    [category.managedObjectContext performBlock:^{
+        if ([category.managedObjectContext hasChanges] == true) {
+            NSError *error;
+            [category.managedObjectContext save:&error];
+            if (error != nil) {
+                NSLog(@"error saving context in view will disappear %@", error);
+            } else {
+                NSLog(@"saved %@ successfully", category.name);
+            }
+            [category.managedObjectContext refreshObject:category mergeChanges:false];
+        }
+    }];
+}
+
 - (void)updateUI {
     self.navigationItem.title = self.categoriesLinkedList.categoryVC.category.name;
 
-    // Update buttons
-    if (self.categoriesLinkedList.prev == nil) {
-        self.prevButtonView.nameLabel.text = @"";
-        self.prevButtonView.iconImageView.hidden = true;
-        ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
-    } else {
-        self.prevButtonView.nameLabel.text = self.categoriesLinkedList.prev.categoryVC.category.name.uppercaseString;
-        ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = true;
-        self.prevButtonView.iconImageView.hidden = false;
-    }
+    BOOL prevExists = (self.categoriesLinkedList.prev != nil);
+    [self.prevButtonView setEnabled:prevExists];
+    self.prevButtonView.nameLabel.text = prevExists ? self.categoriesLinkedList.prev.categoryVC.category.name.uppercaseString : @"";
 
-    if (self.categoriesLinkedList.next == nil) {
-        self.nextButtonView.nameLabel.text = @"";
-        self.nextButtonView.iconImageView.hidden = true;
-        ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
-    } else {
-        self.nextButtonView.nameLabel.text = self.categoriesLinkedList.next.categoryVC.category.name.uppercaseString;
-        ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = true;
-        self.nextButtonView.iconImageView.hidden = false;
-    }
+    BOOL nextExists = (self.categoriesLinkedList.next != nil);
+    [self.nextButtonView setEnabled:nextExists];
+    self.nextButtonView.nameLabel.text = nextExists ? self.categoriesLinkedList.next.categoryVC.category.name.uppercaseString : @"";
 
-    BOOL hideButtons = (self.categoriesLinkedList.prev == nil && self.categoriesLinkedList.next == nil);
+    BOOL hideButtons = (prevExists == false && nextExists == false);
     self.nextButtonView.hidden = hideButtons;
     self.prevButtonView.hidden = hideButtons;
 }
 
 #pragma mark - UIPageViewController DataSource
 
-
-- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
-{
-    if (completed == YES) {
-        ASCategoryCollectionViewController *newCategoryVC = (ASCategoryCollectionViewController *)self.pageViewController.viewControllers.firstObject;
-        // Set pointer to current linked list item, either we went to previous or next item in the linked list, we check which way here
-        self.categoriesLinkedList = [self.categoriesLinkedList.next.categoryVC isEqual:newCategoryVC] ? self.categoriesLinkedList.next : self.categoriesLinkedList.prev;
-        [self updateUI];
-    }
-
-}
-
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(ASCategoryCollectionViewController *)viewController
-{
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(ASCategoryCollectionViewController *)viewController {
     ASCategoryVCLinkedList *next = self.categoriesLinkedList.next;
-
     return (next != nil) ? next.categoryVC : nil;
 }
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(ASCategoryCollectionViewController *)viewController
-{
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(ASCategoryCollectionViewController *)viewController {
     ASCategoryVCLinkedList *prev = self.categoriesLinkedList.prev;
-
     return (prev != nil) ? prev.categoryVC : nil;
 }
 
+#pragma mark - CategoryVC Navigation
 
-
-- (void)goToPrevCategory:(id)sender {
-    ((UIGestureRecognizer *)self.prevButtonView.gestureRecognizers.firstObject).enabled = false;
-    self.categoriesLinkedList = self.categoriesLinkedList.prev;
-
-    [self.pageViewController setViewControllers:@[self.categoriesLinkedList.categoryVC]
-                                      direction:UIPageViewControllerNavigationDirectionReverse
-                                       animated:YES
-                                     completion:nil];
-    [self updateUI];
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
+    if (completed == YES) [self updateState];
 }
 
 - (void)goToNextCategory:(id)sender {
-    ((UIGestureRecognizer *)self.nextButtonView.gestureRecognizers.firstObject).enabled = false;
-    self.categoriesLinkedList = self.categoriesLinkedList.next;
+    [self goToCategoryVC:self.categoriesLinkedList.next.categoryVC inDirection:UIPageViewControllerNavigationDirectionForward];
+}
 
-    [self.pageViewController setViewControllers:@[self.categoriesLinkedList.categoryVC]
-                                      direction:UIPageViewControllerNavigationDirectionForward
+- (void)goToPrevCategory:(id)sender {
+    [self goToCategoryVC:self.categoriesLinkedList.prev.categoryVC inDirection:UIPageViewControllerNavigationDirectionReverse];
+}
+
+- (void)goToCategoryVC:(ASCategoryCollectionViewController *)categoryVC inDirection:(UIPageViewControllerNavigationDirection)direction {
+    __block ASCategoriesPagesViewController *blocksafeSelf = self;
+    [self.pageViewController setViewControllers:@[categoryVC]
+                                      direction:direction
                                        animated:YES
-                                     completion:nil];
-    [self updateUI];
+                                     completion:^(BOOL finished) {
+                                         if (finished == true) [blocksafeSelf updateState];
+                                     }];
 }
 
 #pragma mark - CategoryCollectionVC Delegate
@@ -166,9 +173,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ShowImage"]) {
         ASImagePagesViewController *imagePagesVC = (ASImagePagesViewController *)segue.destinationViewController;
-
         ASImage *image = (ASImage *)sender;
         imagePagesVC.initialActiveImage = image;
+
     } else if ([segue.identifier isEqualToString:@"ShowSettings"]) {
         UINavigationController *navVC = (UINavigationController *)segue.destinationViewController;
         ASSettingsTableViewController *settingsVC = (ASSettingsTableViewController *)navVC.topViewController;

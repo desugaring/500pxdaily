@@ -35,6 +35,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 @synthesize gettingImages;
 @synthesize gettingImagesLock;
+@synthesize thumbnailDownloadTasks;
 
 + (NSURL *)urlForCategoryName:(NSString *)name forPage:(NSUInteger)page {
     NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
@@ -52,19 +53,32 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 - (void)awakeCommon {
     [super awakeCommon];
 
+    if (self.lastUpdated == nil) self.lastUpdated = [NSDate distantPast];
     self.maxNumberOfImages = -1;
     self.gettingImages = false;
-    self.gettingImagesLock = [[NSLock alloc] init];
-    if (self.lastUpdated == nil) self.lastUpdated = [NSDate distantPast];
+    self.gettingImagesLock = [NSLock new];
+    self.thumbnailDownloadTasks = [NSMutableArray new];
 }
 
 - (void)resetImages {
     self.maxNumberOfImages = -1;
     [self numberOfImagesUpdatedTo:0];
     [self.managedObjectContext performBlock:^{
+        for (ASImage *image in self.images) {
+            [self.managedObjectContext deleteObject:image];
+        }
         self.images = [NSOrderedSet new];
+        NSLog(@"done resetting images to empty set");
     }];
     [self requestImageDataForPage:1];
+}
+
+- (void)cancelThumbnailDownloads {
+    NSArray *downloadTasks = self.thumbnailDownloadTasks.copy;
+    for (NSURLSessionDownloadTask *task in downloadTasks) {
+        [[ASDownloadManager sharedManager] cancelDownloadTask:task];
+    }
+    [self.thumbnailDownloadTasks removeAllObjects];
 }
 
 - (void)requestImageData {
@@ -113,6 +127,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     NSArray *photos = imageData[@"photos"];
 
     [self.managedObjectContext performBlock:^{
+        NSLog(@"starting to perform");
         NSMutableOrderedSet *newImages = [NSMutableOrderedSet new];
         for (NSDictionary *photoData in photos) {
             ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
@@ -121,12 +136,16 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
             image.fullURL = (NSString *)photoData[@"image_url"][1];
             [newImages addObject:image];
         }
+        NSLog(@"setting current images");
         NSMutableOrderedSet *currentImages = self.images.mutableCopy;
         [currentImages addObjectsFromArray:newImages.array];
         self.images = (NSOrderedSet *)currentImages.copy;
+        NSLog(@"set current images");
         [self.gettingImagesLock lock];
         self.gettingImages = false;
+        NSLog(@"changed getting images to false");
         [self.gettingImagesLock unlock];
+        NSLog(@"going to send async msg");
         dispatch_async(dispatch_get_main_queue(), ^{
             [self numberOfImagesUpdatedTo:self.images.count];
         });

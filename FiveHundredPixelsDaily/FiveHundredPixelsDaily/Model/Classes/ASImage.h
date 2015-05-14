@@ -26,6 +26,8 @@
 - (void)requestThumbnailImageIfNeeded;
 - (void)requestFullImageIfNeeded;
 
+- (void)cancelRequestIfNeeded;
+
 @end
 
 @protocol ASImageDelegate <NSObject>

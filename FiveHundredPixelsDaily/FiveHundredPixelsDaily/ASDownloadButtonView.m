@@ -1,14 +1,14 @@
 //
-//  ASButtonView.m
+//  ASDownloadButtonView.m
 //  FiveHundredPixelsDaily
 //
-//  Created by Alex Semenikhine on 2015-05-03.
+//  Created by Alex Semenikhine on 2015-05-13.
 //  Copyright (c) 2015 Alex Semenikhine. All rights reserved.
 //
 
-#import "ASButtonView.h"
+#import "ASDownloadButtonView.h"
 
-@implementation ASButtonView
+@implementation ASDownloadButtonView
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -18,10 +18,12 @@
 - (void)setEnabled:(BOOL)enabled {
     self.buttonIsEnabled = enabled;
     if (self.buttonIsEnabled == false) {
-        self.iconImageView.hidden = true;
+        self.iconImageView.alpha = 0.5;
+        self.nameLabel.alpha = 0.5;
         ((UIGestureRecognizer *)self.gestureRecognizers.firstObject).enabled = false;
     } else {
-        self.iconImageView.hidden = false;
+        self.iconImageView.alpha = 1.0;
+        self.nameLabel.alpha = 1.0;
         ((UIGestureRecognizer *)self.gestureRecognizers.firstObject).enabled = true;
     }
 }

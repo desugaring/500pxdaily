@@ -44,7 +44,7 @@
     if (getImage == true) self.gettingImage = true;
     [self.gettingImageLock unlock];
     if (getImage) {
-        NSLog(@"requesting thumbnail for image named %@", self.name);
+//        NSLog(@"requesting thumbnail for image named %@", self.name);
         self.downloadTask = [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.thumbnailURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
             [ASDownloadManager decrementTasks];
             if (location != nil) {
@@ -61,7 +61,7 @@
             [self.gettingImageLock lock];
             self.gettingImage = false;
             [self.category.thumbnailDownloadTasks removeObject:self.downloadTask];
-            NSLog(@"setting getting image to false for %@", self.name);
+//            NSLog(@"setting getting image to false for %@", self.name);
             [self.gettingImageLock unlock];
         }];
         [self.category.thumbnailDownloadTasks addObject:self.downloadTask];

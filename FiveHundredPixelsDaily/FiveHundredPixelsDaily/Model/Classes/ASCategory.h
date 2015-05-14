@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 
 @class ASImage, ASStore;
 
-@protocol ASCategoryImageDelegate <NSObject>
+@protocol ASCategoryDelegate <NSObject>
 
 @optional
 - (void)imageThumbnailUpdated:(ASImage *)image;
@@ -27,24 +27,26 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 
 @end
 
-@interface ASCategory : ASBaseObject <ASCategoryImageDelegate>
+@interface ASCategory : ASBaseObject <ASCategoryDelegate>
 
 @property (nonatomic, retain) NSOrderedSet *images;
 @property (nonatomic, retain) ASStore *store;
 @property (nonatomic, retain) NSDate *lastUpdated;
 @property (nonatomic, retain) NSNumber *isActive;
 @property (nonatomic, retain) NSNumber *isDaily;
+@property (nonatomic, retain) NSNumber *isStale;
+@property (nonatomic, retain) NSNumber *maxNumberOfImages;
 
-@property (weak) id<ASCategoryImageDelegate> delegate;
-@property NSInteger maxNumberOfImages;
+@property (weak) id<ASCategoryDelegate> delegate;
 @property NSMutableArray *thumbnailDownloadTasks;
 
 - (void)imageThumbnailUpdated:(ASImage *)image;
 - (void)imageFullUpdated:(ASImage *)image;
 - (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages;
 
-- (void)resetImages;
+- (void)refreshImages;
 - (void)requestImageData;
 - (void)cancelThumbnailDownloads;
+- (void)checkStaleness;
 
 @end

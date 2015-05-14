@@ -1,7 +1,10 @@
 Ver 1.0:
 
-- Watch wwdc2012 Enhancing User Experience with Scroll Views - session 223
+- Rework resetting images - reset all of them every half an hour, if max images doesn't match, don't update anymore
+- Test for crashes
+- Figure out scrollview inside pagevc bug
 - Test background image fetch
+- Watch wwdc2012 Enhancing User Experience with Scroll Views - session 223
 
 For Release:
 
@@ -13,3 +16,4 @@ Ver 1.1:
 
 - iPad support?
 - use UISplitVC?
+- check for internet connection

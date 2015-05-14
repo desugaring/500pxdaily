@@ -18,8 +18,8 @@
 @property NSMutableSet *visibleIndexPaths;
 @property NSUInteger numberOfImages;
 @property CGSize cellSize;
-@property BOOL showRefreshBanner;
-@property BOOL loadingMore;
+@property BOOL showRefreshHeader;
+@property CGFloat scrollViewOffset;
 
 @end
 
@@ -29,30 +29,18 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.showRefreshBanner = false;
+    self.scrollViewOffset = 0;
+    self.showRefreshHeader = false;
     self.cellSize = CGSizeZero;
     self.navigationItem.title = self.category.name;
-    self.visibleIndexPaths = [NSMutableSet new];
     self.category.delegate = self;
     self.numberOfImages = self.category.images.count;
-    self.loadingMore = self.category.maxNumberOfImages != self.numberOfImages;
-    if (self.numberOfImages == 0) [self.category requestImageData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([self.category.lastUpdated isEqualToDate:[NSDate distantPast]]) {
-        NSLog(@"!!!refreshing category because it is old or nil %@", self.category.name);
-        [self refreshCategory:self];
-        return;
-    } else {
-        NSInteger hours = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.category.lastUpdated toDate:[NSDate date] options:0] hour];
-        if(hours >= 1) {
-            self.showRefreshBanner = true;
-        }
-    }
-//#warning for debugging only
-//    self.showRefreshBanner = true;
+    if (self.numberOfImages == 0) [self.category requestImageData];
+    self.showRefreshHeader = (self.category.isStale.boolValue == true && self.numberOfImages != 0);
     [self.collectionView reloadData];
 }
 
@@ -62,9 +50,9 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 }
 
 - (IBAction)refreshCategory:(id)sender {
-    self.showRefreshBanner = false;
+    self.showRefreshHeader = false;
     self.numberOfImages = 0;
-    [self.category resetImages];
+    [self.category refreshImages];
 }
 
 - (IBAction)refreshAllCategories:(id)sender {
@@ -89,7 +77,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 #pragma mark - UICollectionView DataSource
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return self.showRefreshBanner ? CGSizeMake(collectionView.bounds.size.width, 40) : CGSizeZero;
+    return self.showRefreshHeader ? CGSizeMake(collectionView.bounds.size.width, 40) : CGSizeZero;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
@@ -98,7 +86,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
         return headerView;
     } else if (kind == UICollectionElementKindSectionFooter) {
         ASLoadingFooterCollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"Footer" forIndexPath:indexPath];
-        footerView.loadingLabel.hidden = !self.loadingMore;
+        footerView.loadingLabel.hidden = (self.numberOfImages == self.category.maxNumberOfImages.unsignedIntegerValue);
         return footerView;
     }
     return nil;
@@ -151,23 +139,38 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 #pragma mark - ScrollView Delegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    NSMutableSet *newIndexPaths = [NSMutableSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
-    if ([self.visibleIndexPaths isEqualToSet:newIndexPaths] == false) {
-        // Cancel requests for images that are no longer visible
-        [self.visibleIndexPaths minusSet:newIndexPaths];
-        for (NSIndexPath *indexPath in self.visibleIndexPaths) {
-            ASImage *image = (ASImage *)self.category.images[indexPath.item];
-#warning implement this using tasks instead
-//            if (image.activeRequest != nil && image.thumbnail == nil) {
-//                [image.activeRequest cancel];
-//                NSLog(@"cancelling %@", image.name);
-//            }
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//    NSLog(@"scrollview offet is %@, height is %@, percent down is %@", @(scrollView.contentOffset.y+scrollView.bounds.size.height), @(scrollView.contentSize.height), @((scrollView.contentOffset.y/scrollView.contentSize.height)*100));
+//    if (scrollView.contentOffset.y/scrollView.contentSize.height >)
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat newOffset = scrollView.contentOffset.y+scrollView.bounds.size.height;
+    if (newOffset - self.scrollViewOffset > 150) {
+        self.scrollViewOffset = newOffset;
+        if ((self.scrollViewOffset/scrollView.contentSize.height)*100 >= 75) {
+            NSLog(@"getting close to the end");
+            [self.category requestImageData];
         }
-        self.visibleIndexPaths = newIndexPaths;
-        if (((NSIndexPath *)self.visibleIndexPaths.allObjects.lastObject).item + 50 >= self.category.images.count) [self.category requestImageData];
+        NSLog(@"new offset: %@", @(self.scrollViewOffset));
     }
+//    offset = scrollView.contentOffset.y+scrollView.bounds.size.height;
+    //    NSLog(@"scrolling");
+//    NSMutableSet *newIndexPaths = [NSMutableSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
+//    if ([self.visibleIndexPaths isEqualToSet:newIndexPaths] == false) {
+//        // Cancel requests for images that are no longer visible
+//        [self.visibleIndexPaths minusSet:newIndexPaths];
+//        for (NSIndexPath *indexPath in self.visibleIndexPaths) {
+//            ASImage *image = (ASImage *)self.category.images[indexPath.item];
+//#warning implement this using tasks instead
+////            if (image.activeRequest != nil && image.thumbnail == nil) {
+////                [image.activeRequest cancel];
+////                NSLog(@"cancelling %@", image.name);
+////            }
+//        }
+//        self.visibleIndexPaths = newIndexPaths;
+//        if (((NSIndexPath *)self.visibleIndexPaths.allObjects.lastObject).item + 50 >= self.category.images.count) [self.category requestImageData];
+//    }
 }
 
 #pragma mark - Category Image Delegate
@@ -180,7 +183,6 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 - (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages {
     NSLog(@"num of images updated to in VC: %@", @(numberOfImages));
     self.numberOfImages = numberOfImages;
-    self.loadingMore = numberOfImages != self.category.maxNumberOfImages;
     [self.collectionView reloadData];
 }
 

@@ -19,6 +19,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 @property BOOL gettingImages;
 @property NSLock *gettingImagesLock;
+@property NSTimer *stalenessTimer;
 
 @end
 
@@ -29,10 +30,10 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 @dynamic lastUpdated;
 @dynamic isActive;
 @dynamic isDaily;
+@dynamic isStale;
+@dynamic maxNumberOfImages;
 
-@synthesize maxNumberOfImages;
 @synthesize delegate;
-
 @synthesize gettingImages;
 @synthesize gettingImagesLock;
 @synthesize thumbnailDownloadTasks;
@@ -52,25 +53,37 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 - (void)awakeCommon {
     [super awakeCommon];
-
     if (self.lastUpdated == nil) self.lastUpdated = [NSDate distantPast];
-    self.maxNumberOfImages = -1;
     self.gettingImages = false;
     self.gettingImagesLock = [NSLock new];
     self.thumbnailDownloadTasks = [NSMutableArray new];
+    [self checkStaleness];
+    self.stalenessTimer = [NSTimer timerWithTimeInterval:30*60 target:self selector:@selector(checkStaleness) userInfo:nil repeats:true];
 }
 
-- (void)resetImages {
-    self.maxNumberOfImages = -1;
+- (void)checkStaleness {
+    if (self.isStale.boolValue == false) {
+        NSInteger minutesSinceLastUpdate = [[[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:self.lastUpdated toDate:[NSDate date] options:0] minute];
+        if ((minutesSinceLastUpdate >= 30)) self.isStale = @(true);
+    }
+}
+
+- (void)willTurnIntoFault {
+    [super willTurnIntoFault];
+    [self.stalenessTimer invalidate];
+}
+
+- (void)refreshImages {
+    self.maxNumberOfImages = @(-1);
     [self numberOfImagesUpdatedTo:0];
-    [self.managedObjectContext performBlock:^{
+    [self.managedObjectContext performBlockAndWait:^{
         for (ASImage *image in self.images) {
             [self.managedObjectContext deleteObject:image];
         }
         self.images = [NSOrderedSet new];
         NSLog(@"done resetting images to empty set");
     }];
-    [self requestImageDataForPage:1];
+    [self requestImageData];
 }
 
 - (void)cancelThumbnailDownloads {
@@ -83,7 +96,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 - (void)requestImageData {
     [self.gettingImagesLock lock];
-    BOOL getImages = (self.gettingImages == false && self.images.count != self.maxNumberOfImages);
+    BOOL getImages = (self.gettingImages == false && self.images.count != self.maxNumberOfImages.unsignedIntegerValue);
     if (getImages == true) self.gettingImages = true;
     [self.gettingImagesLock unlock];
     if (getImages) {
@@ -96,8 +109,8 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     [self.gettingImagesLock lock];
     self.gettingImages = true;
     [self.gettingImagesLock unlock];
-    NSLog(@"requesting image data for category %@, page %@", self.name, @(page));
     NSURL *url = [ASCategory urlForCategoryName:self.name forPage:page];
+    NSLog(@"requesting image data for category %@, page %@, url %@", self.name, @(page), url.absoluteString);
     [[ASDownloadManager sharedManager] downloadDataWithURL:url withCompletionBlock:^(NSData *data, NSURLResponse *response, NSError *error) {
         [ASDownloadManager decrementTasks];
         if (data != nil) {
@@ -120,36 +133,40 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 }
 
 - (void)parseImageData:(NSDictionary *)imageData {
-    if (self.maxNumberOfImages == -1) {
-        self.maxNumberOfImages = ((NSNumber *)imageData[@"total_items"]).unsignedIntegerValue;
-        NSLog(@"max number for category %@ is %lu", self.name, (long)self.maxNumberOfImages);
+    // If first page, set new max items
+    if (self.images.count == 0) {
+        self.maxNumberOfImages = (NSNumber *)imageData[@"total_items"];
     }
-    NSArray *photos = imageData[@"photos"];
+    NSLog(@"max number for category %@ is %@", self.name, self.maxNumberOfImages);
 
-    [self.managedObjectContext performBlock:^{
-        NSLog(@"starting to perform");
-        NSMutableOrderedSet *newImages = [NSMutableOrderedSet new];
-        for (NSDictionary *photoData in photos) {
-            ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
-            image.name = photoData[@"name"];
-            image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
-            image.fullURL = (NSString *)photoData[@"image_url"][1];
-            [newImages addObject:image];
-        }
-        NSLog(@"setting current images");
-        NSMutableOrderedSet *currentImages = self.images.mutableCopy;
-        [currentImages addObjectsFromArray:newImages.array];
-        self.images = (NSOrderedSet *)currentImages.copy;
-        NSLog(@"set current images");
-        [self.gettingImagesLock lock];
-        self.gettingImages = false;
-        NSLog(@"changed getting images to false");
-        [self.gettingImagesLock unlock];
-        NSLog(@"going to send async msg");
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self numberOfImagesUpdatedTo:self.images.count];
-        });
-    }];
+    // If current max number of items is out of date, the whole category is out of date, so don't let any new images in
+    if (self.maxNumberOfImages != (NSNumber *)imageData[@"total_items"]) {
+        self.maxNumberOfImages = @(self.images.count);
+        NSLog(@"number of images out of date!!!!");
+    // Otherwise all is well, add new images to the category
+    } else {
+        NSArray *photos = imageData[@"photos"];
+
+        [self.managedObjectContext performBlockAndWait:^{
+            NSMutableOrderedSet *newImages = [NSMutableOrderedSet new];
+            for (NSDictionary *photoData in photos) {
+                ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
+                image.name = photoData[@"name"];
+                image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
+                image.fullURL = (NSString *)photoData[@"image_url"][1];
+                [newImages addObject:image];
+            }
+            NSMutableOrderedSet *currentImages = self.images.mutableCopy;
+            [currentImages addObjectsFromArray:newImages.array];
+            self.images = (NSOrderedSet *)currentImages.copy;
+        }];
+    }
+    [self.gettingImagesLock lock];
+    self.gettingImages = false;
+    [self.gettingImagesLock unlock];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self numberOfImagesUpdatedTo:self.images.count];
+    });
 }
 
 #pragma mark - Image Delegate

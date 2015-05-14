@@ -16,7 +16,7 @@
 
 @end
 
-@interface ASCategoryCollectionViewController : UICollectionViewController <ASCategoryImageDelegate>
+@interface ASCategoryCollectionViewController : UICollectionViewController <ASCategoryDelegate>
 
 @property (weak) ASCategory *category;
 @property (weak) id<ASCategoryCollectionViewControllerDelegate> delegate;

@@ -67,7 +67,7 @@ static volatile int32_t runningTasks = 0;
         [self.resumeData removeObjectForKey:url];
 
     } else {
-        NSLog(@"starting new task for url: %@", url.absoluteString);
+//        NSLog(@"starting new task for url: %@", url.absoluteString);
         task = [self.session downloadTaskWithURL:url completionHandler:completionBlock];
     }
     [task resume];

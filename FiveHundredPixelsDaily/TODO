@@ -11,9 +11,10 @@ For Release:
 
 Ver 1.1:
 
+- Add tap in Full Image mode to hide download button and fade left/right buttons
 - Reachability
 - Watch wwdc2012 Enhancing User Experience with Scroll Views - session 223
 - iPad support?
 - Use UISplitVC?
 - Rework Images to be separate from Categories? A lot of reworking
-- Add gesture recognizers back
+- Add gesture recognizers back to pageVCs, fix full image page issue where swiping to next page, cancelling half-way through, makes it impossible to swipe properly afterwards

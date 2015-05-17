@@ -7,47 +7,70 @@
 //
 
 #import "ASBackgroundImageFetcher.h"
-#import "ASBaseOperation.h"
+#import "ASPhotosManager.h"
+#import "ASDownloadManager.h"
+
 
 @interface ASBackgroundImageFetcher()
 
-@property NSOperationQueue *queue;
 @property NSDate *lastFetched;
+@property (copy, nonatomic) BackgroundFetchCompletionHandler backgroundCompletionHandler;
 
 @end
 
 @implementation ASBackgroundImageFetcher
 
++ (instancetype)sharedFetcher {
+    static dispatch_once_t onceToken;
+    static ASBackgroundImageFetcher *fetcher;
+    dispatch_once(&onceToken, ^{
+        fetcher = [[ASBackgroundImageFetcher alloc] init];
+    });
+    return fetcher;
+}
+
 - (instancetype)init {
     if (self = [super init]) {
-        _queue = [[NSOperationQueue alloc] init];
-        _queue.maxConcurrentOperationCount = 3;
         _lastFetched = [NSDate date];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTaskResponse:) name:@"BackgroundFetchResult" object:nil];
     }
     return self;
 }
 
-- (void)fetchImagesWithCategories:(NSArray *)categories completion:(void (^)(UIBackgroundFetchResult))completion {
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"BackgroundFetchResult" object:nil];
+}
+
+static int numberofSuccessfulBackgroundFetches;
+static int numberOfFetches;
+
+- (void)receiveTaskResponse:(NSNotification *)notification {
+    BOOL success = ((NSNumber *)notification.userInfo[@"success"]).boolValue;
+    if (success == true) {
+        numberofSuccessfulBackgroundFetches++;
+        if (numberofSuccessfulBackgroundFetches == numberOfFetches) self.backgroundCompletionHandler(UIBackgroundFetchResultNewData);
+    } else {
+        [[ASDownloadManager sharedManager] cancelAllDownloadTasks];
+        self.backgroundCompletionHandler(UIBackgroundFetchResultFailed);
+    }
+}
+
+- (void)fetchImagesForCategories:(NSArray *)categories completionHandler:(BackgroundFetchCompletionHandler)completionHandler {
+    if ([ASDownloadManager sharedManager].reachability.isReachable == false) {
+        completionHandler(UIBackgroundFetchResultNoData);
+        return;
+    }
     NSInteger hoursSinceLastFetch = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.lastFetched toDate:[NSDate date] options:0] hour];
     if(hoursSinceLastFetch >= 12) {
         self.lastFetched = [NSDate date];
-        for (int i = 0; i == categories.count; i++) {
-            ASBaseOperation *operation = [(ASCategory *)categories.firstObject operation];
-            operation.object = categories[i];
-            operation.userInfo = @{@"page": @"1", @"perPage": @"1", @"backgroundMode": @"1"};
-            operation.completion = ^(NSArray *result, NSError *error) {
-                if (result.firstObject != nil && [result.firstObject isKindOfClass:UIImage.class]) {
-                    [self.photosManager saveImage:(UIImage *)result.firstObject];
-                    if (i == categories.count-1) completion(UIBackgroundFetchResultNewData);
-                } else {
-                    if (error != nil) NSLog(@"background fetch error: %@", error);
-                    completion(UIBackgroundFetchResultFailed);
-                }
-            };
-            [self.queue addOperation:operation];
+        self.backgroundCompletionHandler = completionHandler;
+        numberOfFetches = (int)categories.count;
+        numberofSuccessfulBackgroundFetches = 0;
+        for (NSString *categoryName in categories) {
+            [ASCategory downloadImageInTheBackgroundForCategory:categoryName];
         }
     } else {
-        completion(UIBackgroundFetchResultNoData);
+        completionHandler(UIBackgroundFetchResultNoData);
     }
 }
 

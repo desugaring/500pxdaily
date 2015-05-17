@@ -232,14 +232,8 @@
 		4F9B8FB21AF6AE3700B36422 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				4FC412561B09146600E4C063 /* Reachability.h */,
-				4FC412571B09146600E4C063 /* Reachability.m */,
-				4F9B8FAF1AF6AE2300B36422 /* ASButtonView.h */,
-				4F9B8FB01AF6AE2300B36422 /* ASButtonView.m */,
-				4FC412531B04324D00E4C063 /* ASDownloadButtonView.h */,
-				4FC412541B04324D00E4C063 /* ASDownloadButtonView.m */,
-				4FC411DD1B02CE2600E4C063 /* ASDownloadManager.h */,
-				4FC411DE1B02CE2600E4C063 /* ASDownloadManager.m */,
+				4FC4125A1B0923FC00E4C063 /* Network */,
+				4FC412591B0923F200E4C063 /* Buttons */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -272,6 +266,28 @@
 				4FC411991AFC4B4600E4C063 /* ASLoadingFooterCollectionReusableView.m */,
 			);
 			name = Cells;
+			sourceTree = "<group>";
+		};
+		4FC412591B0923F200E4C063 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				4F9B8FAF1AF6AE2300B36422 /* ASButtonView.h */,
+				4F9B8FB01AF6AE2300B36422 /* ASButtonView.m */,
+				4FC412531B04324D00E4C063 /* ASDownloadButtonView.h */,
+				4FC412541B04324D00E4C063 /* ASDownloadButtonView.m */,
+			);
+			name = Buttons;
+			sourceTree = "<group>";
+		};
+		4FC4125A1B0923FC00E4C063 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				4FC412561B09146600E4C063 /* Reachability.h */,
+				4FC412571B09146600E4C063 /* Reachability.m */,
+				4FC411DD1B02CE2600E4C063 /* ASDownloadManager.h */,
+				4FC411DE1B02CE2600E4C063 /* ASDownloadManager.m */,
+			);
+			name = Network;
 			sourceTree = "<group>";
 		};
 		4FE3E2871ADA07E600B174F4 /* Views */ = {

@@ -18,8 +18,6 @@
 @property NSManagedObjectModel *mom;
 @property NSPersistentStoreCoordinator *psc;
 @property NSManagedObjectContext *moc;
-@property ASBackgroundImageFetcher *backgroundImageFetcher;
-@property ASPhotosManager *photosManager;
 @property UIBackgroundTaskIdentifier backgroundTask;
 
 @property ASModel *model;
@@ -43,8 +41,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.backgroundTask = UIBackgroundTaskInvalid;
-    self.backgroundImageFetcher = [ASBackgroundImageFetcher new];
-    self.photosManager = [[ASPhotosManager alloc] init];
     if ([[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbumIdentifier"] != nil) {
         [self activateBackgroundFetching];
     } else {
@@ -83,9 +79,9 @@
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSMutableArray *dailyCategories = [NSMutableArray new];
     for (ASCategory *category in ((ASStore *)self.model.stores.firstObject).categories) {
-        if (category.isDaily.boolValue == true) [dailyCategories addObject:category];
+        if (category.isDaily.boolValue == true) [dailyCategories addObject:category.name];
     }
-    [self.backgroundImageFetcher fetchImagesWithCategories:dailyCategories completion:completionHandler];
+    [[ASBackgroundImageFetcher sharedFetcher] fetchImagesForCategories:dailyCategories completionHandler:completionHandler];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {

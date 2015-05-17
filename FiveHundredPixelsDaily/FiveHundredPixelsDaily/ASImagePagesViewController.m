@@ -12,6 +12,7 @@
 #import "ASSettingsTableViewController.h"
 #import "ASDownloadManager.h"
 #import "ASCategory.h"
+#import "ASPhotosManager.h"
 
 @interface ASImagePagesViewController () <UIAlertViewDelegate, ASCategoryDelegate>
 
@@ -160,9 +161,8 @@
         // Save image
         ASImage *image = self.imagesLinkedList.imageVC.image;
         [self.downloadedImages addObject:image];
-        NSLog(@"downloaded");
         [self.downloadButtonView setEnabled:false];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SaveImageToPhotos" object:nil userInfo:@{ @"image": image.full }];
+        [[ASPhotosManager sharedManager] saveImage:image.full];
     }
 }
 

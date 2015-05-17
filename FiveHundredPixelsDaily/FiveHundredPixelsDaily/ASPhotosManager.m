@@ -11,37 +11,32 @@
 
 @implementation ASPhotosManager
 
-- (instancetype)init {
-    if (self = [super init]) {
-        [[NSNotificationCenter defaultCenter] addObserverForName:@"SaveImageToPhotos" object:nil queue:[NSOperationQueue currentQueue]  usingBlock:^(NSNotification *note) {
-            [self saveImage:(UIImage *)note.userInfo[@"image"]];
-        }];
-    }
-    return self;
++ (ASPhotosManager *)sharedManager {
+    static dispatch_once_t onceToken;
+    static ASPhotosManager *manager;
+    dispatch_once(&onceToken, ^{
+        manager = [[ASPhotosManager alloc] init];
+    });
+    return manager;
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SaveImageToPhotos" object:nil];
-}
-
-- (void)saveImage:(UIImage *)image {
+- (BOOL)saveImage:(UIImage *)image {
     NSString *albumIdentifier = [[NSUserDefaults standardUserDefaults] stringForKey:@"ActiveAlbumIdentifier"];
+    if (albumIdentifier == nil) return false;
     
     PHFetchResult *result = [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[albumIdentifier] options:nil];
     PHAssetCollection *collection = (PHAssetCollection *)result.firstObject;
 
-    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+    NSError *error;
+    [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
         PHAssetChangeRequest *assetChangeRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
 
         if (collection != nil) {
             PHAssetCollectionChangeRequest *assetCollectionChangeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:collection];
             [assetCollectionChangeRequest addAssets:@[[assetChangeRequest placeholderForCreatedAsset]]];
         }
-    } completionHandler:^(BOOL success, NSError *error) {
-        if (!success) {
-            NSLog(@"Error creating asset: %@", error);
-        }
-    }];
+    } error:&error];
+    return (error == nil);
 }
 
 @end

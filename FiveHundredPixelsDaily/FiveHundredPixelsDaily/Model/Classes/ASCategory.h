@@ -47,6 +47,8 @@ typedef NS_ENUM(NSInteger, ASCategoryState) {
 @property (weak) id<ASCategoryDelegate> delegate;
 @property NSMutableArray *thumbnailDownloadTasks;
 
++ (void)downloadImageInTheBackgroundForCategory:(NSString *)categoryName;
+
 - (void)imageThumbnailUpdated:(ASImage *)image;
 - (void)imageFullUpdated:(ASImage *)image;
 

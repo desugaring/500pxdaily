@@ -8,12 +8,13 @@
 
 @import UIKit;
 #import "ASCategory.h"
-#import "ASPhotosManager.h"
+
+typedef void(^BackgroundFetchCompletionHandler)(UIBackgroundFetchResult);
 
 @interface ASBackgroundImageFetcher : NSObject
 
-@property ASPhotosManager *photosManager;
++ (ASBackgroundImageFetcher *)sharedFetcher;
 
-- (void)fetchImagesWithCategories:(NSArray *)categories completion:(void (^)(UIBackgroundFetchResult))completion;
+- (void)fetchImagesForCategories:(NSArray *)categories completionHandler:(BackgroundFetchCompletionHandler)completionHandler;
 
 @end

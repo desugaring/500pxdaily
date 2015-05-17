@@ -10,6 +10,7 @@
 #import "ASImage.h"
 #import "ASStore.h"
 #import "ASDownloadManager.h"
+#import "ASPhotosManager.h"
 
 NSString * const PHOTOS_PER_REQUEST = @"30";
 NSString * const FIVE_HUNDRED_PX_URL = @"https://api.500px.com/v1/photos";
@@ -48,6 +49,47 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
                                  [NSURLQueryItem queryItemWithName:@"image_size[1]" value:@"4"],
                                  [NSURLQueryItem queryItemWithName:@"page" value:@(page).stringValue]];
     return urlComponents.URL;
+}
+
++ (void)downloadImageInTheBackgroundForCategory:(NSString *)categoryName {
+    NSURL *url = [ASCategory urlForCategoryName:categoryName forPage:1];
+    NSLog(@"requesting background image data for category %@, url %@", categoryName, url.absoluteString);
+
+    // Get category's first page
+    [[ASDownloadManager sharedManager] downloadDataWithURL:url withCompletionBlock:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (data != nil) {
+            NSError *jsonParsingError;
+            NSDictionary *imageDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonParsingError];
+            if (jsonParsingError == nil) {
+                NSArray *photos = imageDictionary[@"photos"];
+                // Get first photo info
+                NSDictionary *photoData = (NSDictionary *)photos.firstObject;
+                NSString *fullURL = (NSString *)photoData[@"image_url"][1];
+                NSLog(@"requesting background full image from url: %@", fullURL);
+                // Get image
+                [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:fullURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                    if (location != nil) {
+                        UIImage *fullImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
+                        BOOL success = [[ASPhotosManager sharedManager] saveImage:fullImage];
+                        [ASCategory signalBackgroundFetchSuccess:success];
+                    } else {
+                        NSLog(@"background image fetch error: %@", error);
+                        [ASCategory signalBackgroundFetchSuccess:false];
+                    }
+                }];
+            } else {
+                NSLog(@"background json parsing error: %@", jsonParsingError);
+                [ASCategory signalBackgroundFetchSuccess:false];
+            }
+        } else {
+            NSLog(@"background image data request response: %@, error: %@", response, error);
+            [ASCategory signalBackgroundFetchSuccess:false];
+        }
+    }];
+}
+
++ (void)signalBackgroundFetchSuccess:(BOOL)success {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BackgroundFetchResult" object:nil userInfo:@{ @"success": @(success) }];
 }
 
 - (void)awakeCommon {

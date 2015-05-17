@@ -10,6 +10,8 @@
 
 @interface ASPhotosManager : NSObject
 
-- (void)saveImage:(UIImage *)image;
++ (ASPhotosManager *)sharedManager;
+
+- (BOOL)saveImage:(UIImage *)image;
 
 @end

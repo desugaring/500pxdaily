@@ -29,7 +29,6 @@
     } else if (self.imageView == nil) {
         [self updateImage];
     }
-    NSLog(@"wil lappear %@", self.image.name);
 }
 
 - (void)updateImage {

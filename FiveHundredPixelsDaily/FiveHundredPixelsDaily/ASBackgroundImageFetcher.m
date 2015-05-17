@@ -56,10 +56,10 @@ static int numberOfFetches;
 }
 
 - (void)fetchImagesForCategories:(NSArray *)categories completionHandler:(BackgroundFetchCompletionHandler)completionHandler {
-    if ([ASDownloadManager sharedManager].reachability.isReachable == false) {
-        completionHandler(UIBackgroundFetchResultNoData);
-        return;
-    }
+//    if ([ASDownloadManager sharedManager].reachability.isReachable == false) {
+//        completionHandler(UIBackgroundFetchResultNoData);
+//        return;
+//    }
     NSInteger hoursSinceLastFetch = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.lastFetched toDate:[NSDate date] options:0] hour];
     if(hoursSinceLastFetch >= 12) {
         self.lastFetched = [NSDate date];

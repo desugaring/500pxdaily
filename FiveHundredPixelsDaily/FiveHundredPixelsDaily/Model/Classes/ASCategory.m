@@ -17,8 +17,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 @interface ASCategory()
 
-@property BOOL gettingImages;
-@property NSLock *gettingImagesLock;
+@property NSLock *stateLock;
 @property NSTimer *stalenessTimer;
 
 @end
@@ -34,8 +33,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 @dynamic maxNumberOfImages;
 
 @synthesize delegate;
-@synthesize gettingImages;
-@synthesize gettingImagesLock;
+@synthesize stateLock;
 @synthesize thumbnailDownloadTasks;
 @synthesize stalenessTimer;
 
@@ -55,10 +53,9 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 - (void)awakeCommon {
     [super awakeCommon];
     if (self.lastUpdated == nil) self.lastUpdated = [NSDate distantPast];
-    self.gettingImages = false;
-    self.gettingImagesLock = [NSLock new];
+    self.stateLock = [NSLock new];
     self.thumbnailDownloadTasks = [NSMutableArray new];
-    [self refreshState];
+    if (self.state.integerValue != ASCategoryStateRefreshImmediately) [self refreshState];
     self.stalenessTimer = [NSTimer timerWithTimeInterval:30*60 target:self selector:@selector(refreshState) userInfo:nil repeats:true];
 }
 
@@ -80,7 +77,9 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 - (void)refreshImages {
     self.maxNumberOfImages = @(-1);
-    [self numberOfImagesUpdatedTo:0];
+    [self.stateLock lock];
+    self.state = @(ASCategoryStateBusyRefreshing);
+    [self.stateLock unlock];
     [self.managedObjectContext performBlockAndWait:^{
         for (ASImage *image in self.images) {
             [self.managedObjectContext deleteObject:image];
@@ -99,25 +98,22 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     [self.thumbnailDownloadTasks removeAllObjects];
 }
 
-- (void)requestImageData {
-    [self.gettingImagesLock lock];
-    BOOL getImages = (self.gettingImages == false && self.state.integerValue == ASCategoryStateNeedsMoreImages);
-    if (getImages == true) self.gettingImages = true;
-    [self.gettingImagesLock unlock];
-    if (getImages) {
+- (BOOL)requestImageData {
+    [self.stateLock lock];
+    BOOL requestImages = (self.state.integerValue == ASCategoryStateBusyRefreshing || self.state.integerValue == ASCategoryStateFree);
+    if (self.state.integerValue == ASCategoryStateFree) self.state = @(ASCategoryStateBusyGettingImages);
+    [self.stateLock unlock];
+    if (requestImages) {
         NSUInteger page = self.images.count == 0 ? 1 : (self.images.count / PHOTOS_PER_REQUEST.integerValue)+1;
         [self requestImageDataForPage:page];
     }
+    return requestImages;
 }
 
 - (void)requestImageDataForPage:(NSUInteger)page {
-    [self.gettingImagesLock lock];
-    self.gettingImages = true;
-    [self.gettingImagesLock unlock];
     NSURL *url = [ASCategory urlForCategoryName:self.name forPage:page];
     NSLog(@"requesting image data for category %@, page %@, url %@", self.name, @(page), url.absoluteString);
     [[ASDownloadManager sharedManager] downloadDataWithURL:url withCompletionBlock:^(NSData *data, NSURLResponse *response, NSError *error) {
-        [ASDownloadManager decrementTasks];
         if (data != nil) {
             NSError *jsonParsingError;
             NSDictionary *imageDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonParsingError];
@@ -131,50 +127,34 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
             NSLog(@"image data request response: %@, error: %@", response, error);
         }
         // Lock unlocks because of error OR in parseImageData if all goes well
-        [self.gettingImagesLock lock];
-        self.gettingImages = false;
-        [self.gettingImagesLock unlock];
+        [self.stateLock lock];
+        self.state = (self.images.count != 0) ? @(ASCategoryStateFree) : @(ASCategoryStateRefreshImmediately);
+        [self.stateLock unlock];
     }];
 }
 
 - (void)parseImageData:(NSDictionary *)imageData {
-    // If first page, set new max items
-    if (self.images.count == 0) self.maxNumberOfImages = (NSNumber *)imageData[@"total_items"];
-    NSLog(@"max number for category %@ is %@", self.name, self.maxNumberOfImages);
-
-    // If current max number of items is out of date, the whole category is out of date, so don't let any new images in
-    if ([self.maxNumberOfImages isEqualToNumber:(NSNumber *)imageData[@"total_items"]] == false) {
-        self.maxNumberOfImages = @(self.images.count);
-        self.state = @(ASCategoryStateStale);
-        NSLog(@"category number of images out of date!, %@", self.name);
-    // Otherwise all is well, add new images to the category
-    } else {
-        NSArray *photos = imageData[@"photos"];
-        [self.managedObjectContext performBlockAndWait:^{
-            NSMutableOrderedSet *newImages = [NSMutableOrderedSet new];
-            for (NSDictionary *photoData in photos) {
-                ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
-                image.name = photoData[@"name"];
-                image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
-                image.fullURL = (NSString *)photoData[@"image_url"][1];
-                [newImages addObject:image];
-            }
-            NSMutableOrderedSet *currentImages = self.images.mutableCopy;
-            [currentImages addObjectsFromArray:newImages.array];
-            self.images = (NSOrderedSet *)currentImages.copy;
-        }];
-        if (self.maxNumberOfImages.unsignedIntegerValue == self.images.count) {
-            self.state = @(ASCategoryStateUpToDate);
-        } else if (self.state.integerValue != ASCategoryStateNeedsMoreImages) {
-            self.state = @(ASCategoryStateNeedsMoreImages);
-        }
+    if (self.state.integerValue == ASCategoryStateBusyRefreshing) {
+        self.maxNumberOfImages = (NSNumber *)imageData[@"total_items"];
+        NSLog(@"max number for category %@ is %@", self.name, self.maxNumberOfImages);
     }
-    [self.gettingImagesLock lock];
-    self.gettingImages = false;
-    [self.gettingImagesLock unlock];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self numberOfImagesUpdatedTo:self.images.count];
-    });
+    NSArray *photos = imageData[@"photos"];
+    [self.managedObjectContext performBlockAndWait:^{
+        NSMutableOrderedSet *newImages = [NSMutableOrderedSet new];
+        for (NSDictionary *photoData in photos) {
+            ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
+            image.name = photoData[@"name"];
+            image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
+            image.fullURL = (NSString *)photoData[@"image_url"][1];
+            [newImages addObject:image];
+        }
+        NSMutableOrderedSet *currentImages = self.images.mutableCopy;
+        [currentImages addObjectsFromArray:newImages.array];
+        self.images = (NSOrderedSet *)currentImages.copy;
+    }];
+    [self.stateLock lock];
+    self.state = (self.maxNumberOfImages.unsignedIntegerValue == self.images.count) ? @(ASCategoryStateUpToDate) : @(ASCategoryStateFree);
+    [self.stateLock unlock];
 }
 
 #pragma mark - Image Delegate
@@ -193,15 +173,6 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.delegate imageFullUpdated:image];
-        });
-    }
-}
-
-- (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages {
-    self.lastUpdated = [NSDate date];
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(numberOfImagesUpdatedTo:)]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate numberOfImagesUpdatedTo:numberOfImages];
         });
     }
 }

@@ -9,7 +9,6 @@
 @import Foundation;
 @import CoreData;
 #import "ASBaseObject.h"
-#import "ASBaseOperation.h"
 
 typedef NS_ENUM(NSInteger, ASImageSize) {
     ASImageSizeThumbnail,
@@ -19,10 +18,10 @@ typedef NS_ENUM(NSInteger, ASImageSize) {
 typedef NS_ENUM(NSInteger, ASCategoryState) {
     ASCategoryStateRefreshImmediately,
     ASCategoryStateStale,
-    ASCategoryStateNeedsMoreImages,
-    ASCategoryStateGettingMoreImages
-    ASCategoryStateUpToDate,
-    ASCategoryStateRefreshing,
+    ASCategoryStateBusyRefreshing,
+    ASCategoryStateBusyGettingImages,
+    ASCategoryStateFree,
+    ASCategoryStateUpToDate
 };
 
 @class ASImage, ASStore;
@@ -32,7 +31,6 @@ typedef NS_ENUM(NSInteger, ASCategoryState) {
 @optional
 - (void)imageThumbnailUpdated:(ASImage *)image;
 - (void)imageFullUpdated:(ASImage *)image;
-- (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages;
 
 @end
 
@@ -51,10 +49,9 @@ typedef NS_ENUM(NSInteger, ASCategoryState) {
 
 - (void)imageThumbnailUpdated:(ASImage *)image;
 - (void)imageFullUpdated:(ASImage *)image;
-- (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages;
 
 - (void)refreshImages;
-- (void)requestImageData;
+- (BOOL)requestImageData;
 - (void)cancelThumbnailDownloads;
 - (void)refreshState;
 

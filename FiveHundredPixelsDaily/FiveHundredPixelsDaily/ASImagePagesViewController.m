@@ -11,8 +11,9 @@
 #import "ASImageVCLinkedList.h"
 #import "ASSettingsTableViewController.h"
 #import "ASDownloadManager.h"
+#import "ASCategory.h"
 
-@interface ASImagePagesViewController () <UIAlertViewDelegate>
+@interface ASImagePagesViewController () <UIAlertViewDelegate, ASCategoryDelegate>
 
 @property UIPageViewController *pageViewController;
 @property ASImageVCLinkedList *imagesLinkedList;
@@ -24,6 +25,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.initialActiveImage.category addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew context:nil];
+
     // Bar buttons
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Thumbnails"] style:UIBarButtonItemStylePlain target:self action:@selector(goBackToThumbnails:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Settings"] style:UIBarButtonItemStylePlain target:self  action:@selector(goToSettings:)];
@@ -42,7 +45,8 @@
 
     // Create page view controller
     self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:@{ UIPageViewControllerOptionInterPageSpacingKey: @(20.0) }];
-    self.pageViewController.dataSource = self;
+#warning Disables swipe gestures
+    // self.pageViewController.dataSource = self;
     self.pageViewController.delegate = self;
     [self.pageViewController setViewControllers:@[self.imagesLinkedList.imageVC] direction:UIPageViewControllerNavigationDirectionForward animated:false completion:nil];
     imageVC.view.gestureRecognizers = self.pageViewController.gestureRecognizers;
@@ -70,6 +74,10 @@
     [self updateState];
 }
 
+- (void)dealloc {
+    [self.initialActiveImage.category removeObserver:self forKeyPath:@"state"];
+}
+
 - (void)goToSettings:(id)sender {
     [self performSegueWithIdentifier:@"ShowSettings" sender:self];
 }
@@ -77,14 +85,7 @@
 - (void)goBackToThumbnails:(id)sender {
     [self.navigationController popViewControllerAnimated:true];
     [[ASDownloadManager sharedManager] cancelAllDownloadTasks];
-    NSManagedObjectContext *moc = self.initialActiveImage.managedObjectContext;
-    [moc performBlock:^{
-        NSError *error;
-        if ([moc hasChanges] == true) {
-            [moc save:&error];
-            if (error != nil) NSLog(@"error saving full images: %@", error);
-        }
-    }];
+    [self saveContext];
 }
 
 - (void)updateState {
@@ -106,11 +107,28 @@
         // Request prev
         if (self.imagesLinkedList.prev != nil) [self.imagesLinkedList.prev.imageVC.image requestFullImageIfNeeded];
     }
-    // Request current
+
+    // Request current image if needed
     [self.imagesLinkedList.imageVC.image requestFullImageIfNeeded];
+
+    // Request more images if needed
+    ASImage *image = self.imagesLinkedList.imageVC.image;
+    NSUInteger imageIndex = [image.category.images indexOfObject:image];
+    if (image.category.images.count - imageIndex < 5) [image.category requestImageData];
 
     // Update UI
     [self updateUI];
+}
+
+- (void)saveContext {
+    NSManagedObjectContext *moc = self.initialActiveImage.managedObjectContext;
+    [moc performBlock:^{
+        NSError *error;
+        if ([moc hasChanges] == true) {
+            [moc save:&error];
+            if (error != nil) NSLog(@"error saving full images: %@", error);
+        }
+    }];
 }
 
 - (void)updateUI {
@@ -190,6 +208,15 @@
                                      completion:^(BOOL finished) {
                                          if (finished == true) [blockSafeSelf updateState];
                                      }];
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"state"]) {
+        ASCategory *category = (ASCategory *)object;
+        if (category.state.integerValue == ASCategoryStateFree) [self updateUI];
+    }
 }
 
 #pragma mark - Navigation

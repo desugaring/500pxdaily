@@ -41,6 +41,7 @@
 		4FC4119E1AFDDC8300E4C063 /* ASCenteredScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4119D1AFDDC8300E4C063 /* ASCenteredScrollView.m */; };
 		4FC411DF1B02CE2600E4C063 /* ASDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC411DE1B02CE2600E4C063 /* ASDownloadManager.m */; };
 		4FC412551B04324D00E4C063 /* ASDownloadButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC412541B04324D00E4C063 /* ASDownloadButtonView.m */; };
+		4FC412581B09146600E4C063 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC412571B09146600E4C063 /* Reachability.m */; };
 		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
 		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
 /* End PBXBuildFile section */
@@ -110,6 +111,8 @@
 		4FC411DE1B02CE2600E4C063 /* ASDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDownloadManager.m; sourceTree = "<group>"; };
 		4FC412531B04324D00E4C063 /* ASDownloadButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASDownloadButtonView.h; sourceTree = "<group>"; };
 		4FC412541B04324D00E4C063 /* ASDownloadButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDownloadButtonView.m; sourceTree = "<group>"; };
+		4FC412561B09146600E4C063 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		4FC412571B09146600E4C063 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		4FE3E2B51ADA107800B174F4 /* ASCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCategory.h; sourceTree = "<group>"; };
 		4FE3E2B61ADA107800B174F4 /* ASCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategory.m; sourceTree = "<group>"; };
 		4FE3E2B81ADA107800B174F4 /* ASImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImage.h; sourceTree = "<group>"; };
@@ -229,6 +232,8 @@
 		4F9B8FB21AF6AE3700B36422 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				4FC412561B09146600E4C063 /* Reachability.h */,
+				4FC412571B09146600E4C063 /* Reachability.m */,
 				4F9B8FAF1AF6AE2300B36422 /* ASButtonView.h */,
 				4F9B8FB01AF6AE2300B36422 /* ASButtonView.m */,
 				4FC412531B04324D00E4C063 /* ASDownloadButtonView.h */,
@@ -447,6 +452,7 @@
 				4F4D6EBE1AD76BAE00D1ABD8 /* ASCategoriesTableViewController.m in Sources */,
 				4F717E8E1AE08F2D004B8722 /* ASImageCollectionViewCell.m in Sources */,
 				4F717E9B1AE22B12004B8722 /* ASCategoriesPagesViewController.m in Sources */,
+				4FC412581B09146600E4C063 /* Reachability.m in Sources */,
 				4FC411971AF9C69A00E4C063 /* ASPhotosManager.m in Sources */,
 				4F9B8FB11AF6AE2300B36422 /* ASButtonView.m in Sources */,
 				4FC4119E1AFDDC8300E4C063 /* ASCenteredScrollView.m in Sources */,

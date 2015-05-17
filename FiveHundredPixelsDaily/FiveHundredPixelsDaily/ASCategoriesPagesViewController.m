@@ -40,7 +40,8 @@
 
     // Create page view controller
     self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
-    self.pageViewController.dataSource = self;
+#warning Disables swipe gestures
+    //self.pageViewController.dataSource = self;
     self.pageViewController.delegate = self;
     [self.pageViewController setViewControllers:@[self.categoriesLinkedList.categoryVC] direction:UIPageViewControllerNavigationDirectionForward animated:false completion:nil];
 

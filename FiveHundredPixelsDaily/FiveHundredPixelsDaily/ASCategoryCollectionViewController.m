@@ -26,11 +26,11 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.category.delegate = self;
     self.scrollViewOffset = 0;
     self.cellSize = CGSizeZero;
     self.navigationItem.title = self.category.name;
-    self.category.delegate = self;
-    self.numberOfImages = self.category.images.count;
+    self.numberOfImages = 0; // Gets altered via state attribute changes caught via KVO
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -45,17 +45,19 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 }
 
 - (IBAction)refreshCategory:(id)sender {
-    self.numberOfImages = 0;
     self.scrollViewOffset = 0;
     [self.category refreshImages];
 }
 
 - (IBAction)refreshAllCategories:(id)sender {
-    // Turn all categories stale
+    // Refresh current categories
+    [self refreshCategory:self];
+    // Turn all other categories state to 'refresh immediately'
     NSManagedObjectContext *context = self.category.managedObjectContext;
-    [context performBlockAndWait:^{
+    [context performBlock:^{
         NSBatchUpdateRequest *request = [[NSBatchUpdateRequest alloc] initWithEntity:self.category.entity];
         request.propertiesToUpdate = @{ @"state" : @(ASCategoryStateRefreshImmediately) };
+        request.predicate = [NSPredicate predicateWithFormat:@"name != %@" argumentArray:@[self.category.name]];
         request.resultType = NSUpdatedObjectIDsResultType;
         NSError *error;
         NSBatchUpdateResult *objectIDs = (NSBatchUpdateResult *)[context executeRequest:request error:&error];
@@ -66,9 +68,8 @@ static NSString * const reuseIdentifier = @"Thumbnail";
                 [context refreshObject:category mergeChanges:YES];
             }
         }];
-        if (error != nil) NSLog(@"error is %@", error);
+        if (error != nil) NSLog(@"batch update error is %@", error);
     }];
-//    [self refreshCategory:self];
 }
 
 #pragma mark - UICollectionView DataSource
@@ -83,11 +84,13 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if (kind == UICollectionElementKindSectionHeader) {
-        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"RefreshHeader" forIndexPath:indexPath];
-        return headerView;
+        if (self.category.state.integerValue == ASCategoryStateStale) {
+            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"RefreshHeader" forIndexPath:indexPath];
+            return headerView;
+        }
     } else if (kind == UICollectionElementKindSectionFooter) {
         ASLoadingFooterCollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"Footer" forIndexPath:indexPath];
-        footerView.loadingLabel.hidden = (self.numberOfImages == self.category.maxNumberOfImages.unsignedIntegerValue);
+        footerView.loadingLabel.hidden = (self.category.state.integerValue == ASCategoryStateBusyGettingImages || self.category.state.integerValue == ASCategoryStateBusyRefreshing) == false;
         return footerView;
     }
     return nil;
@@ -139,8 +142,9 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat newOffset = scrollView.contentOffset.y+scrollView.bounds.size.height;
     if (newOffset - self.scrollViewOffset > 150) {
-        self.scrollViewOffset = newOffset;
-        if ((self.scrollViewOffset/scrollView.contentSize.height)*100 >= 60) [self.category requestImageData];
+        BOOL imagesRequested = false;
+        if ((newOffset/scrollView.contentSize.height)*100 >= 60) imagesRequested = [self.category requestImageData];
+        if (imagesRequested) self.scrollViewOffset = newOffset;
     }
 }
 
@@ -149,13 +153,6 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 - (void)imageThumbnailUpdated:(ASImage *)image {
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0];
     [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-}
-
-- (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages {
-    NSLog(@"num of images updated to in VC: %@, images number: %@", @(numberOfImages), @(self.category.images.count));
-    self.numberOfImages = numberOfImages;
-    [self.collectionView reloadData];
-    NSLog(@"reloading from number change");
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -168,18 +165,60 @@ static NSString * const reuseIdentifier = @"Thumbnail";
     return ((ASImage *)self.category.images[indexPath.item]).thumbnail != nil;
 }
 
+#pragma mark - Category State Change
+
+- (void)categoryStateChanged {
+    switch (self.category.state.integerValue) {
+        case ASCategoryStateRefreshImmediately: {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self refreshCategory:self];
+            });
+            break;
+        }
+        case ASCategoryStateStale: {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.numberOfImages = self.category.images.count;
+                [self.collectionView reloadData];
+            });
+            break;
+        }
+        case ASCategoryStateBusyRefreshing: {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.numberOfImages = 0;
+                [self.collectionView reloadData];
+            });
+            break;
+        }
+        case ASCategoryStateBusyGettingImages: {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadData];
+            });
+            break;
+        }
+        case ASCategoryStateFree: {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.numberOfImages = self.category.images.count;
+                [self.collectionView reloadData];
+            });
+            break;
+        }
+        case ASCategoryStateUpToDate: {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.numberOfImages = self.category.images.count;
+                [self.collectionView reloadData];
+            });
+            break;
+        }
+        default:
+            break;
+    }
+}
+
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"state"]) {
-        NSNumber *state = ((ASCategory *)object).state;
-        NSLog(@"new state for category %@: %@", self.category.name, state);
-        if (state.integerValue == ASCategoryStateRefreshImmediately) {
-            [self.category refreshImages];
-        } else {
-            NSLog(@"reloading from state change");
-            [self.collectionView reloadData];
-        }
+        [self categoryStateChanged];
     }
 }
 

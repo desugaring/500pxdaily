@@ -8,7 +8,6 @@
 
 #import "ASFHPStore.h"
 #import "ASCategory.h"
-#import "ASFHPOperation.h"
 
 @implementation ASFHPStore
 

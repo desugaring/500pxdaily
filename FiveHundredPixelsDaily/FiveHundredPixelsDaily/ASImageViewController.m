@@ -25,16 +25,11 @@
     [super viewWillAppear:animated];
     if(self.image.full == nil) {
         self.image.delegate = self;
-        [self.image requestFullImageIfNeeded];
         [self.spinner startAnimating];
     } else if (self.imageView == nil) {
         [self updateImage];
     }
     NSLog(@"wil lappear %@", self.image.name);
-}
-
--(void)viewWillLayoutSubviews {
-    [self.view layoutIfNeeded];
 }
 
 - (void)updateImage {
@@ -49,7 +44,7 @@
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        NSLog(@"size is %f %f", size.width, size.height);
+//        NSLog(@"size is %f %f", size.width, size.height);
         [self centerAndScaleImageWithSize:size];
     } completion:nil];
 }

@@ -46,23 +46,22 @@
     if (getImage) {
 //        NSLog(@"requesting thumbnail for image named %@", self.name);
         self.downloadTask = [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.thumbnailURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
-            [ASDownloadManager decrementTasks];
             if (location != nil) {
                 [self.managedObjectContext performBlockAndWait:^{
                     self.thumbnail = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.category imageThumbnailUpdated:self];
-                        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:)]) [self.delegate imageThumbnailUpdated:self];
-                    });
                 }];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.category imageThumbnailUpdated:self];
+                    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:)]) [self.delegate imageThumbnailUpdated:self];
+                });
             } else {
                 NSLog(@"response for thumbnail request is %@, error is %@", response, error);
             }
             [self.gettingImageLock lock];
             self.gettingImage = false;
             [self.category.thumbnailDownloadTasks removeObject:self.downloadTask];
-//            NSLog(@"setting getting image to false for %@", self.name);
             [self.gettingImageLock unlock];
+            if (self.thumbnail == nil) [self requestThumbnailImageIfNeeded];
         }];
         [self.category.thumbnailDownloadTasks addObject:self.downloadTask];
     }
@@ -76,21 +75,21 @@
     if (getImage) {
         //        NSLog(@"requesting thumbnail for image named %@", self.name);
         self.downloadTask = [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.fullURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
-            [ASDownloadManager decrementTasks];
             if (location != nil) {
                 [self.managedObjectContext performBlockAndWait:^{
                     self.full = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.category imageFullUpdated:self];
-                        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) [self.delegate imageFullUpdated:self];
-                    });
                 }];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.category imageFullUpdated:self];
+                    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) [self.delegate imageFullUpdated:self];
+                });
             } else {
                 NSLog(@"response for full image request is %@, error is %@", response, error);
             }
             [self.gettingImageLock lock];
             self.gettingImage = false;
             [self.gettingImageLock unlock];
+            if (self.full == nil) [self requestFullImageIfNeeded];
         }];
     }
 }

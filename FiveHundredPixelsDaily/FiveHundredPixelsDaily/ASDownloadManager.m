@@ -47,28 +47,44 @@ static volatile int32_t runningTasks = 0;
         config.timeoutIntervalForRequest = 15;
         _session = [NSURLSession sessionWithConfiguration:config];
         _resumeData = [NSMutableDictionary new];
+        _reachability = [Reachability reachabilityWithHostName:@"http://google.com"];
     }
+    
     return self;
 }
 
 - (NSURLSessionDataTask *)downloadDataWithURL:(NSURL *)url withCompletionBlock:(URLDataDownloadCompletionBlock)completionBlock {
-    NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:completionBlock];
+    URLDataDownloadCompletionBlock completionBlockWithErrorHandling = ^(NSData *data, NSURLResponse *response, NSError *error) {
+        [ASDownloadManager decrementTasks];
+        completionBlock(data, response, error);
+    };
+
+    NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:completionBlockWithErrorHandling];
     [task resume];
     [ASDownloadManager incrementTasks];
     return task;
 }
 
 - (NSURLSessionDownloadTask *)downloadFileWithURL:(NSURL *)url withCompletionBlock:(URLFileDownloadCompletionBlock)completionBlock {
+    URLFileDownloadCompletionBlock completionBlockWithErrorHandling = ^(NSURL *location, NSURLResponse *response, NSError *error) {
+        [ASDownloadManager decrementTasks];
+        if (error != nil && error.code == NSURLErrorTimedOut) {
+            [[ASDownloadManager sharedManager] cancelAllDownloadTasks];
+            NSLog(@"!!!cancelled all tasks bc of a timeout");
+        }
+        completionBlock(location, response, error);
+    };
+    
     NSData *data = [self.resumeData objectForKey:url];
     NSURLSessionDownloadTask *task;
     if (data != nil) {
-        NSLog(@"resuming task for url: %@", url.absoluteString);
-        task = [self.session downloadTaskWithResumeData:data completionHandler:completionBlock];
+//        NSLog(@"resuming task for url: %@", url.absoluteString);
+        task = [self.session downloadTaskWithResumeData:data completionHandler:completionBlockWithErrorHandling];
         [self.resumeData removeObjectForKey:url];
 
     } else {
 //        NSLog(@"starting new task for url: %@", url.absoluteString);
-        task = [self.session downloadTaskWithURL:url completionHandler:completionBlock];
+        task = [self.session downloadTaskWithURL:url completionHandler:completionBlockWithErrorHandling];
     }
     [task resume];
     [ASDownloadManager incrementTasks];

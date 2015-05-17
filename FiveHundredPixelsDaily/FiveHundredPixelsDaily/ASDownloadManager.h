@@ -7,11 +7,14 @@
 //
 
 @import UIKit;
+#import "Reachability.h"
 
 typedef void(^URLDataDownloadCompletionBlock)(NSData *data, NSURLResponse *response, NSError *error);
 typedef void(^URLFileDownloadCompletionBlock)(NSURL *location, NSURLResponse *response, NSError *error);
 
 @interface ASDownloadManager : NSObject
+
+@property Reachability *reachability;
 
 + (ASDownloadManager *)sharedManager;
 

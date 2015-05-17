@@ -8,7 +8,6 @@
 
 @import Foundation;
 @import CoreData;
-#import "ASBaseOperation.h"
 
 @interface ASBaseObject : NSManagedObject
 

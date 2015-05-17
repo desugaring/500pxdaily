@@ -12,14 +12,12 @@
 
 @dynamic name;
 
-- (void)awakeFromFetch
-{
+- (void)awakeFromFetch {
     [super awakeFromFetch];
     [self awakeCommon];
 }
 
-- (void)awakeFromInsert
-{
+- (void)awakeFromInsert {
     [super awakeFromInsert];
     [self awakeCommon];
 }

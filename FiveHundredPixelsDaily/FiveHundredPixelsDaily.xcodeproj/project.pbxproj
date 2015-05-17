@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4F489A7A1AEED11B0028F4F7 /* ASImageVCLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F489A791AEED11B0028F4F7 /* ASImageVCLinkedList.m */; };
-		4F4C1E411ADA17FA00109166 /* ASBaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E401ADA17FA00109166 /* ASBaseOperation.m */; };
 		4F4C1E441ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E421ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodeld */; };
 		4F4C1E471ADA18CF00109166 /* ASStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E461ADA18CF00109166 /* ASStore.m */; };
 		4F4C1E4D1ADA198F00109166 /* ASFHPStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4C1E4B1ADA198F00109166 /* ASFHPStore.m */; };
@@ -44,14 +43,11 @@
 		4FC412551B04324D00E4C063 /* ASDownloadButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC412541B04324D00E4C063 /* ASDownloadButtonView.m */; };
 		4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B61ADA107800B174F4 /* ASCategory.m */; };
 		4FE3E2BA1ADA107800B174F4 /* ASImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2B91ADA107800B174F4 /* ASImage.m */; };
-		4FE3E2D01ADA160800B174F4 /* ASFHPOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3E2CF1ADA160800B174F4 /* ASFHPOperation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4F489A781AEED11B0028F4F7 /* ASImageVCLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImageVCLinkedList.h; sourceTree = "<group>"; };
 		4F489A791AEED11B0028F4F7 /* ASImageVCLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASImageVCLinkedList.m; sourceTree = "<group>"; };
-		4F4C1E3F1ADA17FA00109166 /* ASBaseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASBaseOperation.h; sourceTree = "<group>"; };
-		4F4C1E401ADA17FA00109166 /* ASBaseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASBaseOperation.m; sourceTree = "<group>"; };
 		4F4C1E431ADA189300109166 /* FiveHundredPixelsDaily.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FiveHundredPixelsDaily.xcdatamodel; sourceTree = "<group>"; };
 		4F4C1E451ADA18CF00109166 /* ASStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASStore.h; sourceTree = "<group>"; };
 		4F4C1E461ADA18CF00109166 /* ASStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASStore.m; sourceTree = "<group>"; };
@@ -118,8 +114,6 @@
 		4FE3E2B61ADA107800B174F4 /* ASCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategory.m; sourceTree = "<group>"; };
 		4FE3E2B81ADA107800B174F4 /* ASImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImage.h; sourceTree = "<group>"; };
 		4FE3E2B91ADA107800B174F4 /* ASImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASImage.m; sourceTree = "<group>"; };
-		4FE3E2CE1ADA160800B174F4 /* ASFHPOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASFHPOperation.h; sourceTree = "<group>"; };
-		4FE3E2CF1ADA160800B174F4 /* ASFHPOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASFHPOperation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,7 +306,6 @@
 				4FE3E2B61ADA107800B174F4 /* ASCategory.m */,
 				4FE3E2B81ADA107800B174F4 /* ASImage.h */,
 				4FE3E2B91ADA107800B174F4 /* ASImage.m */,
-				4FE3E2BE1ADA119600B174F4 /* Operations */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -350,17 +343,6 @@
 				4FC4119D1AFDDC8300E4C063 /* ASCenteredScrollView.m */,
 			);
 			name = Image;
-			sourceTree = "<group>";
-		};
-		4FE3E2BE1ADA119600B174F4 /* Operations */ = {
-			isa = PBXGroup;
-			children = (
-				4F4C1E3F1ADA17FA00109166 /* ASBaseOperation.h */,
-				4F4C1E401ADA17FA00109166 /* ASBaseOperation.m */,
-				4FE3E2CE1ADA160800B174F4 /* ASFHPOperation.h */,
-				4FE3E2CF1ADA160800B174F4 /* ASFHPOperation.m */,
-			);
-			path = Operations;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -468,11 +450,9 @@
 				4FC411971AF9C69A00E4C063 /* ASPhotosManager.m in Sources */,
 				4F9B8FB11AF6AE2300B36422 /* ASButtonView.m in Sources */,
 				4FC4119E1AFDDC8300E4C063 /* ASCenteredScrollView.m in Sources */,
-				4FE3E2D01ADA160800B174F4 /* ASFHPOperation.m in Sources */,
 				4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */,
 				4F489A7A1AEED11B0028F4F7 /* ASImageVCLinkedList.m in Sources */,
 				4FC4119A1AFC4B4600E4C063 /* ASLoadingFooterCollectionReusableView.m in Sources */,
-				4F4C1E411ADA17FA00109166 /* ASBaseOperation.m in Sources */,
 				4F4C1E4D1ADA198F00109166 /* ASFHPStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

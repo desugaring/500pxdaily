@@ -6,9 +6,9 @@
     <entity name="Category" representedClassName="ASCategory" parentEntity="BaseObject" syncable="YES">
         <attribute name="isActive" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
         <attribute name="isDaily" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="isStale" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <attribute name="lastUpdated" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="maxNumberOfImages" attributeType="Integer 32" defaultValueString="-1" syncable="YES"/>
+        <attribute name="state" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Image" inverseName="category" inverseEntity="Image" syncable="YES"/>
         <relationship name="store" maxCount="1" deletionRule="Nullify" destinationEntity="Store" inverseName="categories" inverseEntity="Store" syncable="YES"/>
     </entity>

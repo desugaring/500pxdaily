@@ -30,13 +30,14 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 @dynamic lastUpdated;
 @dynamic isActive;
 @dynamic isDaily;
-@dynamic isStale;
+@dynamic state;
 @dynamic maxNumberOfImages;
 
 @synthesize delegate;
 @synthesize gettingImages;
 @synthesize gettingImagesLock;
 @synthesize thumbnailDownloadTasks;
+@synthesize stalenessTimer;
 
 + (NSURL *)urlForCategoryName:(NSString *)name forPage:(NSUInteger)page {
     NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
@@ -57,14 +58,18 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     self.gettingImages = false;
     self.gettingImagesLock = [NSLock new];
     self.thumbnailDownloadTasks = [NSMutableArray new];
-    [self checkStaleness];
-    self.stalenessTimer = [NSTimer timerWithTimeInterval:30*60 target:self selector:@selector(checkStaleness) userInfo:nil repeats:true];
+    [self refreshState];
+    self.stalenessTimer = [NSTimer timerWithTimeInterval:30*60 target:self selector:@selector(refreshState) userInfo:nil repeats:true];
 }
 
-- (void)checkStaleness {
-    if (self.isStale.boolValue == false) {
+- (void)refreshState {
+    if (self.state.integerValue != ASCategoryStateUpToDate) {
         NSInteger minutesSinceLastUpdate = [[[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:self.lastUpdated toDate:[NSDate date] options:0] minute];
-        if ((minutesSinceLastUpdate >= 30)) self.isStale = @(true);
+        if (minutesSinceLastUpdate >= 60*6) {
+            self.state = @(ASCategoryStateRefreshImmediately);
+        } else if ((minutesSinceLastUpdate >= 30)) {
+            self.state = @(ASCategoryStateStale);
+        }
     }
 }
 
@@ -96,7 +101,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 - (void)requestImageData {
     [self.gettingImagesLock lock];
-    BOOL getImages = (self.gettingImages == false && self.images.count != self.maxNumberOfImages.unsignedIntegerValue);
+    BOOL getImages = (self.gettingImages == false && self.state.integerValue == ASCategoryStateNeedsMoreImages);
     if (getImages == true) self.gettingImages = true;
     [self.gettingImagesLock unlock];
     if (getImages) {
@@ -134,19 +139,17 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 - (void)parseImageData:(NSDictionary *)imageData {
     // If first page, set new max items
-    if (self.images.count == 0) {
-        self.maxNumberOfImages = (NSNumber *)imageData[@"total_items"];
-    }
+    if (self.images.count == 0) self.maxNumberOfImages = (NSNumber *)imageData[@"total_items"];
     NSLog(@"max number for category %@ is %@", self.name, self.maxNumberOfImages);
 
     // If current max number of items is out of date, the whole category is out of date, so don't let any new images in
-    if (self.maxNumberOfImages != (NSNumber *)imageData[@"total_items"]) {
+    if ([self.maxNumberOfImages isEqualToNumber:(NSNumber *)imageData[@"total_items"]] == false) {
         self.maxNumberOfImages = @(self.images.count);
-        NSLog(@"number of images out of date!!!!");
+        self.state = @(ASCategoryStateStale);
+        NSLog(@"category number of images out of date!, %@", self.name);
     // Otherwise all is well, add new images to the category
     } else {
         NSArray *photos = imageData[@"photos"];
-
         [self.managedObjectContext performBlockAndWait:^{
             NSMutableOrderedSet *newImages = [NSMutableOrderedSet new];
             for (NSDictionary *photoData in photos) {
@@ -160,6 +163,11 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
             [currentImages addObjectsFromArray:newImages.array];
             self.images = (NSOrderedSet *)currentImages.copy;
         }];
+        if (self.maxNumberOfImages.unsignedIntegerValue == self.images.count) {
+            self.state = @(ASCategoryStateUpToDate);
+        } else if (self.state.integerValue != ASCategoryStateNeedsMoreImages) {
+            self.state = @(ASCategoryStateNeedsMoreImages);
+        }
     }
     [self.gettingImagesLock lock];
     self.gettingImages = false;

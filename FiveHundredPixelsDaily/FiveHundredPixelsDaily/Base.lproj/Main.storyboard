@@ -194,7 +194,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="lrU-YD-q5P">
                             <size key="itemSize" width="120" height="120"/>
-                            <size key="headerReferenceSize" width="50" height="40"/>
+                            <size key="headerReferenceSize" width="50" height="70"/>
                             <size key="footerReferenceSize" width="50" height="50"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
@@ -234,19 +234,17 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eKj-9d-5s3">
-                                    <rect key="frame" x="94" y="0.0" width="140" height="40"/>
+                                <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CATEGORY IS OUT OF DATE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8rR-FO-o1j">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="iXt-1n-yk1"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                    <state key="normal" title="ALL CATEGORIES">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="refreshAllCategories:" destination="cJZ-AX-HRa" eventType="touchUpInside" id="DeR-kX-6xp"/>
-                                    </connections>
-                                </button>
+                                    <color key="textColor" red="1" green="0.25101772030651337" blue="0.25101772030651337" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZa-Qi-58K">
-                                    <rect key="frame" x="234" y="0.0" width="141" height="40"/>
+                                    <rect key="frame" x="235" y="30" width="140" height="40"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                     <state key="normal" title="THIS CATEGORY">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -257,27 +255,41 @@
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REFRESH:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2wS-T1-Uke">
-                                    <rect key="frame" x="0.0" y="0.0" width="94" height="40"/>
+                                    <rect key="frame" x="0.0" y="30" width="94" height="40"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                     <color key="textColor" red="0.69197497610000003" green="0.90267048360000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eKj-9d-5s3">
+                                    <rect key="frame" x="94" y="30" width="141" height="40"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                    <state key="normal" title="ALL CATEGORIES">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="refreshAllCategories:" destination="cJZ-AX-HRa" eventType="touchUpInside" id="DeR-kX-6xp"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" red="0.092523243801652888" green="0.092523243801652888" blue="0.092523243801652888" alpha="0.75" colorSpace="custom" customColorSpace="sRGB"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="oZa-Qi-58K" secondAttribute="trailing" id="0PH-hN-aya"/>
+                                <constraint firstItem="eKj-9d-5s3" firstAttribute="top" secondItem="8rR-FO-o1j" secondAttribute="bottom" constant="-10" id="1dH-Fk-Wzt"/>
                                 <constraint firstAttribute="bottom" secondItem="oZa-Qi-58K" secondAttribute="bottom" id="2eh-Qn-M9b"/>
+                                <constraint firstItem="oZa-Qi-58K" firstAttribute="top" secondItem="8rR-FO-o1j" secondAttribute="bottom" constant="-10" id="3D1-mx-7oS"/>
                                 <constraint firstItem="oZa-Qi-58K" firstAttribute="leading" secondItem="eKj-9d-5s3" secondAttribute="trailing" id="67p-yM-Lg8"/>
+                                <constraint firstItem="8rR-FO-o1j" firstAttribute="leading" secondItem="kog-ox-4R3" secondAttribute="leading" id="7VO-Y5-XHM"/>
                                 <constraint firstItem="2wS-T1-Uke" firstAttribute="leading" secondItem="kog-ox-4R3" secondAttribute="leading" id="Gxk-BX-XKw"/>
-                                <constraint firstItem="2wS-T1-Uke" firstAttribute="top" secondItem="kog-ox-4R3" secondAttribute="top" id="Hc3-LA-QCB"/>
+                                <constraint firstAttribute="trailing" secondItem="8rR-FO-o1j" secondAttribute="trailing" id="HZz-Fm-Nc8"/>
                                 <constraint firstItem="2wS-T1-Uke" firstAttribute="width" secondItem="eKj-9d-5s3" secondAttribute="width" multiplier="1:1.5" id="Qdj-Hd-j1i"/>
-                                <constraint firstItem="oZa-Qi-58K" firstAttribute="top" secondItem="kog-ox-4R3" secondAttribute="top" id="ZJm-KS-Qmd"/>
+                                <constraint firstItem="2wS-T1-Uke" firstAttribute="top" secondItem="8rR-FO-o1j" secondAttribute="bottom" constant="-10" id="euH-nS-zFp"/>
                                 <constraint firstItem="eKj-9d-5s3" firstAttribute="leading" secondItem="2wS-T1-Uke" secondAttribute="trailing" id="gGH-aN-3Ry"/>
+                                <constraint firstItem="8rR-FO-o1j" firstAttribute="top" secondItem="kog-ox-4R3" secondAttribute="top" id="h17-Jc-6tB"/>
                                 <constraint firstItem="oZa-Qi-58K" firstAttribute="width" secondItem="eKj-9d-5s3" secondAttribute="width" id="ioK-Tq-yYu"/>
                                 <constraint firstAttribute="bottom" secondItem="eKj-9d-5s3" secondAttribute="bottom" id="mH1-hd-crI"/>
                                 <constraint firstAttribute="bottom" secondItem="2wS-T1-Uke" secondAttribute="bottom" id="tno-mD-l1U"/>
-                                <constraint firstItem="eKj-9d-5s3" firstAttribute="top" secondItem="kog-ox-4R3" secondAttribute="top" id="uKW-bf-kMS"/>
                             </constraints>
                         </collectionReusableView>
                         <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Footer" id="Jt6-TE-IrE" customClass="ASLoadingFooterCollectionReusableView">

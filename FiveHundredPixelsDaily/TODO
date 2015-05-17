@@ -1,5 +1,6 @@
 Ver 1.0:
 
+- Add request more images in full image mode in pagesVC
 - Rework resetting images - reset all of them every half an hour, if max images doesn't match, don't update anymore
 - Test for crashes
 - Figure out scrollview inside pagevc bug

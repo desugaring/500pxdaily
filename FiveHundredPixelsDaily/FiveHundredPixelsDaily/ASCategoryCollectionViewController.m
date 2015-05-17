@@ -8,17 +8,14 @@
 
 #import "ASCategoryCollectionViewController.h"
 #import "ASImageCollectionViewCell.h"
-#import "ASFHPStore.h"
 #import "ASCategory.h"
 #import "ASImage.h"
 #import "ASLoadingFooterCollectionReusableView.h"
 
 @interface ASCategoryCollectionViewController() <UICollectionViewDelegateFlowLayout>
 
-@property NSMutableSet *visibleIndexPaths;
 @property NSUInteger numberOfImages;
 @property CGSize cellSize;
-@property BOOL showRefreshHeader;
 @property CGFloat scrollViewOffset;
 
 @end
@@ -30,7 +27,6 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.scrollViewOffset = 0;
-    self.showRefreshHeader = false;
     self.cellSize = CGSizeZero;
     self.navigationItem.title = self.category.name;
     self.category.delegate = self;
@@ -39,30 +35,31 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.numberOfImages == 0) [self.category requestImageData];
-    self.showRefreshHeader = (self.category.isStale.boolValue == true && self.numberOfImages != 0);
-    [self.collectionView reloadData];
+    [self.category addObserver:self forKeyPath:@"state" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew) context:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.category cancelThumbnailDownloads];
+    [self.category removeObserver:self forKeyPath:@"state"];
 }
 
 - (IBAction)refreshCategory:(id)sender {
-    self.showRefreshHeader = false;
     self.numberOfImages = 0;
+    self.scrollViewOffset = 0;
     [self.category refreshImages];
 }
 
 - (IBAction)refreshAllCategories:(id)sender {
+    // Turn all categories stale
     NSManagedObjectContext *context = self.category.managedObjectContext;
-    [context performBlock:^{
+    [context performBlockAndWait:^{
         NSBatchUpdateRequest *request = [[NSBatchUpdateRequest alloc] initWithEntity:self.category.entity];
-        request.propertiesToUpdate = @{ @"lastUpdated" : [NSDate distantPast] };
+        request.propertiesToUpdate = @{ @"state" : @(ASCategoryStateRefreshImmediately) };
         request.resultType = NSUpdatedObjectIDsResultType;
         NSError *error;
         NSBatchUpdateResult *objectIDs = (NSBatchUpdateResult *)[context executeRequest:request error:&error];
+        // Apply changes to objects in memory by merging them with the updated data in the context
         [objectIDs.result enumerateObjectsUsingBlock:^(NSManagedObjectID *objID, NSUInteger idx, BOOL *stop) {
             ASCategory *category = (ASCategory *)[context objectWithID:objID];
             if ([category isFault] == false) {
@@ -70,14 +67,18 @@ static NSString * const reuseIdentifier = @"Thumbnail";
             }
         }];
         if (error != nil) NSLog(@"error is %@", error);
-        [self refreshCategory:self];
     }];
+//    [self refreshCategory:self];
 }
 
 #pragma mark - UICollectionView DataSource
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return self.showRefreshHeader ? CGSizeMake(collectionView.bounds.size.width, 40) : CGSizeZero;
+    return (self.category.state.integerValue == ASCategoryStateStale) ? CGSizeMake(collectionView.bounds.size.width, 70) : CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    return CGSizeMake(self.collectionView.bounds.size.width, floor(self.collectionView.bounds.size.height/10));
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
@@ -90,10 +91,6 @@ static NSString * const reuseIdentifier = @"Thumbnail";
         return footerView;
     }
     return nil;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-    return CGSizeMake(self.collectionView.bounds.size.width, floor(self.collectionView.bounds.size.height/10));
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -139,38 +136,12 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 #pragma mark - ScrollView Delegate
 
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-//    NSLog(@"scrollview offet is %@, height is %@, percent down is %@", @(scrollView.contentOffset.y+scrollView.bounds.size.height), @(scrollView.contentSize.height), @((scrollView.contentOffset.y/scrollView.contentSize.height)*100));
-//    if (scrollView.contentOffset.y/scrollView.contentSize.height >)
-}
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat newOffset = scrollView.contentOffset.y+scrollView.bounds.size.height;
     if (newOffset - self.scrollViewOffset > 150) {
         self.scrollViewOffset = newOffset;
-        if ((self.scrollViewOffset/scrollView.contentSize.height)*100 >= 75) {
-            NSLog(@"getting close to the end");
-            [self.category requestImageData];
-        }
-        NSLog(@"new offset: %@", @(self.scrollViewOffset));
+        if ((self.scrollViewOffset/scrollView.contentSize.height)*100 >= 60) [self.category requestImageData];
     }
-//    offset = scrollView.contentOffset.y+scrollView.bounds.size.height;
-    //    NSLog(@"scrolling");
-//    NSMutableSet *newIndexPaths = [NSMutableSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
-//    if ([self.visibleIndexPaths isEqualToSet:newIndexPaths] == false) {
-//        // Cancel requests for images that are no longer visible
-//        [self.visibleIndexPaths minusSet:newIndexPaths];
-//        for (NSIndexPath *indexPath in self.visibleIndexPaths) {
-//            ASImage *image = (ASImage *)self.category.images[indexPath.item];
-//#warning implement this using tasks instead
-////            if (image.activeRequest != nil && image.thumbnail == nil) {
-////                [image.activeRequest cancel];
-////                NSLog(@"cancelling %@", image.name);
-////            }
-//        }
-//        self.visibleIndexPaths = newIndexPaths;
-//        if (((NSIndexPath *)self.visibleIndexPaths.allObjects.lastObject).item + 50 >= self.category.images.count) [self.category requestImageData];
-//    }
 }
 
 #pragma mark - Category Image Delegate
@@ -181,9 +152,10 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 }
 
 - (void)numberOfImagesUpdatedTo:(NSUInteger)numberOfImages {
-    NSLog(@"num of images updated to in VC: %@", @(numberOfImages));
+    NSLog(@"num of images updated to in VC: %@, images number: %@", @(numberOfImages), @(self.category.images.count));
     self.numberOfImages = numberOfImages;
     [self.collectionView reloadData];
+    NSLog(@"reloading from number change");
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -194,6 +166,21 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     return ((ASImage *)self.category.images[indexPath.item]).thumbnail != nil;
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"state"]) {
+        NSNumber *state = ((ASCategory *)object).state;
+        NSLog(@"new state for category %@: %@", self.category.name, state);
+        if (state.integerValue == ASCategoryStateRefreshImmediately) {
+            [self.category refreshImages];
+        } else {
+            NSLog(@"reloading from state change");
+            [self.collectionView reloadData];
+        }
+    }
 }
 
 @end

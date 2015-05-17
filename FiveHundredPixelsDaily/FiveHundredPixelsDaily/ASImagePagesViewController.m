@@ -77,6 +77,14 @@
 - (void)goBackToThumbnails:(id)sender {
     [self.navigationController popViewControllerAnimated:true];
     [[ASDownloadManager sharedManager] cancelAllDownloadTasks];
+    NSManagedObjectContext *moc = self.initialActiveImage.managedObjectContext;
+    [moc performBlock:^{
+        NSError *error;
+        if ([moc hasChanges] == true) {
+            [moc save:&error];
+            if (error != nil) NSLog(@"error saving full images: %@", error);
+        }
+    }];
 }
 
 - (void)updateState {

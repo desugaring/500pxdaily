@@ -44,7 +44,7 @@ static volatile int32_t runningTasks = 0;
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
         config.HTTPShouldUsePipelining = true;
         config.HTTPMaximumConnectionsPerHost = 4;
-        config.timeoutIntervalForRequest = 15;
+        config.timeoutIntervalForRequest = 12;
         _session = [NSURLSession sessionWithConfiguration:config];
         _resumeData = [NSMutableDictionary new];
         _reachability = [Reachability reachabilityWithHostName:@"http://google.com"];
@@ -68,10 +68,6 @@ static volatile int32_t runningTasks = 0;
 - (NSURLSessionDownloadTask *)downloadFileWithURL:(NSURL *)url withCompletionBlock:(URLFileDownloadCompletionBlock)completionBlock {
     URLFileDownloadCompletionBlock completionBlockWithErrorHandling = ^(NSURL *location, NSURLResponse *response, NSError *error) {
         [ASDownloadManager decrementTasks];
-        if (error != nil && error.code == NSURLErrorTimedOut) {
-            [[ASDownloadManager sharedManager] cancelAllDownloadTasks];
-            NSLog(@"!!!cancelled all tasks bc of a timeout");
-        }
         completionBlock(location, response, error);
     };
     

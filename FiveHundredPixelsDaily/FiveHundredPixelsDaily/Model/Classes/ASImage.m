@@ -13,9 +13,12 @@
 
 @interface ASImage()
 
-@property BOOL gettingImage;
-@property NSLock *gettingImageLock;
-@property (weak) NSURLSessionDownloadTask *downloadTask;
+@property BOOL gettingThumbnail;
+@property BOOL gettingFull;
+@property NSLock *thumbnailLock;
+@property NSLock *fullLock;
+@property (weak) NSURLSessionDownloadTask *thumbnailTask;
+@property (weak) NSURLSessionDownloadTask *fullTask;
 
 @end
 
@@ -28,24 +31,31 @@
 @dynamic category;
 
 @synthesize delegate;
-@synthesize gettingImageLock;
-@synthesize gettingImage;
-@synthesize downloadTask;
+@synthesize thumbnailLock;
+@synthesize fullLock;
+@synthesize gettingThumbnail;
+@synthesize gettingFull;
+@synthesize thumbnailTask;
+@synthesize fullTask;
 
 - (void)awakeCommon {
-    self.gettingImageLock = [NSLock new];
-    self.gettingImage = false;
-    self.downloadTask = nil;
+    self.thumbnailLock = [NSLock new];
+    self.fullLock = [NSLock new];
+    self.gettingThumbnail = false;
+    self.gettingFull = false;
+    self.thumbnailTask = nil;
+    self.fullTask = nil;
 }
 
 - (void)requestThumbnailImageIfNeeded {
-    [self.gettingImageLock lock];
-    BOOL getImage = (self.gettingImage == false && self.thumbnail == nil);
-    if (getImage == true) self.gettingImage = true;
-    [self.gettingImageLock unlock];
+    [self.thumbnailLock lock];
+    BOOL getImage = (self.gettingThumbnail == false && self.thumbnail == nil);
+    if (getImage == true) self.gettingThumbnail = true;
+    [self.thumbnailLock unlock];
     if (getImage) {
 //        NSLog(@"requesting thumbnail for image named %@", self.name);
-        self.downloadTask = [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.thumbnailURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        self.thumbnailTask = [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.thumbnailURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
+            BOOL retryDownload = false;
             if (location != nil) {
                 [self.managedObjectContext performBlockAndWait:^{
                     self.thumbnail = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
@@ -56,25 +66,27 @@
                 });
             } else {
                 NSLog(@"response for thumbnail request is %@, error is %@", response, error);
+                if (error != nil && error.code == NSURLErrorTimedOut) retryDownload = true;
             }
-            [self.gettingImageLock lock];
-            self.gettingImage = false;
-            [self.category.thumbnailDownloadTasks removeObject:self.downloadTask];
-            [self.gettingImageLock unlock];
-            if (self.thumbnail == nil) [self requestThumbnailImageIfNeeded];
+            [self.thumbnailLock lock];
+            self.gettingThumbnail = false;
+            [self.category.thumbnailDownloadTasks removeObject:self.thumbnailTask];
+            [self.thumbnailLock unlock];
+            if (retryDownload == true) [self requestThumbnailImageIfNeeded];
         }];
-        [self.category.thumbnailDownloadTasks addObject:self.downloadTask];
+        [self.category.thumbnailDownloadTasks addObject:self.thumbnailTask];
     }
 }
 
 - (void)requestFullImageIfNeeded {
-    [self.gettingImageLock lock];
-    BOOL getImage = (self.gettingImage == false && self.full == nil);
-    if (getImage == true) self.gettingImage = true;
-    [self.gettingImageLock unlock];
+    [self.fullLock lock];
+    BOOL getImage = (self.gettingFull == false && self.full == nil);
+    if (getImage == true) self.gettingFull = true;
+    [self.fullLock unlock];
     if (getImage) {
         //        NSLog(@"requesting thumbnail for image named %@", self.name);
-        self.downloadTask = [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.fullURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        self.fullTask = [[ASDownloadManager sharedManager] downloadFileWithURL:[NSURL URLWithString:self.fullURL] withCompletionBlock:^(NSURL *location, NSURLResponse *response, NSError *error) {
+            BOOL retryDownload = false;
             if (location != nil) {
                 [self.managedObjectContext performBlockAndWait:^{
                     self.full = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
@@ -85,17 +97,22 @@
                 });
             } else {
                 NSLog(@"response for full image request is %@, error is %@", response, error);
+                if (error != nil && error.code == NSURLErrorTimedOut) retryDownload = true;
             }
-            [self.gettingImageLock lock];
-            self.gettingImage = false;
-            [self.gettingImageLock unlock];
-            if (self.full == nil) [self requestFullImageIfNeeded];
+            [self.fullLock lock];
+            self.gettingFull = false;
+            [self.fullLock unlock];
+            if (retryDownload == true) [self requestFullImageIfNeeded];
         }];
     }
 }
 
-- (void)cancelRequestIfNeeded {
-    if (self.downloadTask != nil) [[ASDownloadManager sharedManager] cancelDownloadTask:self.downloadTask];
+- (void)cancelThumbnailRequestIfNeeded {
+    if (self.thumbnailTask != nil) [[ASDownloadManager sharedManager] cancelDownloadTask:self.thumbnailTask];
+}
+
+- (void)cancelFullRequestIfNeeded {
+    if (self.fullTask != nil) [[ASDownloadManager sharedManager] cancelDownloadTask:self.fullTask];
 }
 
 @end

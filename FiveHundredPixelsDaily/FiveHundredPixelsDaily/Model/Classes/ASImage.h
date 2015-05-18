@@ -26,7 +26,8 @@
 - (void)requestThumbnailImageIfNeeded;
 - (void)requestFullImageIfNeeded;
 
-- (void)cancelRequestIfNeeded;
+- (void)cancelThumbnailRequestIfNeeded;
+- (void)cancelFullRequestIfNeeded;
 
 @end
 

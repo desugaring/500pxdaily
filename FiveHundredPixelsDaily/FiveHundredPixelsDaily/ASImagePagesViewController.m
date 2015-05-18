@@ -94,7 +94,7 @@
     ASImageViewController *activeVC = (ASImageViewController *)self.pageViewController.viewControllers.firstObject;
     if (self.imagesLinkedList.next != nil && [self.imagesLinkedList.next.imageVC isEqual:activeVC]) {
         // Cancel previous
-        if (self.imagesLinkedList.prev != nil) [self.imagesLinkedList.prev.imageVC.image cancelRequestIfNeeded];
+        if (self.imagesLinkedList.prev != nil) [self.imagesLinkedList.prev.imageVC.image cancelFullRequestIfNeeded];
         // Set new imageVC
         self.imagesLinkedList = self.imagesLinkedList.next;
         // Request next
@@ -102,7 +102,7 @@
 
     } else if (self.imagesLinkedList.prev != nil && [self.imagesLinkedList.prev.imageVC isEqual:activeVC]) {
         // Cancel next
-        if (self.imagesLinkedList.next != nil) [self.imagesLinkedList.next.imageVC.image cancelRequestIfNeeded];
+        if (self.imagesLinkedList.next != nil) [self.imagesLinkedList.next.imageVC.image cancelFullRequestIfNeeded];
         // Set new imageVC
         self.imagesLinkedList = self.imagesLinkedList.prev;
         // Request prev
@@ -111,6 +111,9 @@
 
     // Request current image if needed
     [self.imagesLinkedList.imageVC.image requestFullImageIfNeeded];
+
+    // Save context
+    [self saveContext];
 
     // Request more images if needed
     ASImage *image = self.imagesLinkedList.imageVC.image;
@@ -127,7 +130,11 @@
         NSError *error;
         if ([moc hasChanges] == true) {
             [moc save:&error];
-            if (error != nil) NSLog(@"error saving full images: %@", error);
+            if (error != nil) {
+                NSLog(@"error saving full images: %@", error);
+            } else {
+                NSLog(@"full image saved successfully");
+            }
         }
     }];
 }

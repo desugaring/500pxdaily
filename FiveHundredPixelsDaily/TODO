@@ -1,6 +1,7 @@
 Ver 1.0:
 
-- Test for crashes, test timeouts
+- Rework timeouts to be inside VCs
+- Test for crashes
 
 For Release:
 

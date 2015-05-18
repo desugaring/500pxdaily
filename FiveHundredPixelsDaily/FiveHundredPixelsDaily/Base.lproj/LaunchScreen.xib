@@ -11,17 +11,25 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="NM5-iT-nlz">
-                    <rect key="frame" x="240" y="190" width="120" height="120"/>
+                    <rect key="frame" x="270" y="220" width="60" height="60"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="120" id="b2s-8T-lJI"/>
-                        <constraint firstAttribute="width" constant="120" id="cP9-mc-VL8"/>
+                        <constraint firstAttribute="height" constant="60" id="b2s-8T-lJI"/>
+                        <constraint firstAttribute="width" constant="60" id="cP9-mc-VL8"/>
                     </constraints>
                 </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="500px Daily" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hk-wN-RYc">
+                    <rect key="frame" x="267" y="288" width="66" height="15"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="NM5-iT-nlz" firstAttribute="centerX" secondItem="0hk-wN-RYc" secondAttribute="centerX" id="EmX-WD-nVg"/>
                 <constraint firstAttribute="centerX" secondItem="NM5-iT-nlz" secondAttribute="centerX" id="Tp0-ca-zlz"/>
                 <constraint firstAttribute="centerY" secondItem="NM5-iT-nlz" secondAttribute="centerY" constant="50" id="fcG-je-932"/>
+                <constraint firstItem="0hk-wN-RYc" firstAttribute="top" secondItem="NM5-iT-nlz" secondAttribute="bottom" constant="8" id="hbF-Yc-94j"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

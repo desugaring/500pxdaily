@@ -19,7 +19,6 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 @interface ASCategory()
 
 @property NSLock *stateLock;
-@property NSTimer *stalenessTimer;
 
 @end
 
@@ -36,7 +35,6 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 @synthesize delegate;
 @synthesize stateLock;
 @synthesize thumbnailDownloadTasks;
-@synthesize stalenessTimer;
 
 + (NSURL *)urlForCategoryName:(NSString *)name forPage:(NSUInteger)page {
     NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
@@ -97,24 +95,17 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     if (self.lastUpdated == nil) self.lastUpdated = [NSDate distantPast];
     self.stateLock = [NSLock new];
     self.thumbnailDownloadTasks = [NSMutableArray new];
-    if (self.state.integerValue != ASCategoryStateRefreshImmediately) [self refreshState];
-    self.stalenessTimer = [NSTimer timerWithTimeInterval:30*60 target:self selector:@selector(refreshState) userInfo:nil repeats:true];
 }
 
 - (void)refreshState {
     if (self.state.integerValue != ASCategoryStateUpToDate) {
         NSInteger minutesSinceLastUpdate = [[[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:self.lastUpdated toDate:[NSDate date] options:0] minute];
-        if (minutesSinceLastUpdate >= 60*6) {
-            self.state = @(ASCategoryStateRefreshImmediately);
-        } else if ((minutesSinceLastUpdate >= 30)) {
-            self.state = @(ASCategoryStateStale);
+        if (minutesSinceLastUpdate >= 60*12) {
+            if (self.state.integerValue != ASCategoryStateRefreshImmediately) self.state = @(ASCategoryStateRefreshImmediately);
+        } else if ((minutesSinceLastUpdate >= 60*6)) {
+            if (self.state.integerValue != ASCategoryStateStale) self.state = @(ASCategoryStateStale);
         }
     }
-}
-
-- (void)willTurnIntoFault {
-    [super willTurnIntoFault];
-    [self.stalenessTimer invalidate];
 }
 
 - (void)refreshImages {

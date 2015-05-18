@@ -17,6 +17,7 @@
 @property NSUInteger numberOfImages;
 @property CGSize cellSize;
 @property CGFloat scrollViewOffset;
+@property NSTimer *stalenessTimer;
 
 @end
 
@@ -35,12 +36,15 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.stalenessTimer = [NSTimer timerWithTimeInterval:30*60 target:self.category selector:@selector(refreshState) userInfo:nil repeats:true];
+    [self.category refreshState];
     [self.category addObserver:self forKeyPath:@"state" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew) context:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.category cancelThumbnailDownloads];
+    [self.stalenessTimer invalidate];
     [self.category removeObserver:self forKeyPath:@"state"];
 }
 

@@ -49,7 +49,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     return urlComponents.URL;
 }
 
-+ (void)downloadImageInTheBackgroundForCategory:(NSString *)categoryName {
++ (void)downloadImageNumber:(NSInteger)imageNumber inTheBackgroundForCategory:(NSString *)categoryName {
     NSURL *url = [ASCategory urlForCategoryName:categoryName forPage:1];
     NSLog(@"requesting background image data for category %@, url %@", categoryName, url.absoluteString);
 
@@ -61,7 +61,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
             if (jsonParsingError == nil) {
                 NSArray *photos = imageDictionary[@"photos"];
                 // Get first photo info
-                NSDictionary *photoData = (NSDictionary *)photos.firstObject;
+                NSDictionary *photoData = (NSDictionary *)photos[imageNumber];
                 NSString *fullURL = (NSString *)photoData[@"image_url"][1];
                 NSLog(@"requesting background full image from url: %@", fullURL);
                 // Get image
@@ -95,6 +95,10 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     if (self.lastUpdated == nil) self.lastUpdated = [NSDate distantPast];
     self.stateLock = [NSLock new];
     self.thumbnailDownloadTasks = [NSMutableArray new];
+}
+
+- (void)willTurnIntoFault {
+    NSLog(@"turning %@ into fault", self.name);
 }
 
 - (void)refreshState {
@@ -147,7 +151,8 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     NSURL *url = [ASCategory urlForCategoryName:self.name forPage:page];
     NSLog(@"requesting image data for category %@, page %@, url %@", self.name, @(page), url.absoluteString);
     [[ASDownloadManager sharedManager] downloadDataWithURL:url withCompletionBlock:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (data != nil) {
+        BOOL retryDownload = false;
+        if (data != nil && data.length != 0) {
             NSError *jsonParsingError;
             NSDictionary *imageDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonParsingError];
             if (jsonParsingError == nil) {
@@ -157,19 +162,21 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
                 NSLog(@"json parsing error: %@", jsonParsingError);
             }
         } else {
-            NSLog(@"image data request response: %@, error: %@", response, error);
+            // NSLog(@"image data request response for category: %@: %@, error: %@", self.name, response, error);
+            if (error != nil && error.code == NSURLErrorTimedOut) retryDownload = true;
         }
         // Lock unlocks because of error OR in parseImageData if all goes well
         [self.stateLock lock];
-        self.state = (self.images.count != 0) ? @(ASCategoryStateFree) : @(ASCategoryStateRefreshImmediately);
+        self.state = @(ASCategoryStateFree);
         [self.stateLock unlock];
+        if (retryDownload == true) [self requestImageData];
     }];
 }
 
 - (void)parseImageData:(NSDictionary *)imageData {
     if (self.state.integerValue == ASCategoryStateBusyRefreshing) {
         self.maxNumberOfImages = (NSNumber *)imageData[@"total_items"];
-        NSLog(@"max number for category %@ is %@", self.name, self.maxNumberOfImages);
+        // NSLog(@"max number for category %@ is %@", self.name, self.maxNumberOfImages);
     }
     NSArray *photos = imageData[@"photos"];
     [self.managedObjectContext performBlockAndWait:^{
@@ -192,20 +199,21 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 
 #pragma mark - Image Delegate
 
-- (void)imageThumbnailUpdated:(ASImage *)image {
+- (void)imageThumbnailUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task {
     self.lastUpdated = [NSDate date];
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:)]) {
+    if ([self.thumbnailDownloadTasks containsObject:task] == true) [self.thumbnailDownloadTasks removeObject:task];
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageThumbnailUpdated:withTask:)]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate imageThumbnailUpdated:image];
+            [self.delegate imageThumbnailUpdated:image withTask:task];
         });
     }
 }
 
-- (void)imageFullUpdated:(ASImage *)image {
+- (void)imageFullUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task {
     self.lastUpdated = [NSDate date];
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:)]) {
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(imageFullUpdated:withTask:)]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate imageFullUpdated:image];
+            [self.delegate imageFullUpdated:image withTask:task];
         });
     }
 }

@@ -29,8 +29,8 @@ typedef NS_ENUM(NSInteger, ASCategoryState) {
 @protocol ASCategoryDelegate <NSObject>
 
 @optional
-- (void)imageThumbnailUpdated:(ASImage *)image;
-- (void)imageFullUpdated:(ASImage *)image;
+- (void)imageThumbnailUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task;
+- (void)imageFullUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task;
 
 @end
 
@@ -47,10 +47,10 @@ typedef NS_ENUM(NSInteger, ASCategoryState) {
 @property (weak) id<ASCategoryDelegate> delegate;
 @property NSMutableArray *thumbnailDownloadTasks;
 
-+ (void)downloadImageInTheBackgroundForCategory:(NSString *)categoryName;
++ (void)downloadImageNumber:(NSInteger)imageNumber inTheBackgroundForCategory:(NSString *)categoryName;
 
-- (void)imageThumbnailUpdated:(ASImage *)image;
-- (void)imageFullUpdated:(ASImage *)image;
+- (void)imageThumbnailUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task;
+- (void)imageFullUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task;
 
 - (void)refreshImages;
 - (BOOL)requestImageData;

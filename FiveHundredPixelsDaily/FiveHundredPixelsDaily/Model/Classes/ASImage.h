@@ -34,7 +34,7 @@
 @protocol ASImageDelegate <NSObject>
 
 @optional
-- (void)imageThumbnailUpdated:(ASImage *)image;
-- (void)imageFullUpdated:(ASImage *)image;
+- (void)imageThumbnailUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task;
+- (void)imageFullUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task;
 
 @end

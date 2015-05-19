@@ -61,17 +61,22 @@ static int numberOfFetches;
 //        return;
 //    }
     NSInteger hoursSinceLastFetch = [[[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:self.lastFetched toDate:[NSDate date] options:0] hour];
-    if(hoursSinceLastFetch >= 12) {
+    if(hoursSinceLastFetch >= 18) {
         self.lastFetched = [NSDate date];
         self.backgroundCompletionHandler = completionHandler;
         numberOfFetches = (int)categories.count;
         numberofSuccessfulBackgroundFetches = 0;
         for (NSString *categoryName in categories) {
-            [ASCategory downloadImageInTheBackgroundForCategory:categoryName];
+            NSInteger randomNumber = [self getRandomNumberBetween:0 to:10];
+            [ASCategory downloadImageNumber:randomNumber inTheBackgroundForCategory:categoryName];
         }
     } else {
         completionHandler(UIBackgroundFetchResultNoData);
     }
+}
+
+-(int)getRandomNumberBetween:(int)from to:(int)to {
+    return (int)from + arc4random() % (to-from+1);
 }
 
 @end

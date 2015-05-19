@@ -106,7 +106,7 @@
             } else {
                 NSLog(@"saved %@ successfully", category.name);
             }
-            [category.managedObjectContext refreshObject:category mergeChanges:false];
+            if (category.state.integerValue != ASCategoryStateBusyRefreshing || category.state.integerValue != ASCategoryStateBusyGettingImages) [category.managedObjectContext refreshObject:category mergeChanges:false];
         }
     }];
 }

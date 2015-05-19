@@ -70,7 +70,7 @@
 
 #pragma mark - ASImage Delegate
 
-- (void)imageFullUpdated:(ASImage *)image {
+- (void)imageFullUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task {
     if (self.imageView == nil) [self updateImage];
 }
 

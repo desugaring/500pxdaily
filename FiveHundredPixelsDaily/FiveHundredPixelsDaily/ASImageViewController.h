@@ -17,6 +17,6 @@
 @property (weak, nonatomic) IBOutlet ASCenteredScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
-- (void)imageFullUpdated:(ASImage *)image;
+- (void)imageFullUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task;
 
 @end

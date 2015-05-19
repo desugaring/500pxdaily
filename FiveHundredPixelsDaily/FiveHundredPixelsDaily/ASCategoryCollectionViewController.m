@@ -154,7 +154,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 
 #pragma mark - Category Image Delegate
 
-- (void)imageThumbnailUpdated:(ASImage *)image {
+- (void)imageThumbnailUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task {
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0];
     [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
 }

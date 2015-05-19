@@ -10,33 +10,29 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="NM5-iT-nlz">
-                    <rect key="frame" x="270" y="220" width="60" height="60"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="60" id="b2s-8T-lJI"/>
-                        <constraint firstAttribute="width" constant="60" id="cP9-mc-VL8"/>
-                    </constraints>
-                </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="500px Daily" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hk-wN-RYc">
-                    <rect key="frame" x="267" y="288" width="66" height="15"/>
+                    <rect key="frame" x="267" y="233" width="66" height="15"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.76904700413223137" green="0.76904700413223137" blue="0.76904700413223137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="loading..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mcr-B0-IWD">
+                    <rect key="frame" x="276" y="258" width="48" height="14"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="NM5-iT-nlz" firstAttribute="centerX" secondItem="0hk-wN-RYc" secondAttribute="centerX" id="EmX-WD-nVg"/>
-                <constraint firstAttribute="centerX" secondItem="NM5-iT-nlz" secondAttribute="centerX" id="Tp0-ca-zlz"/>
-                <constraint firstAttribute="centerY" secondItem="NM5-iT-nlz" secondAttribute="centerY" constant="50" id="fcG-je-932"/>
-                <constraint firstItem="0hk-wN-RYc" firstAttribute="top" secondItem="NM5-iT-nlz" secondAttribute="bottom" constant="8" id="hbF-Yc-94j"/>
+                <constraint firstAttribute="centerY" secondItem="0hk-wN-RYc" secondAttribute="centerY" constant="60" id="UMX-uU-KQK"/>
+                <constraint firstItem="Mcr-B0-IWD" firstAttribute="top" secondItem="0hk-wN-RYc" secondAttribute="bottom" constant="10" id="k8v-DY-1Ip"/>
+                <constraint firstItem="Mcr-B0-IWD" firstAttribute="centerX" secondItem="0hk-wN-RYc" secondAttribute="centerX" id="rqQ-Uk-c4r"/>
+                <constraint firstAttribute="centerX" secondItem="0hk-wN-RYc" secondAttribute="centerX" id="soR-gs-w9g"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="548" y="455"/>
         </view>
     </objects>
-    <resources>
-        <image name="Logo" width="180" height="180"/>
-    </resources>
 </document>

@@ -98,7 +98,7 @@ int const MAX_NUMBER_OF_DAILY_CATEGORIES = 3;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if ([self.sections[section] isEqualToString:@"Description"]) {
-        return @"What is 500px Daily?";
+        return @"What is DailyPhotos for 500px?";
     } else if ([self.sections[section] isEqualToString:@"Photos"]) {
         return @"Downloaded Photos Album";
     } else if ([self.sections[section] isEqualToString:@"Categories"]) {

@@ -18,7 +18,7 @@
 - (void)prepareForReuse {
     self.backgroundColor = [UIColor blackColor];
     self.viewButton.hidden = true;
-    self.accessoryType = UITableViewCellAccessoryNone;
+    self.rightArrow.hidden = true;
 }
 
 - (IBAction)viewButtonClicked:(id)sender {

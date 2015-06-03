@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="FIi-6c-SEf">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E26a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="FIi-6c-SEf">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -26,28 +26,38 @@
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgx-kN-eai">
-                                            <rect key="frame" x="297" y="0.0" width="70" height="43"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgx-kN-eai">
+                                            <rect key="frame" x="295" y="0.0" width="80" height="43"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="70" id="k3m-cf-2sh"/>
+                                                <constraint firstAttribute="width" constant="80" id="k3m-cf-2sh"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="22" maxY="0.0"/>
                                             <state key="normal" title="VIEW">
-                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="titleColor" red="0.89026256443298968" green="0.96728012242268036" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
                                                 <action selector="viewButtonClicked:" destination="epK-UR-7Yq" eventType="touchUpInside" id="SY1-Kf-A2F"/>
                                             </connections>
                                         </button>
+                                        <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RightArrow" translatesAutoresizingMaskIntoConstraints="NO" id="twp-eU-9Qa">
+                                            <rect key="frame" x="347" y="12" width="20" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="JAr-o0-ss2"/>
+                                                <constraint firstAttribute="height" constant="20" id="U9t-iA-yZt"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="twp-eU-9Qa" secondAttribute="trailing" constant="8" id="0NE-9J-VQN"/>
                                         <constraint firstItem="pgx-kN-eai" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="SYo-MQ-4lo" secondAttribute="trailing" constant="20" id="An7-hV-Ii3"/>
                                         <constraint firstAttribute="centerY" secondItem="pgx-kN-eai" secondAttribute="centerY" id="CT1-Hh-5Im"/>
                                         <constraint firstItem="pgx-kN-eai" firstAttribute="top" secondItem="AdE-Fv-AJm" secondAttribute="top" id="IZ8-Te-csx"/>
                                         <constraint firstAttribute="bottom" secondItem="pgx-kN-eai" secondAttribute="bottom" id="T42-d8-P6n"/>
-                                        <constraint firstItem="pgx-kN-eai" firstAttribute="trailing" secondItem="AdE-Fv-AJm" secondAttribute="trailingMargin" id="gWe-9k-il0"/>
+                                        <constraint firstItem="pgx-kN-eai" firstAttribute="trailing" secondItem="AdE-Fv-AJm" secondAttribute="trailing" id="gWe-9k-il0"/>
                                         <constraint firstAttribute="centerY" secondItem="SYo-MQ-4lo" secondAttribute="centerY" id="kkE-J9-kHK"/>
+                                        <constraint firstAttribute="centerY" secondItem="twp-eU-9Qa" secondAttribute="centerY" id="tFB-ZM-8Og"/>
                                         <constraint firstItem="SYo-MQ-4lo" firstAttribute="leading" secondItem="AdE-Fv-AJm" secondAttribute="leadingMargin" constant="14" id="ywz-TK-3yw"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -55,6 +65,7 @@
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="15" maxY="0.0"/>
                                 <connections>
                                     <outlet property="nameLabel" destination="SYo-MQ-4lo" id="YGh-UU-gNh"/>
+                                    <outlet property="rightArrow" destination="twp-eU-9Qa" id="Wbj-ly-Kif"/>
                                     <outlet property="viewButton" destination="pgx-kN-eai" id="Dvz-oq-vax"/>
                                 </connections>
                             </tableViewCell>
@@ -714,6 +725,6 @@
         <image name="RightArrow" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="T63-zZ-yyg"/>
+        <segue reference="UY0-Uc-YYq"/>
     </inferredMetricsTieBreakers>
 </document>

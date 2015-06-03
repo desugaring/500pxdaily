@@ -57,8 +57,11 @@
     if ([self.selectedCategories containsObject:indexPath]) {
         cell.backgroundColor = [UIColor colorWithRed:0.075 green:0.075 blue:0.075 alpha:1];
         cell.viewButton.hidden = false;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.rightArrow.hidden = false;
         cell.delegate = self;
+    } else {
+        cell.viewButton.hidden = true;
+        cell.rightArrow.hidden = true;
     }
 
     return cell;

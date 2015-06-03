@@ -102,8 +102,9 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 }
 
 - (void)refreshState {
-    if (self.state.integerValue != ASCategoryStateUpToDate) {
+    if (self.state.integerValue != ASCategoryStateRefreshImmediately) {
         NSInteger minutesSinceLastUpdate = [[[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:self.lastUpdated toDate:[NSDate date] options:0] minute];
+        NSLog(@"minutes since last update for category %@ is %li", self.name, (long)minutesSinceLastUpdate);
         if (minutesSinceLastUpdate >= 60*12) {
             if (self.state.integerValue != ASCategoryStateRefreshImmediately) self.state = @(ASCategoryStateRefreshImmediately);
         } else if ((minutesSinceLastUpdate >= 60*6)) {
@@ -165,7 +166,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
             // NSLog(@"image data request response for category: %@: %@, error: %@", self.name, response, error);
             if (error != nil && error.code == NSURLErrorTimedOut) retryDownload = true;
         }
-        // Lock unlocks because of error OR in parseImageData if all goes well
+        // If this place is reached, there was an error
         [self.stateLock lock];
         self.state = @(ASCategoryStateFree);
         [self.stateLock unlock];
@@ -174,7 +175,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 }
 
 - (void)parseImageData:(NSDictionary *)imageData {
-    if (self.state.integerValue == ASCategoryStateBusyRefreshing) {
+    if (self.maxNumberOfImages.integerValue == -1) {
         self.maxNumberOfImages = (NSNumber *)imageData[@"total_items"];
         // NSLog(@"max number for category %@ is %@", self.name, self.maxNumberOfImages);
     }

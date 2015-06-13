@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14D131" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14E26a" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="BaseObject" representedClassName="ASBaseObject" isAbstract="YES" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -16,6 +16,7 @@
     <entity name="Image" representedClassName="ASImage" parentEntity="BaseObject" syncable="YES">
         <attribute name="full" optional="YES" attributeType="Transformable" valueTransformerName="ASImageTransformer" syncable="YES"/>
         <attribute name="fullURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nsfw" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="thumbnail" optional="YES" attributeType="Transformable" valueTransformerName="ASImageTransformer" syncable="YES"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="images" inverseEntity="Category" syncable="YES"/>
@@ -32,7 +33,7 @@
         <element name="BaseObject" positionX="288" positionY="279" width="128" height="60"/>
         <element name="Category" positionX="261" positionY="216" width="128" height="148"/>
         <element name="FHPStore" positionX="279" positionY="270" width="128" height="45"/>
-        <element name="Image" positionX="270" positionY="225" width="128" height="120"/>
+        <element name="Image" positionX="270" positionY="225" width="128" height="135"/>
         <element name="Model" positionX="297" positionY="279" width="128" height="60"/>
         <element name="Store" positionX="261" positionY="189" width="128" height="75"/>
     </elements>

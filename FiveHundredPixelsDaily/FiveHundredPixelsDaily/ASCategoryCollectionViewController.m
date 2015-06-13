@@ -111,7 +111,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ASImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
-    ASImage *image = self.category.images[indexPath.item];
+    ASImage *image = self.category.mildImages[indexPath.item];
     if (image.thumbnail != nil) {
         cell.imageView.image = image.thumbnail;
         [cell.spinner stopAnimating];
@@ -155,18 +155,18 @@ static NSString * const reuseIdentifier = @"Thumbnail";
 #pragma mark - Category Image Delegate
 
 - (void)imageThumbnailUpdated:(ASImage *)image withTask:(NSURLSessionDownloadTask *)task {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.category.images indexOfObject:image] inSection:0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.category.mildImages indexOfObject:image] inSection:0];
     [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
 #pragma mark <UICollectionViewDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(categoryImageWasSelected:)]) [self.delegate categoryImageWasSelected:self.category.images[indexPath.item]];
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(categoryImageWasSelected:)]) [self.delegate categoryImageWasSelected:self.category.mildImages[indexPath.item]];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return ((ASImage *)self.category.images[indexPath.item]).thumbnail != nil;
+    return ((ASImage *)self.category.mildImages[indexPath.item]).thumbnail != nil;
 }
 
 #pragma mark - Category State Change
@@ -181,7 +181,7 @@ static NSString * const reuseIdentifier = @"Thumbnail";
         }
         case ASCategoryStateStale: {
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.numberOfImages = self.category.images.count;
+                self.numberOfImages = self.category.mildImages.count;
                 [self.collectionView reloadData];
             });
             break;
@@ -201,14 +201,14 @@ static NSString * const reuseIdentifier = @"Thumbnail";
         }
         case ASCategoryStateFree: {
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.numberOfImages = self.category.images.count;
+                self.numberOfImages = self.category.mildImages.count;
                 [self.collectionView reloadData];
             });
             break;
         }
         case ASCategoryStateUpToDate: {
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.numberOfImages = self.category.images.count;
+                self.numberOfImages = self.category.mildImages.count;
                 [self.collectionView reloadData];
             });
             break;

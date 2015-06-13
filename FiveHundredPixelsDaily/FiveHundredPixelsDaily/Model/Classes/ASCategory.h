@@ -36,6 +36,7 @@ typedef NS_ENUM(NSInteger, ASCategoryState) {
 
 @interface ASCategory : ASBaseObject <ASCategoryDelegate>
 
+@property NSOrderedSet *mildImages;
 @property (nonatomic, retain) NSOrderedSet *images;
 @property (nonatomic, retain) ASStore *store;
 @property (nonatomic, retain) NSDate *lastUpdated;

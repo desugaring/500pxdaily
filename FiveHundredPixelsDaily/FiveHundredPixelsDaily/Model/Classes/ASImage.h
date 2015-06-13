@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSString *fullURL;
 @property (nonatomic, retain) UIImage *thumbnail;
 @property (nonatomic, retain) UIImage *full;
+@property (nonatomic, retain) NSNumber *nsfw;
 @property (nonatomic, retain) ASCategory *category;
 
 @property (weak) id<ASImageDelegate> delegate;

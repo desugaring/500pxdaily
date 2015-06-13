@@ -29,6 +29,7 @@
 @dynamic thumbnail;
 @dynamic full;
 @dynamic category;
+@dynamic nsfw;
 
 @synthesize delegate;
 @synthesize thumbnailLock;

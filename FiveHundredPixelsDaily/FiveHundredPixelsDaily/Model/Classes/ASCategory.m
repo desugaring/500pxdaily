@@ -35,6 +35,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
 @synthesize delegate;
 @synthesize stateLock;
 @synthesize thumbnailDownloadTasks;
+@synthesize mildImages;
 
 + (NSURL *)urlForCategoryName:(NSString *)name forPage:(NSUInteger)page {
     NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:FIVE_HUNDRED_PX_URL];
@@ -95,6 +96,7 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     if (self.lastUpdated == nil) self.lastUpdated = [NSDate distantPast];
     self.stateLock = [NSLock new];
     self.thumbnailDownloadTasks = [NSMutableArray new];
+    self.mildImages = [self.images filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"nsfw = 0"]];
 }
 
 - (void)willTurnIntoFault {
@@ -183,15 +185,18 @@ NSString * const CONSUMER_KEY = @"8bFolgsX5BfAiMMH7GUDLLYDgQm4pjcTcDDAAHJY";
     [self.managedObjectContext performBlockAndWait:^{
         NSMutableOrderedSet *newImages = [NSMutableOrderedSet new];
         for (NSDictionary *photoData in photos) {
+//            NSLog(@"photo data: %@", photoData);
             ASImage *image = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:self.managedObjectContext];
             image.name = photoData[@"name"];
             image.thumbnailURL = (NSString *)photoData[@"image_url"][0];
             image.fullURL = (NSString *)photoData[@"image_url"][1];
+            image.nsfw = (NSNumber *)photoData[@"nsfw"];
             [newImages addObject:image];
         }
         NSMutableOrderedSet *currentImages = self.images.mutableCopy;
         [currentImages addObjectsFromArray:newImages.array];
         self.images = (NSOrderedSet *)currentImages.copy;
+        self.mildImages = [self.images filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"nsfw = 0"]];
     }];
     [self.stateLock lock];
     self.state = (self.maxNumberOfImages.unsignedIntegerValue == self.images.count) ? @(ASCategoryStateUpToDate) : @(ASCategoryStateFree);

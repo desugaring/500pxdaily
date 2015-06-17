@@ -2,6 +2,8 @@
 
 iOS app for browsing upcoming 500px photos
 
+Soon to be in the app store, oh the review process
+
 ### Features:
 - scroll between categories
 - download images to photos app

@@ -6,6 +6,8 @@ iOS app for browsing upcoming 500px photos
 - scroll between categories
 - download images to photos app
 - download one random image per category in the background once a day
+- no dependencies
+- written in objective-c
 
 ![1][1]
 ![2][2]

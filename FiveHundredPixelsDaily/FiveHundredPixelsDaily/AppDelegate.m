@@ -12,6 +12,7 @@
 #import "ASCategoriesTableViewController.h"
 #import "ASBackgroundImageFetcher.h"
 #import "ASPhotosManager.h"
+#import "GSTouchesShowingWindow.h"
 
 @interface AppDelegate ()
 
@@ -154,6 +155,13 @@
     return self.psc;
 }
 
+- (GSTouchesShowingWindow *)window {
+    static GSTouchesShowingWindow *window = nil;
+    if (!window) {
+        window = [[GSTouchesShowingWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    }
+    return window;
+}
 
 - (NSManagedObjectContext *)managedObjectContext {
     // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.)

@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FiveHundredPixelsDaily/Model/Classes/ASCategory.m"
-            timestampString = "455913188.318623"
+            timestampString = "456256999.432231"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
             landmarkName = "-imageThumbnailUpdated:withTask:"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FiveHundredPixelsDaily/Model/Classes/ASCategory.m"
-            timestampString = "455913188.318623"
+            timestampString = "456256999.432231"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "216"
-            endingLineNumber = "216"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
             landmarkName = "-imageThumbnailUpdated:withTask:"
             landmarkType = "5">
          </BreakpointContent>

@@ -20,6 +20,9 @@
 		4F4D6EC11AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC01AD76BCA00D1ABD8 /* ASCategoryTableViewCell.m */; };
 		4F4D6EC41AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC31AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m */; };
 		4F4D6EC71AD76C7900D1ABD8 /* ASImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D6EC61AD76C7900D1ABD8 /* ASImageViewController.m */; };
+		4F5D42611B31EDAC00B246F7 /* GSTouchesShowingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F5D42601B31EDAC00B246F7 /* GSTouchesShowingWindow.m */; };
+		4F5D42641B31EE2500B246F7 /* GSTouchImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5D42621B31EE2500B246F7 /* GSTouchImage.png */; };
+		4F5D42651B31EE2500B246F7 /* GSTouchImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5D42631B31EE2500B246F7 /* GSTouchImage@2x.png */; };
 		4F717E8B1ADE122D004B8722 /* ASBaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E8A1ADE122D004B8722 /* ASBaseObject.m */; };
 		4F717E8E1AE08F2D004B8722 /* ASImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E8D1AE08F2D004B8722 /* ASImageCollectionViewCell.m */; };
 		4F717E951AE2279E004B8722 /* ASModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F717E941AE2279E004B8722 /* ASModel.m */; };
@@ -70,6 +73,10 @@
 		4F4D6EC31AD76C5B00D1ABD8 /* ASCategoryCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASCategoryCollectionViewController.m; sourceTree = "<group>"; };
 		4F4D6EC51AD76C7900D1ABD8 /* ASImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImageViewController.h; sourceTree = "<group>"; };
 		4F4D6EC61AD76C7900D1ABD8 /* ASImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASImageViewController.m; sourceTree = "<group>"; };
+		4F5D425F1B31EDAC00B246F7 /* GSTouchesShowingWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSTouchesShowingWindow.h; sourceTree = "<group>"; };
+		4F5D42601B31EDAC00B246F7 /* GSTouchesShowingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSTouchesShowingWindow.m; sourceTree = "<group>"; };
+		4F5D42621B31EE2500B246F7 /* GSTouchImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GSTouchImage.png; sourceTree = "<group>"; };
+		4F5D42631B31EE2500B246F7 /* GSTouchImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "GSTouchImage@2x.png"; sourceTree = "<group>"; };
 		4F717E891ADE122D004B8722 /* ASBaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASBaseObject.h; sourceTree = "<group>"; };
 		4F717E8A1ADE122D004B8722 /* ASBaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASBaseObject.m; sourceTree = "<group>"; };
 		4F717E8C1AE08F2D004B8722 /* ASImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASImageCollectionViewCell.h; sourceTree = "<group>"; };
@@ -168,6 +175,10 @@
 				4FC411951AF9C69A00E4C063 /* ASPhotosManager.h */,
 				4FC411961AF9C69A00E4C063 /* ASPhotosManager.m */,
 				4F4D6EA01AD75EB800D1ABD8 /* Main.storyboard */,
+				4F5D425F1B31EDAC00B246F7 /* GSTouchesShowingWindow.h */,
+				4F5D42601B31EDAC00B246F7 /* GSTouchesShowingWindow.m */,
+				4F5D42621B31EE2500B246F7 /* GSTouchImage.png */,
+				4F5D42631B31EE2500B246F7 /* GSTouchImage@2x.png */,
 				4F4D6E911AD75EB800D1ABD8 /* Info.plist */,
 				4F4D6E921AD75EB800D1ABD8 /* main.m */,
 				4F4D6EA31AD75EB800D1ABD8 /* Images.xcassets */,
@@ -429,9 +440,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F5D42641B31EE2500B246F7 /* GSTouchImage.png in Resources */,
 				4F4D6EA21AD75EB800D1ABD8 /* Main.storyboard in Resources */,
 				4F4D6EA71AD75EB800D1ABD8 /* LaunchScreen.xib in Resources */,
 				4F717E9E1AE462C1004B8722 /* TODO in Resources */,
+				4F5D42651B31EE2500B246F7 /* GSTouchImage@2x.png in Resources */,
 				4F4D6EA41AD75EB800D1ABD8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -470,6 +483,7 @@
 				4F717E9B1AE22B12004B8722 /* ASCategoriesPagesViewController.m in Sources */,
 				4FC412581B09146600E4C063 /* Reachability.m in Sources */,
 				4FC411971AF9C69A00E4C063 /* ASPhotosManager.m in Sources */,
+				4F5D42611B31EDAC00B246F7 /* GSTouchesShowingWindow.m in Sources */,
 				4F9B8FB11AF6AE2300B36422 /* ASButtonView.m in Sources */,
 				4FC4119E1AFDDC8300E4C063 /* ASCenteredScrollView.m in Sources */,
 				4FE3E2B71ADA107800B174F4 /* ASCategory.m in Sources */,

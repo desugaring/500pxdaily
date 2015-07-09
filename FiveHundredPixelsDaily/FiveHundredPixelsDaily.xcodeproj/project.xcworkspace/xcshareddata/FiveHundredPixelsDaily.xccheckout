@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>854B501A-74D7-4270-BB91-0130E2CF6732</string>
+	<key>IDESourceControlProjectName</key>
+	<string>FiveHundredPixelsDaily</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>04501216C8155F5F7D6597B4E4D2DE44AD4E2799</key>
+		<string>https://github.com/desugaring/500pxDaily.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>FiveHundredPixelsDaily/FiveHundredPixelsDaily.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>04501216C8155F5F7D6597B4E4D2DE44AD4E2799</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/desugaring/500pxDaily.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>04501216C8155F5F7D6597B4E4D2DE44AD4E2799</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>04501216C8155F5F7D6597B4E4D2DE44AD4E2799</string>
+			<key>IDESourceControlWCCName</key>
+			<string>500pxDaily</string>
+		</dict>
+	</array>
+</dict>
+</plist>
